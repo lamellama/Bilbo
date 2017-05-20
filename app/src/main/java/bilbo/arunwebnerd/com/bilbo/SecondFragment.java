@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class secondFragment extends Fragment {
+public class SecondFragment extends Fragment {
 
-    @Override
+  /*  @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.first_frag, container, false);
 
@@ -19,7 +19,7 @@ public class secondFragment extends Fragment {
         tv.setText(getArguments().getString("msg"));
 
         return v;
-    }
+    }*/
 
     public static FirstFragment newInstance(String text) {
 

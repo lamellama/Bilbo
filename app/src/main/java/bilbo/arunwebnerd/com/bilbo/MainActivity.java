@@ -72,15 +72,15 @@ public class MainActivity extends AppCompatActivity {
             switch(pos) {
 
 				case 0: return FirstFragment.newInstance("FirstFragment, Instance 1");
-				case 1: return SecondFragment.newInstance("SecondFragment, Instance 1");
+			//	case 1: return SecondFragment.newInstance("SecondFragment, Instance 1");
 				
-				default: return SecondFragment.newInstance("ThirdFragment, Default");
+				default: return FirstFragment.newInstance("ThirdFragment, Default");
             }
         }
 
         @Override
         public int getCount() {
-            return 5;
+            return 2;
         }       
     }
 
@@ -132,14 +132,14 @@ public class MainActivity extends AppCompatActivity {
             return fragment;
         }
 
-        @Override
+    /*    @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+           View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
-        }
+        }*/
     }
 
     /**

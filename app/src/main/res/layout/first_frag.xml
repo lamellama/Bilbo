@@ -9,7 +9,7 @@
     tools:context="bilbo.arunwebnerd.com.bilbo.MainActivity$PlaceholderFragment">
 
     <TextView
-        android:id="@+id/section_label"
+        android:id="@+id/tvFragFirst"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
