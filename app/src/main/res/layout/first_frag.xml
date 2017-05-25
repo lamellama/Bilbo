@@ -6,11 +6,30 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="bilbo.arunwebnerd.com.bilbo.MainActivity$PlaceholderFragment">
+    tools:context="bilbo.arunwebnerd.com.bilbo.MainActivity">
 
     <TextView
-        android:id="@+id/tvFragFirst"
+        android:id="@+id/tvTotal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="@string/total_prompt" />
 
+    <TextView
+        android:id="@+id/tvNumPeople"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/people_prompt"
+        android:layout_below="@+id/tvTotal"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:id="@+id/spinnerTipPercent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvNumPeople"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:entries="@array/tippercent_array"
+        android:prompt="@string/tip_prompt" />
 </RelativeLayout>

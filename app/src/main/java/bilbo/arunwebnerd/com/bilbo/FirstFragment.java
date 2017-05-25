@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class FirstFragment extends Fragment {
@@ -15,8 +16,13 @@ public class FirstFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.first_frag, container, false);
 
-        TextView tv = (TextView) v.findViewById(R.id.tvFragFirst);
-        tv.setText(getArguments().getString("msg"));
+        TextView tvTotal = (TextView) v.findViewById(R.id.tvTotal);
+        tvTotal.setText(getArguments().getString("Total Bill"));
+
+        TextView tvNumberPeople = (TextView) v.findViewById(R.id.tvNumPeople);
+        tvNumberPeople.setText(getArguments().getString("How many people?"));
+
+        Spinner spinTipPercent = (Spinner) v.findViewById(R.id.spinnerTipPercent);
 
         return v;
     }
