@@ -8,13 +8,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="bilbo.arunwebnerd.com.bilbo.MainActivity">
 
-    <TextView
+    <EditText
         android:id="@+id/tvTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/total_prompt" />
 
-    <TextView
+    <EditText
         android:id="@+id/tvNumPeople"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

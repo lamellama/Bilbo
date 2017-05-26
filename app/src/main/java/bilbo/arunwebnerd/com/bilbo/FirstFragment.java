@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.*;
 
 public class FirstFragment extends Fragment {
 
@@ -16,11 +17,11 @@ public class FirstFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.first_frag, container, false);
 
-        TextView tvTotal = (TextView) v.findViewById(R.id.tvTotal);
-        tvTotal.setText(getArguments().getString("Total Bill"));
+        EditText tvTotal = (EditText) v.findViewById(R.id.tvTotal);
+        tvTotal.setText(getString(R.string.total_prompt));
 
-        TextView tvNumberPeople = (TextView) v.findViewById(R.id.tvNumPeople);
-        tvNumberPeople.setText(getArguments().getString("How many people?"));
+        EditText tvNumberPeople = (EditText) v.findViewById(R.id.tvNumPeople);
+        tvNumberPeople.setText(getString(R.string.people_prompt));
 
         Spinner spinTipPercent = (Spinner) v.findViewById(R.id.spinnerTipPercent);
 

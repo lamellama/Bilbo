@@ -5,7 +5,7 @@
     <string name="total_prompt">Bill total</string>
     <string name="people_prompt">How many People?</string>
     <string name="tip_prompt">Choose a tip</string>
-    <integer-array name="tippercent_array">
+    <string-array name="tippercent_array">
         <item>5</item>
         <item>6</item>
         <item>7</item>
@@ -15,12 +15,12 @@
         <item>11</item>
         <item>12</item>
         <item>13</item>
-        <item>114</item>
+        <item>14</item>
         <item>15</item>
         <item>16</item>
         <item>17</item>
         <item>18</item>
         <item>19</item>
         <item>20</item>
-    </integer-array>
+    </string-array>
 </resources>

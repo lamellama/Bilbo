@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             switch(pos) {
 
 				case 0: return FirstFragment.newInstance("FirstFragment, Instance 1");
-			//	case 1: return SecondFragment.newInstance("SecondFragment, Instance 1");
+				case 1: return SecondFragment.newInstance("SecondFragment, Instance 1");
 				
 				default: return FirstFragment.newInstance("ThirdFragment, Default");
             }
