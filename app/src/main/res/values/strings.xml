@@ -5,6 +5,9 @@
     <string name="total_prompt">Bill total</string>
     <string name="people_prompt">How many People?</string>
     <string name="tip_prompt">Choose a tip</string>
+    <string name="element_text">Element</string>
+    <string name="grid_layout_manager">Grid Layout Manager</string>
+    <string name="linear_layout_manager">Linear Layout Manager</string>
     <string-array name="tippercent_array">
         <item>5</item>
         <item>6</item>
