@@ -43,6 +43,15 @@ public class SecondFragment extends Fragment {
         initDataset();
     }
 
+    public static SecondFragment newInstance(String text) {
+
+        SecondFragment f = new SecondFragment();
+        Bundle b = new Bundle();
+        b.putString("msg", text);
+
+        f.setArguments(b);
+        return f;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

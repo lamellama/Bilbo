@@ -8,6 +8,22 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="bilbo.arunwebnerd.com.bilbo.MainActivity">
 
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:checkedButton="@+id/linear_layout_rb">
+        <RadioButton android:id="@+id/linear_layout_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/linear_layout_manager"/>
+        <RadioButton android:id="@+id/grid_layout_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/grid_layout_manager"/>
+    </RadioGroup>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvPeopleGroups"
