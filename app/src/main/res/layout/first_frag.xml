@@ -14,14 +14,16 @@
         android:layout_height="wrap_content"
         android:text="@string/total_prompt" />
 
-    <EditText
+    <Spinner
         android:id="@+id/tvNumPeople"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/people_prompt"
         android:layout_below="@+id/tvTotal"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+		android:entries="@array/numpeople_array"
+        android:prompt="@string/people_prompt" />
 
     <Spinner
         android:id="@+id/spinnerTipPercent"

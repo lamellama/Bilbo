@@ -18,8 +18,8 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity implements FirstFragment.OnInputUpdateListener{
+	
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
 				case 0: return FirstFragment.newInstance("FirstFragment, Instance 1");
 				case 1: return SecondFragment.newInstance("SecondFragment, Instance 1");
-				
 				default: return FirstFragment.newInstance("ThirdFragment, Default");
             }
         }
@@ -85,7 +84,14 @@ public class MainActivity extends AppCompatActivity {
         }       
     }
 
+	@Override
+	public void onInputUpdate(int pos)
+	{
+		// TODO: Need to pass the new data to the second fragment
+	}
 
+
+	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
