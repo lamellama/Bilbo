@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<integer name="tip_default">10</integer>
-	<integer name="numpeople_default">5</integer>
+	<integer name="numpeople_default">4</integer>
 	<string name="total_default">0.0</string>
 	
 </resources>

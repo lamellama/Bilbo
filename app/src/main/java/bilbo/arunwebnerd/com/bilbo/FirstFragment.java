@@ -13,27 +13,35 @@ import android.widget.*;
 import android.app.*;
 import java.util.function.*;
 import android.widget.AdapterView.*;
+import android.util.*;
 
 public class FirstFragment extends Fragment implements OnItemSelectedListener{
 
+	private static final String TAG = "FirstFragment";
 	OnInputUpdateListener mCallback;
-	private int tip_percent;
-	private float bill_total;
-	private int num_people;
+	private int tipPercent;
+	private float billTotal;
+	private int numPeople;
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.first_frag, container, false);
 		
-		tip_percent = getResources().getInteger(R.integer.tip_default);
-		bill_total = Float.parseFloat( getContext().getResources().getString(R.string.total_default));
-		num_people = getContext().getResources().getInteger(R.integer.tip_default);
+		tipPercent = getResources().getInteger(R.integer.tip_default);
+		billTotal = Float.parseFloat( getContext().getResources().getString(R.string.total_default));
+		numPeople = getContext().getResources().getInteger(R.integer.numpeople_default);
+		Log.d(TAG, "numPeople: " + numPeople);
 
         EditText tvTotal = (EditText) v.findViewById(R.id.tvTotal);
-        tvTotal.setText(getString(R.string.total_prompt));
+        tvTotal.setText(getContext().getResources().getString(R.string.total_default));
+		
+		//tvTotal.setText(getString(R.string.total_prompt));
 
         Spinner tvNumberPeople = (Spinner) v.findViewById(R.id.tvNumPeople);
 		tvNumberPeople.setOnItemSelectedListener(this);
+		tvNumberPeople.setSelection(getIndex(tvNumberPeople, numPeople));
+		//tvNumberPeople.setSelection(4);
+		
         //tvNumberPeople.setText(getString(R.string.people_prompt));
 
         Spinner spinTipPercent = (Spinner) v.findViewById(R.id.spinnerTipPercent);
@@ -41,6 +49,20 @@ public class FirstFragment extends Fragment implements OnItemSelectedListener{
 
         return v;
     }
+	
+	private int getIndex(Spinner spinner, int value){
+
+        int index = 0;
+
+        for (int i=0;i<spinner.getCount();i++){
+			Log.d(TAG, "spinner.getItemAtPosition(i): " + spinner.getItemAtPosition(i) + " + value: " + value);
+            if (spinner.getItemAtPosition(i).equals(Integer.toString(value))){
+                index = i;
+				Log.d(TAG, "values equal");
+            }
+        }
+        return index;
+	}
 
 	public void onItemSelected(AdapterView<?> parent, View view,
 							   int pos, long id) {

@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.util.Log;
 
 import android.widget.TextView;
 
@@ -35,6 +36,12 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+	
+	private static final String TAG = "MainActivity";
+	
+	private int numPeople;
+	private int tipPercent;
+	private float billTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +67,11 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
                         .setAction("Action", null).show();
             }
         });
+		
+		tipPercent = getResources().getInteger(R.integer.tip_default);
+		billTotal = Float.parseFloat( getResources().getString(R.string.total_default));
+		numPeople = getResources().getInteger(R.integer.tip_default);
+		
 
     }
 	private class MyPagerAdapter extends FragmentPagerAdapter {
@@ -73,7 +85,11 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
             switch(pos) {
 
 				case 0: return FirstFragment.newInstance("FirstFragment, Instance 1");
-				case 1: return SecondFragment.newInstance("SecondFragment, Instance 1");
+				case 1:SecondFragment newFragment = SecondFragment.newInstance("SecondFragment, Instance 1");
+					Bundle args = new Bundle();
+					args.putInt("NUMPEOPLE", pos);
+					newFragment.setArguments(args); 
+					return newFragment;
 				default: return FirstFragment.newInstance("ThirdFragment, Default");
             }
         }
@@ -88,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 	public void onInputUpdate(int pos)
 	{
 		// TODO: Need to pass the new data to the second fragment
+		Log.d(TAG, "onInputUpdate pos: " + pos);
 	}
 
 

@@ -17,16 +17,16 @@ import android.util.Log;
 
 public class SecondFragment extends Fragment {
     private static final String TAG = "RecyclerViewFragment";
-    private static final String KEY_LAYOUT_MANAGER = "layoutManager";
-    private static final int SPAN_COUNT = 2;
-    private static final int DATASET_COUNT = 60;
+   // private static final String KEY_LAYOUT_MANAGER = "layoutManager";
+    //private static final int SPAN_COUNT = 2;
+  //  private static final int DATASET_COUNT = 60;
 
-    private enum LayoutManagerType {
+   /* private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
         LINEAR_LAYOUT_MANAGER
-    }
+    }*/
 
-    protected LayoutManagerType mCurrentLayoutManagerType;
+  //  protected LayoutManagerType mCurrentLayoutManagerType;
 
     protected RadioButton mLinearLayoutRadioButton;
     protected RadioButton mGridLayoutRadioButton;
@@ -43,6 +43,13 @@ public class SecondFragment extends Fragment {
         // Initialize dataset, this data would usually come from a local content provider or
         // remote server.
         initDataset();
+    }
+	
+	public int getNumPeople() {
+        if (getArguments().getInt("NUMPEOPLE", 0) > 0)
+			return getArguments().getInt("NUMPEOPLE", 0);
+		else
+			return 0;
     }
 
     public static SecondFragment newInstance(String text) {
@@ -68,13 +75,13 @@ public class SecondFragment extends Fragment {
         // elements are laid out.
         mLayoutManager = new LinearLayoutManager(getActivity());
 
-        mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+      /*  mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
 
         if (savedInstanceState != null) {
             // Restore saved layout manager type.
             mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
                     .getSerializable(KEY_LAYOUT_MANAGER);
-        }
+        }*/
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         //setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
@@ -91,7 +98,7 @@ public class SecondFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save currently selected layout manager.
-        savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, mCurrentLayoutManagerType);
+      //  savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, mCurrentLayoutManagerType);
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -100,8 +107,10 @@ public class SecondFragment extends Fragment {
      * from a local content provider or remote server.
      */
     private void initDataset() {
-        mDataset = new String[DATASET_COUNT];
-        for (int i = 0; i < DATASET_COUNT; i++) {
+		Log.d(TAG, "initDataset(): getNumPeople(): " + getNumPeople());
+        mDataset = new String[getNumPeople()];
+		
+        for (int i = 0; i < getNumPeople(); i++) {
             mDataset[i] = "This is element #" + i;
         }
     }
