@@ -101,10 +101,10 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
     }
 
 	@Override
-	public void onInputUpdate(int pos)
+	public void onInputUpdate()
 	{
 		// TODO: Need to pass the new data to the second fragment
-		Log.d(TAG, "onInputUpdate pos: " + pos);
+		//Log.d(TAG, "onInputUpdate pos: " + pos);
 	}
 
 
