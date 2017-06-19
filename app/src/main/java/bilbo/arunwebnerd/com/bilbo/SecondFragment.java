@@ -46,8 +46,8 @@ public class SecondFragment extends Fragment {
     }
 	
 	public int getNumPeople() {
-        if (getArguments().getInt("NUMPEOPLE", 0) > 0)
-			return getArguments().getInt("NUMPEOPLE", 0);
+        if (getArguments().getInt("people", 0) > 0)
+			return getArguments().getInt("people", 0);
 		else
 			return 0;
     }

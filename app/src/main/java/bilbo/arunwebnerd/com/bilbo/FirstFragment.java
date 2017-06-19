@@ -15,8 +15,8 @@ import java.util.function.*;
 import android.widget.AdapterView.*;
 import android.util.*;
 
-public class FirstFragment extends Fragment implements OnItemSelectedListener{
-
+public class FirstFragment extends Fragment implements OnItemSelectedListener, OnClickListener
+{
 	private static final String TAG = "FirstFragment";
 	OnInputUpdateListener mCallback;
 	private int tipPercent;
@@ -31,8 +31,19 @@ public class FirstFragment extends Fragment implements OnItemSelectedListener{
 		billTotal = Float.parseFloat( getContext().getResources().getString(R.string.total_default));
 		numPeople = getContext().getResources().getInteger(R.integer.numpeople_default);
 
-        EditText tvTotal = (EditText) v.findViewById(R.id.tvTotal);
+        final EditText tvTotal = (EditText) v.findViewById(R.id.tvTotal);
         tvTotal.setText(getContext().getResources().getString(R.string.total_default));
+		tvTotal.setOnFocusChangeListener(new OnFocusChangeListener() {          
+				@Override
+				public void onFocusChange(View v, boolean hasFocus) {
+					if (!hasFocus) {
+						
+						billTotal = Float.valueOf(tvTotal.getText().toString());
+						Log.d(TAG, "EditText lost focus, tvTotal = " + billTotal);
+						mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
+					}
+				}
+			});
 
         Spinner tvNumberPeople = (Spinner) v.findViewById(R.id.tvNumPeople);
 		tvNumberPeople.setSelection(getIndex(tvNumberPeople, numPeople));
@@ -54,6 +65,9 @@ public class FirstFragment extends Fragment implements OnItemSelectedListener{
         Spinner spinTipPercent = (Spinner) v.findViewById(R.id.spinnerTipPercent);
 		spinTipPercent.setOnItemSelectedListener(this);
 		
+		//initialise variables in main activity
+		mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
+		
         return v;
     }
 	
@@ -71,6 +85,16 @@ public class FirstFragment extends Fragment implements OnItemSelectedListener{
         return index;
 	}
 	
+	@Override
+	public void onClick(View p1)
+	{
+		switch (p1.getId()) {
+			case R.id.tvNumPeople:
+				
+				break;
+        }
+		mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
+	}
 	
 	public void onItemSelected(AdapterView<?> parent, View view,
 							   int pos, long id) {
@@ -87,17 +111,24 @@ public class FirstFragment extends Fragment implements OnItemSelectedListener{
 				break;
         }
 		// Send the event to the host activity
-        mCallback.onInputUpdate();
+        mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
 	
+	public Bundle getInput(){
+		Bundle inputBun = new Bundle();
+		inputBun.putInt("tip", tipPercent);
+		inputBun.putInt("people", numPeople);
+		inputBun.putFloat("total", billTotal);
+		return inputBun;
+	}
 	
     // Container Activity must implement this interface
     public interface OnInputUpdateListener {
-        public void onInputUpdate();
+        public void onInputUpdate(int numPeeps, int tip, float total);
     }
 
     @Override

@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 	
 	private static final String TAG = "MainActivity";
 	
+	private Bundle secondFragBundle;
+	
 	private int numPeople;
 	private int tipPercent;
 	private float billTotal;
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mPageAdapter);
-
+		
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -68,9 +70,13 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
             }
         });
 		
+		secondFragBundle = new Bundle();
+		
 		tipPercent = getResources().getInteger(R.integer.tip_default);
 		billTotal = Float.parseFloat( getResources().getString(R.string.total_default));
-		numPeople = getResources().getInteger(R.integer.tip_default);
+		numPeople = getResources().getInteger(R.integer.numpeople_default);
+		// Initialise bundle before second fragment is created
+		onInputUpdate(numPeople, tipPercent, billTotal);
 		
 
     }
@@ -86,9 +92,10 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 
 				case 0: return FirstFragment.newInstance("FirstFragment, Instance 1");
 				case 1:SecondFragment newFragment = SecondFragment.newInstance("SecondFragment, Instance 1");
-					Bundle args = new Bundle();
-					args.putInt("NUMPEOPLE", pos);
-					newFragment.setArguments(args); 
+					Log.d(TAG, "secondFragBundled");
+					
+					//secondFragBundle = getSupportFragmentManager().findFragmentById(R.id.pageview)
+					newFragment.setArguments(secondFragBundle); 
 					return newFragment;
 				default: return FirstFragment.newInstance("ThirdFragment, Default");
             }
@@ -101,10 +108,13 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
     }
 
 	@Override
-	public void onInputUpdate()
+	public void onInputUpdate(int numPeeps, int tip, float total)
 	{
 		// TODO: Need to pass the new data to the second fragment
-		//Log.d(TAG, "onInputUpdate pos: " + pos);
+		Log.d(TAG, "onInputUpdate - bill: " + total + " - tip: " + tip + " - Peeps: " + numPeeps);
+		secondFragBundle.putInt("tip", tip);
+		secondFragBundle.putInt("people", numPeeps);
+		secondFragBundle.putFloat("total", total);
 	}
 
 
@@ -131,65 +141,4 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-/*    public static class PlaceholderFragment extends Fragment {
-        
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-           View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }
-
-   
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
-            }
-            return null;
-        }
-    }*/
 }
