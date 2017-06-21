@@ -22,14 +22,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.util.Log;
+import java.util.*;
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
  */
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
+public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
     private String[] mDataSet;
+	//private ArrayList<Boolean> selected;
 
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
     /**
@@ -37,15 +39,26 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
+		public boolean selected = true;
+		// an array of selected items (Integer indices) 
+		
+		RecyclerView mRecyclerView; 
+		View selectedOverlay;
 
         public ViewHolder(View v) {
             super(v);
-
+			selectedOverlay = itemView.findViewById(R.id.selected_overlay);
             // Define click listener for the ViewHolder's View.
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+					
+					
                    Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
+				   if(!selected)
+					   selected = true;
+				   else
+					   selected = false;
                 }
             });
             textView = (TextView) v.findViewById(R.id.textView);
@@ -70,11 +83,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     // Create new views (invoked by the layout manager)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        Log.d(TAG, "Testing recyclerView item");
+    //    Log.d(TAG, "Testing recyclerView item");
         // Create a new view.
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.text_row_item, viewGroup, false);
-
+		
         return new ViewHolder(v);
     }
     // END_INCLUDE(recyclerViewOnCreateViewHolder)
@@ -83,8 +96,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        Log.d(TAG, "Element " + position + " set.");
-
+        Log.d(TAG, "Element selected " + viewHolder.selected);
+	//	viewHolder.itemView.setSelected(viewHolder.selected);
+	//	viewHolder.itemView.setTag(position);
+		// each time an item comes into view, its position is checked
+		// against "selected" indices
+		
+		
+		// Highlight the item if it's selected
+        viewHolder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
         viewHolder.getTextView().setText(mDataSet[position]);

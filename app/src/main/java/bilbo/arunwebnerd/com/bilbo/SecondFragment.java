@@ -45,9 +45,23 @@ public class SecondFragment extends Fragment {
         initDataset();
     }
 	
-	public int getNumPeople() {
+	private int getNumPeople() {
         if (getArguments().getInt("people", 0) > 0)
 			return getArguments().getInt("people", 0);
+		else
+			return 0;
+    }
+	
+	private float getBillTotal() {
+        if (getArguments().getFloat("total", 0) > 0)
+			return getArguments().getFloat("total", 0);
+		else
+			return 0;
+    }
+	
+	private int getTipPercent() {
+        if (getArguments().getInt("tip", 0) > 0)
+			return getArguments().getInt("tip", 0);
 		else
 			return 0;
     }
