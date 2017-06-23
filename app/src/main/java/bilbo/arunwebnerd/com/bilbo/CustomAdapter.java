@@ -31,25 +31,38 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
     private String[] mDataSet;
+	private ViewHolder.ClickListener clickListener;
 	//private ArrayList<Boolean> selected;
 
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+	{
+
+		
+		public interface ClickListener {
+            public void onItemClicked(int position);
+         //   public boolean onItemLongClicked(int position);
+        }
+
         private final TextView textView;
 		public boolean selected = true;
+		
 		// an array of selected items (Integer indices) 
+		private ClickListener listener;
 		
 		RecyclerView mRecyclerView; 
 		View selectedOverlay;
 
-        public ViewHolder(View v) {
+        public ViewHolder(View v, ClickListener listener) {
             super(v);
 			selectedOverlay = itemView.findViewById(R.id.selected_overlay);
+			this.listener = listener;
+			itemView.setOnClickListener(this);
             // Define click listener for the ViewHolder's View.
-            v.setOnClickListener(new View.OnClickListener() {
+       /*     v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 					
@@ -60,8 +73,15 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 				   else
 					   selected = false;
                 }
-            });
+            });*/
             textView = (TextView) v.findViewById(R.id.textView);
+        }
+		
+		@Override
+        public void onClick(View v) {
+            if (listener != null) {
+                listener.onItemClicked(getPosition());
+            }
         }
 
         public TextView getTextView() {
@@ -75,8 +95,9 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
      *
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
      */
-    public CustomAdapter(String[] dataSet) {
+    public CustomAdapter(String[] dataSet, ViewHolder.ClickListener clickListener) {
         mDataSet = dataSet;
+		this.clickListener = clickListener;
     }
 
     // BEGIN_INCLUDE(recyclerViewOnCreateViewHolder)
@@ -88,7 +109,7 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.text_row_item, viewGroup, false);
 		
-        return new ViewHolder(v);
+        return new ViewHolder(v, clickListener);
     }
     // END_INCLUDE(recyclerViewOnCreateViewHolder)
 

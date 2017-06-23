@@ -13,20 +13,13 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.util.Log;
+import android.support.v7.app.*;
 
 
-public class SecondFragment extends Fragment {
+public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder.ClickListener
+{
+	
     private static final String TAG = "RecyclerViewFragment";
-   // private static final String KEY_LAYOUT_MANAGER = "layoutManager";
-    //private static final int SPAN_COUNT = 2;
-  //  private static final int DATASET_COUNT = 60;
-
-   /* private enum LayoutManagerType {
-        GRID_LAYOUT_MANAGER,
-        LINEAR_LAYOUT_MANAGER
-    }*/
-
-  //  protected LayoutManagerType mCurrentLayoutManagerType;
 
     protected RadioButton mLinearLayoutRadioButton;
     protected RadioButton mGridLayoutRadioButton;
@@ -40,10 +33,18 @@ public class SecondFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Initialize dataset, this data would usually come from a local content provider or
-        // remote server.
+        // Initialize dataset
         initDataset();
     }
+	
+	//onClick passed from the adapter viewholder
+	@Override
+	public void onItemClicked(int position)
+	{
+		Log.d(TAG, "OnClick");
+		mAdapter.toggleSelection(position);
+	}
+	
 	
 	private int getNumPeople() {
         if (getArguments().getInt("people", 0) > 0)
@@ -100,7 +101,7 @@ public class SecondFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         //setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
 
-        mAdapter = new CustomAdapter(mDataset);
+        mAdapter = new CustomAdapter(mDataset, this);
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
         // END_INCLUDE(initializeRecyclerView)
