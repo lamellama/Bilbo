@@ -28,6 +28,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
     protected CustomAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected String[] mDataset;
+	protected ItemCalculator calculator;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,12 +118,17 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    /**
-     * Generates Strings for RecyclerView's adapter. This data would usually come
-     * from a local content provider or remote server.
-     */
+    //Pass input to calculator and prepare results for adapter
     private void initDataset() {
-		Log.d(TAG, "initDataset(): getNumPeople(): " + getNumPeople());
+		Log.d(TAG, "initDataset(): getNumPeople(): " + getNumPeople() + " getBillTotal(): " + getBillTotal());
+		//Give the calculator the input
+		calculator = new ItemCalculator(getNumPeople(), getBillTotal(), getTipPercent());
+		//Get the output
+		PerPersonValue[] ppValues = calculator.getPPValueList();
+		
+		
+		
+		
         mDataset = new String[getNumPeople()];
 		
         for (int i = 0; i < getNumPeople(); i++) {

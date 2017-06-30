@@ -30,7 +30,7 @@ import java.util.*;
 public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
-    private String[] mDataSet;
+    private PerPersonValue[] mDataSet;
 	private ViewHolder.ClickListener clickListener;
 	//private ArrayList<Boolean> selected;
 
@@ -95,7 +95,7 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
      *
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
      */
-    public CustomAdapter(String[] dataSet, ViewHolder.ClickListener clickListener) {
+    public CustomAdapter(PerPersonValue[] dataSet, ViewHolder.ClickListener clickListener) {
         mDataSet = dataSet;
 		this.clickListener = clickListener;
     }
