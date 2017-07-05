@@ -8,6 +8,7 @@ public class ItemCalculator
 	private final static String TAG = "ItemCalculator";
 	private PerPersonValue[] ppValues;
 	private Map<Integer, List<Integer>> groupIndexMap;
+	private List<Integer> groups;
 	private float totalExtraValue =0;
 	private int numPeople;
 	private float billTotal;
@@ -22,54 +23,52 @@ public class ItemCalculator
 		ppValues = new PerPersonValue[numPeople];
 		calculatePerPersonValues();
 		groupIndexMap = new HashMap <Integer, List<Integer>>();
+		groups = new ArrayList<Integer>();
 		//initialiseGroups();
 	}
 	
-	private void addToGroup(Integer[] items, int group){
-		Integer[] newGroup = new Integer[items.length];
+	private void addToGroup(List<Integer> items, int group){
+		//Integer[] newGroup = new Integer[items.size()];
+		List<Integer> groupList = groupIndexMap.get(group);
+		for(Integer i = 0; i < items.size(); i++){
+			if(!groupList.contains(items.get(i)))
+				groupList.add(items.get(i));
+			
+			
+		}
 		
-		groupIndexList.add
 	}
 	
-	public void makeGroup(Integer[] items){
-		for( int i =0; i< items.length; i++){
-			if(ppValues[items[i]].group > 0){
+	public void breakGroup(int groupIndex){
+		if(groupIndexMap.containsKey(groupIndex)){
+			Log.d(TAG, "destroy group ");
+			for(int i = 0; i < groupIndexMap.get(groupIndex).size(); i ++)
+			//	if((groupIndexMap.get(groupIndex).get(i) < ppValues.length)&&(groupIndexMap.get(groupIndex).get(i) >=0))
+				ppValues[groupIndexMap.get(groupIndex).get(i)].group = 0;
+				
+			groupIndexMap.remove(groupIndex);
+		}
+	}
+	
+	public void makeGroup(List<Integer> items){
+		for( int i =0; i< items.size(); i++){
+			if(ppValues[items.get(i)].group > 0){
 				//this item is already in a group
-				addToGroup(items, ppValues[items[i]].group);
+				addToGroup(items, ppValues[items.get(i)].group);
 				return;
 			}
 		}
 		//items not already in groups, so male a new one
 		numGroups++;
+		groups.add(numGroups);
 		//Add list to 
-		groupIndexList.add(items);
-			
+		groupIndexMap.put(numGroups, items);
+		//Set thier group value
 		Log.d(TAG, "make new group ");
-		for(int i = 0; i < items.length; i ++)
-			if((items[i] < ppValues.length)&&(items[i] >=0))
-				ppValues[items[i]].group = numGroups;
+		for(int i = 0; i < items.size(); i ++)
+			if((items.get(i) < ppValues.length)&&(items.get(i) >=0))
+				ppValues[items.get(i)].group = numGroups;
 			
-			
-		
-		
-		
-	/*	groupIndexList.remove(groupList.get(0));
-		groupIndexList.add(groupList.get(0), groupList);
-		//new group inserted, remove duplicates
-		for(int i =0;i < groupList.size(); i++){
-			for(int j =0; j < groupIndexList.size(); j++){
-				if( j!=groupList.get(0)){
-					for(int it: groupIndexList.get(j)){
-						if(it == groupList.get(i)){
-
-							//found a group with a duplicate value
-							Log.d(TAG, "found a duplicate, deleting");
-							groupIndexList.get(j).remove(it);//??TODO does thhis work
-						}
-					}
-				}
-			}
-		}*/
 	}
 	
 	private void calculatePerPersonValues(){
@@ -90,28 +89,31 @@ public class ItemCalculator
 		
 	}
 	
-	public PerPersonValue[] getPPValueList(){
-		int itemCount = 0;
-		int i = 0;
+	public List<PerPersonValue> getPPValueList(){
+	
+		int i;
+		List<PerPersonValue> dataSet = new ArrayList<PerPersonValue>();
 		for(i = 0; i < ppValues.length; i++){
-			if(ppValues[i].group == 0){
-				itemCount++;
+			if(ppValues[i].group == 0)
+				dataSet.add(ppValues[i]);
+		}
+		//int currentGroup = 0;
+		for(i = 0; i<groups.size(); i++){
+			//for(Iterator j = new Set() : groupIndexMap)
+			if(groupIndexMap.containsKey(groups.get(i))){
+				List<Integer> tempList;// = new ArrayList<Integer>();
+				tempList = groupIndexMap.get(groups.get(i));
+				//Combine each group and add it to the list
+				PerPersonValue grouped = new PerPersonValue();
+				for(int k =0; k< tempList.size(); k++){
+					grouped.addedExtra += ppValues[tempList.get(k)].addedExtra;
+					grouped.bill += ppValues[tempList.get(k)].bill;
+					//TODO grouped. += ppValues[tempList.get(k)].addedExtra;
+					
+				}
+				dataSet.add(grouped);
 			}
 		}
-		itemCount+=itemsInGroup;
-		PerPersonValue[] dataSet = new PerPersonValue[itemCount];
-		int j = 0;//this is used in the next loop also
-		for(i = 0; i < ppValues.length; i++){
-			if(ppValues[i].group == 0){
-				dataSet[j] = ppValues[i];
-				j++;
-				
-			}
-		}
-		//add the groups as one item
-		for(i = 0; i < groupIndexList.size(); i ++){
-			dataSet[j] = ppValues[groupIndexList.get(i)[i]];//TODO
-		} 
 		return dataSet;
 	}
 }

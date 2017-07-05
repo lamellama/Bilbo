@@ -30,7 +30,7 @@ import java.util.*;
 public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
-    private PerPersonValue[] mDataSet;
+    private List<PerPersonValue> mDataSet;
 	private ViewHolder.ClickListener clickListener;
 	//private ArrayList<Boolean> selected;
 
@@ -95,7 +95,7 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
      *
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
      */
-    public CustomAdapter(PerPersonValue[] dataSet, ViewHolder.ClickListener clickListener) {
+    public CustomAdapter(List<PerPersonValue> dataSet, ViewHolder.ClickListener clickListener) {
         mDataSet = dataSet;
 		this.clickListener = clickListener;
     }
@@ -127,14 +127,14 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		// Highlight the item if it's selected
         viewHolder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
         // Get element from your dataset at this position and replace the contents of the view
-        // with that element
-        viewHolder.getTextView().setText(mDataSet[position]);
+        // with that element,
+        viewHolder.getTextView().setText("Blah position: " + position);
     }
     // END_INCLUDE(recyclerViewOnBindViewHolder)
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataSet.length;
+        return mDataSet.size();
     }
 }

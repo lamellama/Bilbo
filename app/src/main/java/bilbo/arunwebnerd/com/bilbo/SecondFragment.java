@@ -14,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.util.Log;
 import android.support.v7.app.*;
+import java.util.*;
 
 
 public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder.ClickListener
@@ -27,7 +28,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
     protected RecyclerView mRecyclerView;
     protected CustomAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
-    protected String[] mDataset;
+    protected List<PerPersonValue> mDataset;
 	protected ItemCalculator calculator;
 
     @Override
@@ -124,15 +125,10 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		//Give the calculator the input
 		calculator = new ItemCalculator(getNumPeople(), getBillTotal(), getTipPercent());
 		//Get the output
-		PerPersonValue[] ppValues = calculator.getPPValueList();
+		mDataset = calculator.getPPValueList();
 		
 		
 		
 		
-        mDataset = new String[getNumPeople()];
-		
-        for (int i = 0; i < getNumPeople(); i++) {
-            mDataset[i] = "This is element #" + i;
-        }
     }
 }	
