@@ -131,14 +131,23 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+       
+		switch (item.getItemId()) {
+			case R.id.action_settings:
+				// User chose the "Settings" item, show the app settings UI...
+				return true;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+			case R.id.action_group:
+				
+				return true;
+			case R.id.action_ungroup:
+				return true;
+			default:
+			//No action
+				return super.onOptionsItemSelected(item);
 
-        return super.onOptionsItemSelected(item);
+		}
+	
     }
 
 }

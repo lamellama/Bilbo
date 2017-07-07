@@ -7,6 +7,8 @@
     <string name="tip_prompt">Choose a tip</string>
     <string name="element_text">Element</string>
     <string name="grid_layout_manager">Grid Layout Manager</string>
+	<string name="action_ungroup">Ungroup</string>
+	<string name="action_group">Group</string>
     <string name="linear_layout_manager">Linear Layout Manager</string>
     <string-array name="tippercent_array">
         <item>5</item>

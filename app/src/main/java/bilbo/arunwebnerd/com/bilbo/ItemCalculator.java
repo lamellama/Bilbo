@@ -21,6 +21,8 @@ public class ItemCalculator
 		billTotal = bill;
 		tipPercent = tip;
 		ppValues = new PerPersonValue[numPeople];
+		for(int i = 0; i < numPeople; i++)
+			ppValues[i] = new PerPersonValue();
 		calculatePerPersonValues();
 		groupIndexMap = new HashMap <Integer, List<Integer>>();
 		groups = new ArrayList<Integer>();
@@ -74,7 +76,7 @@ public class ItemCalculator
 	private void calculatePerPersonValues(){
 		
 		float perPerson = (billTotal - totalExtraValue) / numPeople;
-		for(int i =0; i<numPeople; i++){
+		for(int i =0; i<ppValues.length; i++){
 			ppValues[i].bill = perPerson;
 		}
 		
