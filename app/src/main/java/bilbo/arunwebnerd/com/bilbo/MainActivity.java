@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 	private int numPeople;
 	private int tipPercent;
 	private float billTotal;
+	
+	SecondFragment secondFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +54,12 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+		
+		secondFragment = SecondFragment.newInstance("SecondFragment, Instance 1");
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mPageAdapter = new MyPagerAdapter(getSupportFragmentManager());
-
+        mPageAdapter = new MyPagerAdapter(getSupportFragmentManager(), secondFragment);
+		
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mPageAdapter);
@@ -81,9 +85,11 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 
     }
 	private class MyPagerAdapter extends FragmentPagerAdapter {
-
-        public MyPagerAdapter(FragmentManager fm) {
+		private Fragment secondFragment;
+        public MyPagerAdapter(FragmentManager fm, Fragment frag) {
+			
             super(fm);
+			secondFragment = frag;
         }
 
         @Override
@@ -91,12 +97,12 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
             switch(pos) {
 
 				case 0: return FirstFragment.newInstance("FirstFragment, Instance 1");
-				case 1:SecondFragment newFragment = SecondFragment.newInstance("SecondFragment, Instance 1");
+				case 1://SecondFragment newFragment = SecondFragment.newInstance("SecondFragment, Instance 1");
 					Log.d(TAG, "secondFragBundled");
 					
 					//secondFragBundle = getSupportFragmentManager().findFragmentById(R.id.pageview)
-					newFragment.setArguments(secondFragBundle); 
-					return newFragment;
+					secondFragment.setArguments(secondFragBundle); 
+					return secondFragment;
 				default: return FirstFragment.newInstance("ThirdFragment, Default");
             }
         }
@@ -138,9 +144,12 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 				return true;
 
 			case R.id.action_group:
-				
+				//((SecondFragment)getSupportFragmentManager().findFragmentById(R.id.second_frag)).groupItems();
+				secondFragment.groupItems();
 				return true;
 			case R.id.action_ungroup:
+				secondFragment.unGroupItems();
+				//((SecondFragment)getSupportFragmentManager().findFragmentById(R.id.second_frag)).unGroupItems();
 				return true;
 			default:
 			//No action

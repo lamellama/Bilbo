@@ -31,6 +31,7 @@ public class ItemCalculator
 	
 	private void addToGroup(List<Integer> items, int group){
 		//Integer[] newGroup = new Integer[items.size()];
+		Log.d(TAG, "Add to group ");
 		List<Integer> groupList = groupIndexMap.get(group);
 		for(Integer i = 0; i < items.size(); i++){
 			if(!groupList.contains(items.get(i)))

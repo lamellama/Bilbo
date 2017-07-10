@@ -32,7 +32,6 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 
     private List<PerPersonValue> mDataSet;
 	private ViewHolder.ClickListener clickListener;
-	//private ArrayList<Boolean> selected;
 
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
     /**
@@ -61,19 +60,7 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 			selectedOverlay = itemView.findViewById(R.id.selected_overlay);
 			this.listener = listener;
 			itemView.setOnClickListener(this);
-            // Define click listener for the ViewHolder's View.
-       /*     v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-					
-					
-                   Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
-				   if(!selected)
-					   selected = true;
-				   else
-					   selected = false;
-                }
-            });*/
+
             textView = (TextView) v.findViewById(R.id.textView);
         }
 		
@@ -99,6 +86,11 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
         mDataSet = dataSet;
 		this.clickListener = clickListener;
     }
+	
+	public void updateDataset(List<PerPersonValue> data){
+		mDataSet = data;
+		notifyAll();
+	}
 
     // BEGIN_INCLUDE(recyclerViewOnCreateViewHolder)
     // Create new views (invoked by the layout manager)

@@ -28,9 +28,19 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
     protected RecyclerView mRecyclerView;
     protected CustomAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
-    protected List<PerPersonValue> mDataset;
 	protected ItemCalculator calculator;
+	
+	public void groupItems(){
+		Log.d(TAG, "makeGroup()");
+		calculator.makeGroup(mAdapter.getSelectedItems());
+		//TODO pass new dataset to adapter
+		mAdapter.updateDataset(calculator.getPPValueList());
+	}
 
+	public void unGroupItems(){
+		calculator.breakGroup(mAdapter.getSelectedItems().get(0));
+	}
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +88,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
         f.setArguments(b);
         return f;
     }
+	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -91,19 +102,10 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
         // to the way ListView would layout elements. The RecyclerView.LayoutManager defines how
         // elements are laid out.
         mLayoutManager = new LinearLayoutManager(getActivity());
-
-      /*  mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-
-        if (savedInstanceState != null) {
-            // Restore saved layout manager type.
-            mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
-                    .getSerializable(KEY_LAYOUT_MANAGER);
-        }*/
-
+		
         mRecyclerView.setLayoutManager(mLayoutManager);
-        //setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
 
-        mAdapter = new CustomAdapter(mDataset, this);
+        mAdapter = new CustomAdapter(calculator.getPPValueList(), this);
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
         // END_INCLUDE(initializeRecyclerView)
@@ -124,11 +126,6 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		Log.d(TAG, "initDataset(): getNumPeople(): " + getNumPeople() + " getBillTotal(): " + getBillTotal());
 		//Give the calculator the input
 		calculator = new ItemCalculator(getNumPeople(), getBillTotal(), getTipPercent());
-		//Get the output
-		mDataset = calculator.getPPValueList();
-		
-		
-		
 		
     }
 }	
