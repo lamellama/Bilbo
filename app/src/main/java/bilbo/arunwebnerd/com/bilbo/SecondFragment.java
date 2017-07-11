@@ -33,7 +33,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 	public void groupItems(){
 		Log.d(TAG, "makeGroup()");
 		calculator.makeGroup(mAdapter.getSelectedItems());
-		//TODO pass new dataset to adapter
+		//pass new dataset to adapter
 		mAdapter.updateDataset(calculator.getPPValueList());
 	}
 

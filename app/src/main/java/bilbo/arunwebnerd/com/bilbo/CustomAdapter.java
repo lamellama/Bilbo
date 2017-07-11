@@ -89,7 +89,9 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 	
 	public void updateDataset(List<PerPersonValue> data){
 		mDataSet = data;
-		notifyAll();
+		clearSelection();
+		notifyDataSetChanged();
+		
 	}
 
     // BEGIN_INCLUDE(recyclerViewOnCreateViewHolder)
