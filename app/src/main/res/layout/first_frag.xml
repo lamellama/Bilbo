@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,32 +6,70 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:stretchColumns="*"
     tools:context="bilbo.arunwebnerd.com.bilbo.MainActivity">
 
-    <EditText
-        android:id="@+id/tvTotal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/total_prompt" />
-
-    <Spinner
-        android:id="@+id/tvNumPeople"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/people_prompt"
-        android:layout_below="@+id/tvTotal"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-		android:entries="@array/numpeople_array"
-        android:prompt="@string/people_prompt" />
-
-    <Spinner
-        android:id="@+id/spinnerTipPercent"
+    <TableRow
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvNumPeople"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:entries="@array/tippercent_array"
-        android:prompt="@string/tip_prompt" />
-</RelativeLayout>
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/billTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Bill" />
+
+        <EditText
+            android:id="@+id/tvTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:digits="0123456789."
+            android:text="@string/total_prompt"
+            android:ems="10"/>
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/numPeopleTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/people_prompt" />
+
+        <SeekBar
+            android:id="@+id/sbNumPeople"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="50"
+            android:progress="25"
+
+            />
+    </TableRow>
+
+    <TableRow
+        android:layout_weight="1"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/tipTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tip_prompt" />
+        <SeekBar
+            android:id="@+id/sbTipPercent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="50"
+            android:progress="10"
+ />
+    </TableRow>
+
+
+</TableLayout>
