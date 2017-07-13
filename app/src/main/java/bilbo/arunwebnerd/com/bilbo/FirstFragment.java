@@ -15,7 +15,7 @@ import java.util.function.*;
 import android.widget.AdapterView.*;
 import android.util.*;
 
-public class FirstFragment extends Fragment implements OnItemSelectedListener, OnClickListener
+public class FirstFragment extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener
 {
 	private static final String TAG = "FirstFragment";
 	OnInputUpdateListener mCallback;
@@ -33,7 +33,7 @@ public class FirstFragment extends Fragment implements OnItemSelectedListener, O
 
         final EditText tvTotal = (EditText) v.findViewById(R.id.tvTotal);
         tvTotal.setText(getContext().getResources().getString(R.string.total_default));
-		tvTotal.setOnFocusChangeListener(new OnFocusChangeListener() {          
+		tvTotal.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 				@Override
 				public void onFocusChange(View v, boolean hasFocus) {
 					if (!hasFocus) {
@@ -45,9 +45,9 @@ public class FirstFragment extends Fragment implements OnItemSelectedListener, O
 				}
 			});
 
-        Spinner tvNumberPeople = (Spinner) v.findViewById(R.id.tvNumPeople);
-		tvNumberPeople.setSelection(getIndex(tvNumberPeople, numPeople));
-		tvNumberPeople.setOnItemSelectedListener(this);
+        SeekBar sbNumberPeople = (SeekBar) v.findViewById(R.id.sbNumPeople);
+		//sbNumberPeople.setSelection(getIndex(sbNumberPeople, numPeople));
+		sbNumberPeople.setOnSeekBarChangeListener(this);
 		/*tvNumberPeople.setOnItemSelectedListener(new OnItemSelectedListener() {
 				@Override
 				public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -62,8 +62,8 @@ public class FirstFragment extends Fragment implements OnItemSelectedListener, O
 
 			});*/
 
-        Spinner spinTipPercent = (Spinner) v.findViewById(R.id.spinnerTipPercent);
-		spinTipPercent.setOnItemSelectedListener(this);
+        SeekBar spinTipPercent = (SeekBar) v.findViewById(R.id.sbTipPercent);
+		spinTipPercent.setOnSeekBarChangeListener(this);
 		
 		//initialise variables in main activity
 		mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
@@ -89,30 +89,30 @@ public class FirstFragment extends Fragment implements OnItemSelectedListener, O
 	public void onClick(View p1)
 	{
 		switch (p1.getId()) {
-			case R.id.tvNumPeople:
+			case R.id.sbNumPeople:
 				
 				break;
         }
 		mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
 	}
 	
-	public void onItemSelected(AdapterView<?> parent, View view,
+/*	public void onItemSelected(AdapterView<?> parent, View view,
 							   int pos, long id) {
         // An item was selected. You can retrieve the selected item using
         //Spinner inputSpinner = (Spinner)parent.getItemAtPosition(pos);
 		switch (parent.getId()) {
-			case R.id.tvNumPeople:
+			case R.id.sbNumPeople:
 				Log.d(TAG, "Spinner numPeople selected: " + parent.getItemAtPosition(pos));
 				numPeople = Integer.parseInt(parent.getItemAtPosition(pos).toString());
 				break;
-			case R.id.spinnerTipPercent:
+			case R.id.sbTipPercent:
 				Log.d(TAG, "Spinner Tip selected: " + parent.getItemAtPosition(pos));
 				tipPercent = Integer.parseInt(parent.getItemAtPosition(pos).toString());
 				break;
         }
 		// Send the event to the host activity
         mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
-    }
+    }*/
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
@@ -125,8 +125,36 @@ public class FirstFragment extends Fragment implements OnItemSelectedListener, O
 		inputBun.putFloat("total", billTotal);
 		return inputBun;
 	}
-	
-    // Container Activity must implement this interface
+
+	@Override
+	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+		// An item was selected. You can retrieve the selected item using
+		//Spinner inputSpinner = (Spinner)parent.getItemAtPosition(pos);
+		switch (seekBar.getId()) {
+			case R.id.sbNumPeople:
+				Log.d(TAG, "Seekbar numPeople selected: " + seekBar.getProgress());
+				numPeople = seekBar.getProgress();
+				break;
+			case R.id.sbTipPercent:
+				Log.d(TAG, "Spinner Tip selected: " + seekBar.getProgress());
+				tipPercent = seekBar.getProgress();
+				break;
+		}
+		// Send the event to the host activity
+		mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
+	}
+
+	@Override
+	public void onStartTrackingTouch(SeekBar seekBar) {
+
+	}
+
+	@Override
+	public void onStopTrackingTouch(SeekBar seekBar) {
+
+	}
+
+	// Container Activity must implement this interface
     public interface OnInputUpdateListener {
         public void onInputUpdate(int numPeeps, int tip, float total);
     }

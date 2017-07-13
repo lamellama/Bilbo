@@ -1,53 +1,12 @@
 <resources>
     <string name="app_name">Bilbo</string>
     <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="total_prompt">Bill total</string>
-    <string name="people_prompt">How many People?</string>
-    <string name="tip_prompt">Choose a tip</string>
+    <string name="total_prompt">£0.00</string>
+    <string name="people_prompt">People count</string>
+    <string name="tip_prompt">Tip %</string>
     <string name="element_text">Element</string>
     <string name="grid_layout_manager">Grid Layout Manager</string>
 	<string name="action_ungroup">Ungroup</string>
 	<string name="action_group">Group</string>
     <string name="linear_layout_manager">Linear Layout Manager</string>
-    <string-array name="tippercent_array">
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-        <item>16</item>
-        <item>17</item>
-        <item>18</item>
-        <item>19</item>
-        <item>20</item>
-    </string-array>
-<string-array name="numpeople_array">
-	<item>2</item>
-	<item>3</item>
-	<item>4</item>
-	<item>5</item>
-    <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-        <item>16</item>
-        <item>17</item>
-        <item>18</item>
-        <item>19</item>
-        <item>20</item>
-    </string-array>
-		
 	</resources>
