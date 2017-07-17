@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 		
+		secondFragBundle = new Bundle();
 		secondFragment = SecondFragment.newInstance("SecondFragment, Instance 1");
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
             }
         });
 		
-		secondFragBundle = new Bundle();
+		
 		
 		tipPercent = getResources().getInteger(R.integer.tip_default);
 		billTotal = Float.parseFloat( getResources().getString(R.string.total_default));
@@ -121,6 +122,16 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 		secondFragBundle.putInt("tip", tip);
 		secondFragBundle.putInt("people", numPeeps);
 		secondFragBundle.putFloat("total", total);
+		
+		//secondFragment.setArguments(secondFragBundle);
+		
+		if(secondFragment == null){}
+		else{
+			Bundle bun = new Bundle();
+			bun.putInt("tip", tip);
+			bun.putInt("people", numPeeps);
+			bun.putFloat("total", total);
+			secondFragment.updateArgs(bun);}
 	}
 
 

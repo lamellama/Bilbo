@@ -47,6 +47,7 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 
         SeekBar sbNumberPeople = (SeekBar) v.findViewById(R.id.sbNumPeople);
 		//sbNumberPeople.setSelection(getIndex(sbNumberPeople, numPeople));
+		sbNumberPeople.setProgress(numPeople);
 		sbNumberPeople.setOnSeekBarChangeListener(this);
 		/*tvNumberPeople.setOnItemSelectedListener(new OnItemSelectedListener() {
 				@Override
@@ -71,19 +72,6 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
         return v;
     }
 	
-	private int getIndex(Spinner spinner, int value){
-
-        int index = 0;
-
-        for (int i=0;i<spinner.getCount();i++){
-		//	Log.d(TAG, "spinner.getItemAtPosition(i): " + spinner.getItemAtPosition(i) + " + value: " + value);
-            if (spinner.getItemAtPosition(i).equals(Integer.toString(value))){
-                index = i;
-				//Log.d(TAG, "values equal");
-            }
-        }
-        return index;
-	}
 	
 	@Override
 	public void onClick(View p1)
@@ -93,7 +81,7 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 				
 				break;
         }
-		mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
+		//mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
 	}
 	
 /*	public void onItemSelected(AdapterView<?> parent, View view,
@@ -118,13 +106,14 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
         // Another interface callback
     }
 	
-	public Bundle getInput(){
+	/*public Bundle getInput(){
 		Bundle inputBun = new Bundle();
 		inputBun.putInt("tip", tipPercent);
 		inputBun.putInt("people", numPeople);
 		inputBun.putFloat("total", billTotal);
+		Log.d(TAG, "getInput()");
 		return inputBun;
-	}
+	}*/
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

@@ -13,8 +13,8 @@ public class ItemCalculator
 	private int numPeople;
 	private float billTotal;
 	private int tipPercent;
-	private int itemsInGroup = 0;
-	private int numGroups = 0;
+	//private int itemsInGroup = 0;
+	private int uniqueIndex = 1;
 	
 	public ItemCalculator(int numPeeps, float bill, int tip){
 		numPeople = numPeeps;
@@ -31,46 +31,90 @@ public class ItemCalculator
 	
 	private void addToGroup(List<Integer> items, int group){
 		//Integer[] newGroup = new Integer[items.size()];
-		Log.d(TAG, "Add to group ");
+		//Log.d(TAG, "Add to group ");
 		List<Integer> groupList = groupIndexMap.get(group);
-		for(Integer i = 0; i < items.size(); i++){
-			if(!groupList.contains(items.get(i)))
-				groupList.add(items.get(i));
-			
-			
+		for(int i = 0; i < groupList.size(); i++){
+			Log.d(TAG, "groupList before: " + groupList.get(i));
 		}
 		
+		for(Integer i = 0; i < items.size(); i++){
+			
+			if(!groupList.contains(items.get(i))){
+				groupList.add(items.get(i));
+				ppValues[items.get(i)].group = group;
+				Log.d(TAG, "addToGroup()" + group + ": " + items.get(i));
+				}
+			
+		}
+		for(int i = 0; i < groupList.size(); i++){
+			Log.d(TAG, "groupList after: " + groupIndexMap.get(group).get(i));
+		}
+			
+	}
+	private List<Integer> getRealIndex(List<Integer> items){
+		List<Integer> newList = new ArrayList<Integer>();
+		for(int j = 0; j < items.size(); j++){
+			
+			int index = items.get(j) + groups.size();
+			for(int i = 0; i<ppValues.length && i < (items.get(j) + groups.size()); i++){
+				if(ppValues[i].group > 0)
+					index--;
+			}
+			newList.add(index);
+		}
+		return newList;
+	}
+	
+	private int getRealIndex(int displayIndex){
+		int index = displayIndex + groups.size();
+		for(int i = 0; i<ppValues.length && i < (displayIndex + groups.size()); i++){
+			if(ppValues[i].group > 0)
+				index--;
+		}
+		return index;
 	}
 	
 	public void breakGroup(int groupIndex){
+		Log.d(TAG, "remove group: " + groupIndex);
 		if(groupIndexMap.containsKey(groupIndex)){
 			Log.d(TAG, "destroy group ");
-			for(int i = 0; i < groupIndexMap.get(groupIndex).size(); i ++)
+			for(int i = 0; i < groupIndexMap.get(groupIndex).size(); i ++){
 			//	if((groupIndexMap.get(groupIndex).get(i) < ppValues.length)&&(groupIndexMap.get(groupIndex).get(i) >=0))
 				ppValues[groupIndexMap.get(groupIndex).get(i)].group = 0;
+				}
 				
 			groupIndexMap.remove(groupIndex);
+		
 		}
+		if(groups.contains(groupIndex)){groups.remove(groupIndex);}
+		
 	}
 	
 	public void makeGroup(List<Integer> items){
-		for( int i =0; i< items.size(); i++){
-			if(ppValues[items.get(i)].group > 0){
+		List<Integer> itemsCopy = getRealIndex(items);
+		for(int x =0; x<itemsCopy.size(); x++)
+			Log.d(TAG, "Makegroup(): " + itemsCopy.get(x));
+		for( int i =0; i< itemsCopy.size(); i++){
+			if(ppValues[itemsCopy.get(i)].group > 0){
 				//this item is already in a group
-				addToGroup(items, ppValues[items.get(i)].group);
+				addToGroup(items, ppValues[itemsCopy.get(i)].group);
 				return;
 			}
 		}
 		//items not already in groups, so male a new one
-		numGroups++;
-		groups.add(numGroups);
+		//numGroups++;
+		int group = uniqueIndex;
+		uniqueIndex++;
+		groups.add(group);
 		//Add list to 
-		groupIndexMap.put(numGroups, items);
+		groupIndexMap.put(group, itemsCopy);
 		//Set thier group value
-		Log.d(TAG, "make new group ");
-		for(int i = 0; i < items.size(); i ++)
-			if((items.get(i) < ppValues.length)&&(items.get(i) >=0))
-				ppValues[items.get(i)].group = numGroups;
+		Log.d(TAG, "make new group: " + group);
+		for(int i = 0; i < itemsCopy.size(); i ++)
+			if((items.get(i) < ppValues.length)&&(itemsCopy.get(i) >=0)){
+				ppValues[itemsCopy.get(i)].group = group;
+				Log.d(TAG, "item " + itemsCopy.get(i) + " group set to: " + group);
+				}
 			
 	}
 	

@@ -30,21 +30,48 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
     protected RecyclerView.LayoutManager mLayoutManager;
 	protected ItemCalculator calculator;
 	
+	private int numPeople;
+	private int tipPercent;
+	private float billTotal;
+	
+	public void updateArgs(Bundle args){
+		Log.d(TAG, "updateArgs");
+		numPeople = args.getInt("people", 0);
+		tipPercent = args.getInt("tip", 0);
+		billTotal = args.getFloat("total", 0);
+		
+		init();
+	}
+	
+	private void init(){
+		initDataset();
+		
+		if(mAdapter!=null)
+			mAdapter.updateDataset(calculator.getPPValueList());
+		
+	}
+	
 	public void groupItems(){
 		Log.d(TAG, "makeGroup()");
-		calculator.makeGroup(mAdapter.getSelectedItems());
+		if(calculator!=null)
+			calculator.makeGroup(mAdapter.getSelectedItems());
 		//pass new dataset to adapter
-		mAdapter.updateDataset(calculator.getPPValueList());
+		if(mAdapter!=null)
+			mAdapter.updateDataset(calculator.getPPValueList());
 	}
 
 	public void unGroupItems(){
-		calculator.breakGroup(mAdapter.getSelectedItems().get(0));
+		if(calculator!=null)
+			calculator.breakGroup(mAdapter.getSelectedItems().get(0));
 	}
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+		numPeople = getArguments().getInt("people", 0);
+		tipPercent = getArguments().getInt("tip", 0);
+		billTotal = getArguments().getFloat("total", 0);
+		//updateArgs(getNumPeople(), getTipPercent(), getBillTotal());
         // Initialize dataset
         initDataset();
     }
@@ -59,22 +86,22 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 	
 	
 	private int getNumPeople() {
-        if (getArguments().getInt("people", 0) > 0)
-			return getArguments().getInt("people", 0);
+        if (numPeople > 0)
+			return numPeople;
 		else
 			return 0;
     }
 	
 	private float getBillTotal() {
-        if (getArguments().getFloat("total", 0) > 0)
-			return getArguments().getFloat("total", 0);
+        if (billTotal > 0)
+			return billTotal;
 		else
 			return 0;
     }
 	
 	private int getTipPercent() {
-        if (getArguments().getInt("tip", 0) > 0)
-			return getArguments().getInt("tip", 0);
+        if(tipPercent > 0)
+			return tipPercent;
 		else
 			return 0;
     }
