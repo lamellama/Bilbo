@@ -8,7 +8,7 @@ public class ItemCalculator
 	private final static String TAG = "ItemCalculator";
 	private PerPersonValue[] ppValues;
 	private Map<Integer, List<Integer>> groupIndexMap;
-	private List<Integer> groups;
+	//private List<Integer> groups;
 	private float totalExtraValue =0;
 	private int numPeople;
 	private float billTotal;
@@ -25,7 +25,7 @@ public class ItemCalculator
 			ppValues[i] = new PerPersonValue();
 		calculatePerPersonValues();
 		groupIndexMap = new HashMap <Integer, List<Integer>>();
-		groups = new ArrayList<Integer>();
+		//groups = new ArrayList<Integer>();
 		//initialiseGroups();
 	}
 	
@@ -55,10 +55,10 @@ public class ItemCalculator
 		List<Integer> newList = new ArrayList<Integer>();
 		for(int j = 0; j < items.size(); j++){
 			
-			int index = items.get(j) + groups.size();
-			for(int i = 0; i<ppValues.length && i < (items.get(j) + groups.size()); i++){
+			int index = items.get(j) - groupIndexMap.size();
+			for(int i = 0; i<ppValues.length && i < (items.get(j) + groupIndexMap.size()); i++){
 				if(ppValues[i].group > 0)
-					index--;
+					index++;
 			}
 			newList.add(index);
 		}
@@ -66,8 +66,8 @@ public class ItemCalculator
 	}
 	
 	private int getRealIndex(int displayIndex){
-		int index = displayIndex + groups.size();
-		for(int i = 0; i<ppValues.length && i < (displayIndex + groups.size()); i++){
+		int index = displayIndex + groupIndexMap.size();
+		for(int i = 0; i<ppValues.length && i < (displayIndex + groupIndexMap.size()); i++){
 			if(ppValues[i].group > 0)
 				index--;
 		}
@@ -86,7 +86,7 @@ public class ItemCalculator
 			groupIndexMap.remove(groupIndex);
 		
 		}
-		if(groups.contains(groupIndex)){groups.remove(groupIndex);}
+		//if(groups.contains(groupIndex)){groups.remove(Integer.valueOf(groupIndex));}
 		
 	}
 	
@@ -97,7 +97,7 @@ public class ItemCalculator
 		for( int i =0; i< itemsCopy.size(); i++){
 			if(ppValues[itemsCopy.get(i)].group > 0){
 				//this item is already in a group
-				addToGroup(items, ppValues[itemsCopy.get(i)].group);
+				addToGroup(itemsCopy, ppValues[itemsCopy.get(i)].group);
 				return;
 			}
 		}
@@ -105,7 +105,7 @@ public class ItemCalculator
 		//numGroups++;
 		int group = uniqueIndex;
 		uniqueIndex++;
-		groups.add(group);
+		//groups.add(group);
 		//Add list to 
 		groupIndexMap.put(group, itemsCopy);
 		//Set thier group value
@@ -140,26 +140,47 @@ public class ItemCalculator
 	
 		int i;
 		List<PerPersonValue> dataSet = new ArrayList<PerPersonValue>();
-		for(i = 0; i < ppValues.length; i++){
-			if(ppValues[i].group == 0)
-				dataSet.add(ppValues[i]);
+		
+		//Combine groups imto single PP
+		for (Map.Entry<Integer, List <Integer>> entry : groupIndexMap.entrySet()) {
+			Integer groupKey = entry.getKey();
+			List<Integer> groupList = entry.getValue();
+			
+			PerPersonValue grouped = new PerPersonValue();
+			grouped.group = groupKey;
+			for(int k =0; k< groupList.size(); k++){
+				grouped.addedExtra += ppValues[groupList.get(k)].addedExtra;
+				grouped.bill += ppValues[groupList.get(k)].bill;
+				//TODO grouped. += ppValues[tempList.get(k)].addedExtra;
+
+			}
+			Log.d(TAG, "Add group to dataset");
+			dataSet.add(grouped);
+
 		}
 		//int currentGroup = 0;
-		for(i = 0; i<groups.size(); i++){
+		/*for(i = 0; i<groups.size(); i++){
 			//for(Iterator j = new Set() : groupIndexMap)
 			if(groupIndexMap.containsKey(groups.get(i))){
 				List<Integer> tempList;// = new ArrayList<Integer>();
 				tempList = groupIndexMap.get(groups.get(i));
 				//Combine each group and add it to the list
 				PerPersonValue grouped = new PerPersonValue();
+				grouped.group = ppValues[tempList.get(0)].group;
 				for(int k =0; k< tempList.size(); k++){
 					grouped.addedExtra += ppValues[tempList.get(k)].addedExtra;
 					grouped.bill += ppValues[tempList.get(k)].bill;
 					//TODO grouped. += ppValues[tempList.get(k)].addedExtra;
 					
 				}
+				Log.d(TAG, "Add group to dataset");
 				dataSet.add(grouped);
 			}
+		}*/
+		//Add individuals
+		for(i = 0; i < ppValues.length; i++){
+			if(ppValues[i].group == 0)
+				dataSet.add(ppValues[i]);
 		}
 		return dataSet;
 	}

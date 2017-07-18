@@ -50,19 +50,25 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 			mAdapter.updateDataset(calculator.getPPValueList());
 		
 	}
-	
-	public void groupItems(){
-		Log.d(TAG, "makeGroup()");
-		if(calculator!=null)
-			calculator.makeGroup(mAdapter.getSelectedItems());
+	private void updateAdapterData(){
 		//pass new dataset to adapter
 		if(mAdapter!=null)
 			mAdapter.updateDataset(calculator.getPPValueList());
 	}
+	public void groupItems(){
+		Log.d(TAG, "makeGroup()");
+		if(calculator!=null)
+			calculator.makeGroup(mAdapter.getSelectedItems());
+		
+		updateAdapterData();
+	}
 
 	public void unGroupItems(){
 		if(calculator!=null)
-			calculator.breakGroup(mAdapter.getSelectedItems().get(0));
+			for(int i = 0; i < mAdapter.getSelectedGroupId().size(); i++)
+				calculator.breakGroup(mAdapter.getSelectedGroupId().get(i));
+				
+		updateAdapterData();
 	}
 	
     @Override

@@ -93,6 +93,18 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		notifyDataSetChanged();
 		
 	}
+	
+	public List<Integer> getSelectedGroupId(){
+		List<Integer> groups = new ArrayList<Integer>();
+		List<Integer> selectedItems = getSelectedItems();
+		
+		for(int i = 0; i < selectedItems.size(); i++){
+			//for(int j = 0; j < groups.size(); j++){
+			groups.add(mDataSet.get(selectedItems.get(i)).group);
+			//}
+		}
+		return groups;
+	}
 
     // BEGIN_INCLUDE(recyclerViewOnCreateViewHolder)
     // Create new views (invoked by the layout manager)
@@ -122,7 +134,14 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
         viewHolder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
         // Get element from your dataset at this position and replace the contents of the view
         // with that element,
-        viewHolder.getTextView().setText("Blah position: " + position);
+		Log.d(TAG, "Dataset group: " + mDataSet.get(position).group );
+		if(mDataSet.get(position).group > 0){
+			//its a group
+			Log.d(TAG, "Print group");
+			viewHolder.getTextView().setText("Group");
+		}
+		else
+     	   viewHolder.getTextView().setText("Blah position: " + position);
     }
     // END_INCLUDE(recyclerViewOnBindViewHolder)
 
