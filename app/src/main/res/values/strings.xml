@@ -8,5 +8,6 @@
     <string name="grid_layout_manager">Grid Layout Manager</string>
 	<string name="action_ungroup">Ungroup</string>
 	<string name="action_group">Group</string>
+	<string name="action_add_value">Add Extras</string>
     <string name="linear_layout_manager">Linear Layout Manager</string>
 	</resources>

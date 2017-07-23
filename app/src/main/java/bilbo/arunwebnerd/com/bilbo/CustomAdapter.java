@@ -23,6 +23,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.util.Log;
 import java.util.*;
+import android.widget.*;
+import android.support.v7.view.ActionMode;
+import android.view.MenuInflater;
+import android.view.*;
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
@@ -32,6 +36,7 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 
     private List<PerPersonValue> mDataSet;
 	private ViewHolder.ClickListener clickListener;
+	private ActionMode mActionMode;
 
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
     /**
@@ -46,7 +51,9 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
          //   public boolean onItemLongClicked(int position);
         }
 
-        private final TextView textView;
+        public final TextView totalTextView;
+		public Button addButton;
+		public TextView numPartiesTextView;
 		public boolean selected = true;
 		
 		// an array of selected items (Integer indices) 
@@ -61,19 +68,27 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 			this.listener = listener;
 			itemView.setOnClickListener(this);
 
-            textView = (TextView) v.findViewById(R.id.textView);
+            totalTextView = (TextView) v.findViewById(R.id.tvTotalB);
+			numPartiesTextView = (TextView) v.findViewById(R.id.tvPP);
+			addButton = (Button) v.findViewById(R.id.addButton);
+			
         }
 		
 		@Override
         public void onClick(View v) {
             if (listener != null) {
                 listener.onItemClicked(getPosition());
+			//	mActionMode = MainActivity.getInstance().startActionMode(mActionModeCallback);
+			//	view.setSelected(true);
+			//	return true;
             }
         }
+		
+		public TextView getNumPPText(){return numPartiesTextView;}
+		public TextView getTotalText(){return totalTextView;}
+		public Button getAddButton(){return addButton;}
 
-        public TextView getTextView() {
-            return textView;
-        }
+        
     }
     // END_INCLUDE(recyclerViewSampleViewHolder)
 
@@ -82,9 +97,10 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
      *
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
      */
-    public CustomAdapter(List<PerPersonValue> dataSet, ViewHolder.ClickListener clickListener) {
+    public CustomAdapter(List<PerPersonValue> dataSet, ViewHolder.ClickListener clickListener, ActionMode actionMode) {
         mDataSet = dataSet;
 		this.clickListener = clickListener;
+		mActionMode = actionMode;
     }
 	
 	public void updateDataset(List<PerPersonValue> data){
@@ -138,10 +154,12 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		if(mDataSet.get(position).group > 0){
 			//its a group
 			Log.d(TAG, "Print group");
-			viewHolder.getTextView().setText("Group");
+			viewHolder.numPartiesTextView.setText("Group");
 		}
-		else
-     	   viewHolder.getTextView().setText("Blah position: " + position);
+		else{
+     	   viewHolder.numPartiesTextView.setText(Integer.toString(position));
+		   viewHolder.totalTextView.setText(Float.toString(mDataSet.get(position).bill));
+		   }
     }
     // END_INCLUDE(recyclerViewOnBindViewHolder)
 
@@ -150,4 +168,6 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
     public int getItemCount() {
         return mDataSet.size();
     }
+	
+	
 }

@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.util.Log;
 import android.support.v7.app.*;
 import java.util.*;
+import android.support.v7.view.ActionMode;
+import android.view.*;
 
 
 public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder.ClickListener
@@ -30,9 +32,14 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
     protected RecyclerView.LayoutManager mLayoutManager;
 	protected ItemCalculator calculator;
 	
+	protected static ActionMode mActionMode;
+	
 	private int numPeople;
 	private int tipPercent;
 	private float billTotal;
+	
+	boolean multiMenuStarted = false;
+	boolean singleMenuStarted = false;
 	
 	public void updateArgs(Bundle args){
 		Log.d(TAG, "updateArgs");
@@ -82,13 +89,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
         initDataset();
     }
 	
-	//onClick passed from the adapter viewholder
-	@Override
-	public void onItemClicked(int position)
-	{
-		Log.d(TAG, "OnClick");
-		mAdapter.toggleSelection(position);
-	}
+	
 	
 	
 	private int getNumPeople() {
@@ -137,8 +138,10 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
         mLayoutManager = new LinearLayoutManager(getActivity());
 		
         mRecyclerView.setLayoutManager(mLayoutManager);
+		
+		//mRecyclerView.setChoiceMode
 
-        mAdapter = new CustomAdapter(calculator.getPPValueList(), this);
+        mAdapter = new CustomAdapter(calculator.getPPValueList(), this, mActionMode);
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
         // END_INCLUDE(initializeRecyclerView)
@@ -161,4 +164,115 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		calculator = new ItemCalculator(getNumPeople(), getBillTotal(), getTipPercent());
 		
     }
+	
+	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+		// Called when the action mode is created; startActionMode() was called
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			// Inflate a menu resource providing context menu items
+			MenuInflater inflater = mode.getMenuInflater();
+			//if(mAdapter.getSelectedItemCount() > 1){
+				if(singleMenuStarted){
+					//start singleMenu
+					inflater.inflate(R.menu.action_single_select, menu);
+				}
+				else{
+					//start multiMenu
+					inflater.inflate(R.menu.action_multi_select, menu);
+				}
+			
+			
+			return true;
+		}
+
+		// Called each time the action mode is shown. Always called after onCreateActionMode, but
+		// may be called multiple times if the mode is invalidated.
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return false; // Return false if nothing is done
+		}
+
+		// Called when the user selects a contextual menu item
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			switch (item.getItemId()) {
+				case R.id.action_group:
+					groupItems();
+					mode.finish();
+					return true;
+				case R.id.action_ungroup:
+					unGroupItems();
+					mode.finish(); // Action picked, so close the CAB
+					return true;
+				default:
+					return false;
+			}
+		}
+
+		// Called when the user exits the action mode
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			mActionMode = null;
+		}
+	};
+	
+	public enum menuState{
+		single,
+		multi,
+		
+	}
+	
+	//onClick passed from the adapter viewholder
+	@Override
+	public void onItemClicked(int position)
+	{
+		Log.d(TAG, "OnClick");
+		mAdapter.toggleSelection(position);
+		AppCompatActivity activity=(AppCompatActivity)getActivity();
+		
+		
+		if(multiMenuStarted){
+			if(mAdapter.getSelectedItemCount() < 2){
+				//closeMulti
+				//Start single menu
+				multiMenuStarted = false;
+				singleMenuStarted =true;
+				if(mActionMode != null)
+					mActionMode.finish();
+				mActionMode = activity.startSupportActionMode(mActionModeCallback);
+				
+				
+			}
+		}
+		else if(singleMenuStarted){
+			if(mAdapter.getSelectedItemCount() > 1){
+				//close single
+				//Start multiMenu
+				multiMenuStarted = true;
+				singleMenuStarted =false;
+				if(mActionMode != null)
+					mActionMode.finish();
+				mActionMode = activity.startSupportActionMode(mActionModeCallback);
+				
+			}
+			if(mAdapter.getSelectedItemCount() < 1){
+				//close singleMenu
+				singleMenuStarted =false;
+				if(mActionMode != null)
+					mActionMode.finish();
+				
+			}
+		}else if(mAdapter.getSelectedItemCount() > 0){
+			singleMenuStarted =true;
+			
+			mActionMode = activity.startSupportActionMode(mActionModeCallback);
+		}
+		
+        
+        
+	}
+	
 }	
+
+
