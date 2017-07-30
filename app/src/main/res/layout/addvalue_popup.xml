@@ -1,0 +1,23 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="match_parent"
+	android:layout_marginLeft="@dimen/margin_medium"
+	android:layout_marginRight="@dimen/margin_medium"
+	android:stretchColumns="*"
+	android:gravity="center_vertical"
+	android:theme="@style/AppTheme.PopupOverlay">
+	<TableRow
+		android:id="@+id/addTableRow2"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:gravity="center"
+		android:layout_weight="1">
+		<EditText
+			android:id="@+id/popAddInput"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="numberDecimal"
+			android:digits="0123456789."
+			android:text="10.00"/>
+	</TableRow>
+</TableLayout>

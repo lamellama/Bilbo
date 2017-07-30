@@ -17,10 +17,19 @@ import android.support.v7.app.*;
 import java.util.*;
 import android.support.v7.view.ActionMode;
 import android.view.*;
+import android.support.v7.widget.*;
+import android.widget.*;
+import android.content.*;
+import android.support.v4.app.DialogFragment;
+import android.app.Dialog;
+import android.app.Activity;
 
 
-public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder.ClickListener
+public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder.ClickListener, AddValueDialogFragment.AddClickListener
 {
+
+	
+	
 	
     private static final String TAG = "RecyclerViewFragment";
 
@@ -40,6 +49,8 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 	
 	boolean multiMenuStarted = false;
 	boolean singleMenuStarted = false;
+	
+	Menu addValuePopup;
 	
 	public void updateArgs(Bundle args){
 		Log.d(TAG, "updateArgs");
@@ -76,6 +87,15 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 				calculator.breakGroup(mAdapter.getSelectedGroupId().get(i));
 				
 		updateAdapterData();
+	}
+	
+	public void addValueToItems(float value){
+		if(calculator!=null)
+			for(int i = 0; i < mAdapter.getSelectedGroupId().size(); i++)
+				calculator.addExtraValue(mAdapter.getSelectedGroupId().get(i), value);
+
+		updateAdapterData();
+	
 	}
 	
     @Override
@@ -123,10 +143,12 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
         return f;
     }
 	
+	private View rootView;
+	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.second_frag, container, false);
+        rootView = inflater.inflate(R.layout.second_frag, container, false);
         rootView.setTag(TAG);
 
         // BEGIN_INCLUDE(initializeRecyclerView)
@@ -164,6 +186,40 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		calculator = new ItemCalculator(getNumPeople(), getBillTotal(), getTipPercent());
 		
     }
+	
+	public  void messageDialog(Activity a, String title, String message){
+		AlertDialog.Builder dialog = new AlertDialog.Builder(a);
+		dialog.setTitle(title);
+		dialog.setMessage(message);
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+
+		// Inflate and set the layout for the dialog
+		// Pass null as the parent view because its going in the dialog layout
+		dialog.setView(inflater.inflate(R.layout.addvalue_popup, null));
+		dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					// Add value
+					EditText t = ((EditText) ((AlertDialog) dialog).findViewById(R.id.popAddInput));
+					addValueToItems(Float.parseFloat(t.getText().toString()));
+
+				}
+			})
+			.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					// User cancelled the dialog
+				}
+			});
+		dialog.create().show();     
+
+	}
+	
+	@Override
+	public void addValueClicked(float value)
+	{
+		
+		addValueToItems(value);
+	}
+	
 	
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
@@ -205,6 +261,27 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 					unGroupItems();
 					mode.finish(); // Action picked, so close the CAB
 					return true;
+				case R.id.action_add_value:
+					//AddValueDialogFragment.AddClickListener listener = null;
+					//AddValueDialogFragment addValueDialog = AddValueDialogFragment.newInstance("Add Value", listener);
+					messageDialog(getActivity(), "Add Value", "bl");
+				/*	addValueDialog.builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								// Add value
+								EditText t = ((EditText) ((AlertDialog) dialog).findViewById(R.id.popAddInput));
+								addValueToItems(Float.parseFloat(t.getText().toString()));
+
+							}
+						})
+						.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								// User cancelled the dialog
+							}
+						});*/
+					//addValueDialog.show(getFragmentManager(), "yesNoAlert");
+					//TODO
+			
+					return true;
 				default:
 					return false;
 			}
@@ -217,11 +294,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		}
 	};
 	
-	public enum menuState{
-		single,
-		multi,
-		
-	}
+	private int itemSelected =-1;
 	
 	//onClick passed from the adapter viewholder
 	@Override
@@ -251,6 +324,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 				//Start multiMenu
 				multiMenuStarted = true;
 				singleMenuStarted =false;
+				itemSelected = mAdapter.getSelectedGroupId().get(0);
 				if(mActionMode != null)
 					mActionMode.finish();
 				mActionMode = activity.startSupportActionMode(mActionModeCallback);
