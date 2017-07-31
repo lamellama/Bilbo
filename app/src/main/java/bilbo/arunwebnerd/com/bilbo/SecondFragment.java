@@ -25,7 +25,7 @@ import android.app.Dialog;
 import android.app.Activity;
 
 
-public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder.ClickListener, AddValueDialogFragment.AddClickListener
+public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder.ClickListener
 {
 
 	
@@ -91,8 +91,8 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 	
 	public void addValueToItems(float value){
 		if(calculator!=null)
-			for(int i = 0; i < mAdapter.getSelectedGroupId().size(); i++)
-				calculator.addExtraValue(mAdapter.getSelectedGroupId().get(i), value);
+			for(int i = 0; i < mAdapter.getSelectedItems().size(); i++)
+				calculator.addExtraValue(mAdapter.getSelectedItems().get(i), value);
 
 		updateAdapterData();
 	
@@ -187,6 +187,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		
     }
 	
+	//Add value popup box input
 	public  void messageDialog(Activity a, String title, String message){
 		AlertDialog.Builder dialog = new AlertDialog.Builder(a);
 		dialog.setTitle(title);
@@ -213,14 +214,9 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 
 	}
 	
-	@Override
-	public void addValueClicked(float value)
-	{
-		
-		addValueToItems(value);
-	}
 	
 	
+	//actionbar
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
 		// Called when the action mode is created; startActionMode() was called

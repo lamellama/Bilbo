@@ -119,10 +119,14 @@ public class ItemCalculator
 	}
 	
 	private void calculatePerPersonValues(){
-		
-		float perPerson = (billTotal - totalExtraValue) / numPeople;
+		float totalLeft = 0;
+		float perPerson = 0;
+		if(billTotal > totalExtraValue)
+			totalLeft = billTotal - totalExtraValue;
+		if((totalLeft > 0)&&(ppValues.length > 0))
+			perPerson =  totalLeft / ppValues.length;
 		for(int i =0; i<ppValues.length; i++){
-			ppValues[i].bill = perPerson;
+			ppValues[i].bill = ppValues[i].addedExtra + perPerson;
 		}
 		
 	}

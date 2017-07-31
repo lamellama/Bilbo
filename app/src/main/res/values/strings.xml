@@ -12,4 +12,5 @@
     <string name="linear_layout_manager">Linear Layout Manager</string>
 	<string name="ok">ok</string>
 	<string name="cancel">cancel</string>
+	<string name="dialog_add_title">Add Value</string>
 	</resources>
