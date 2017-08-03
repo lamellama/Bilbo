@@ -13,4 +13,6 @@
 	<string name="ok">ok</string>
 	<string name="cancel">cancel</string>
 	<string name="dialog_add_title">Add Value</string>
+	<string name="pp_tip_equals">Tip: </string>
+	<string name="pp_bill_equals">Per Person: </string>
 	</resources>

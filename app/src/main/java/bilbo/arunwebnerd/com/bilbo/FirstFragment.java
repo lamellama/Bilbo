@@ -14,6 +14,9 @@ import android.app.*;
 import java.util.function.*;
 import android.widget.AdapterView.*;
 import android.util.*;
+import android.text.method.*;
+import android.view.*;
+import android.text.*;
 
 public class FirstFragment extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener
 {
@@ -23,6 +26,15 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 	private float billTotal;
 	private int numPeople;
 	
+	private TextView tvNumPeopleSeekDisplay;
+	private TextView tipSeekDisplay;
+	private EditText tvTotal;
+	
+	private TextView tvTip;
+	private TextView tvBill;
+	private TextView tvBillTotal;
+	
+	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.first_frag, container, false);
@@ -30,8 +42,12 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 		tipPercent = getResources().getInteger(R.integer.tip_default);
 		billTotal = Float.parseFloat( getContext().getResources().getString(R.string.total_default));
 		numPeople = getContext().getResources().getInteger(R.integer.numpeople_default);
+		
+		tvTip = (TextView) v.findViewById(R.id.tvPPTipDisplay);
+		tvBill = (TextView) v.findViewById(R.id.tvPPBillDisplay);
+		tvBillTotal = (TextView) v.findViewById(R.id.tvPPTotalDisplay);
 
-        final EditText tvTotal = (EditText) v.findViewById(R.id.tvTotal);
+        tvTotal = (EditText) v.findViewById(R.id.tvTotal);
         tvTotal.setText(getContext().getResources().getString(R.string.total_default));
 		tvTotal.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 				@Override
@@ -41,29 +57,42 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 						billTotal = Float.valueOf(tvTotal.getText().toString());
 						Log.d(TAG, "EditText lost focus, tvTotal = " + billTotal);
 						mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
+						updateTotals();
 					}
 				}
 			});
+	
+		tvTotal.addTextChangedListener(new TextWatcher() {
+				public void afterTextChanged(Editable s){
+
+				}
+				public void  beforeTextChanged(CharSequence s, int start, int count, int after){
+					// you can check for enter key here
+				}
+				public void  onTextChanged (CharSequence s, int start, int before,int count) {
+					if(tvTotal.getText().length() > 0){
+						billTotal = Float.valueOf(tvTotal.getText().toString());
+					
+						mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
+						updateTotals();
+					}
+				} 
+			});
+					
+					
+		
+	//	tvTotal.setFocusable(true);
+		//tvTotal.setFocusableInTouchMode(true);
 
         SeekBar sbNumberPeople = (SeekBar) v.findViewById(R.id.sbNumPeople);
-		//sbNumberPeople.setSelection(getIndex(sbNumberPeople, numPeople));
 		sbNumberPeople.setProgress(numPeople);
+		tvNumPeopleSeekDisplay = (TextView) v.findViewById(R.id.numPeopleSeekbarDisplay);
 		sbNumberPeople.setOnSeekBarChangeListener(this);
-		/*tvNumberPeople.setOnItemSelectedListener(new OnItemSelectedListener() {
-				@Override
-				public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-					
-					mCallback.onInputUpdate(position);
-				}
-
-				@Override
-				public void onNothingSelected(AdapterView<?> parentView) {
-					// your code here
-				}
-
-			});*/
-
+		
+		
+		
         SeekBar spinTipPercent = (SeekBar) v.findViewById(R.id.sbTipPercent);
+		tipSeekDisplay = (TextView) v.findViewById(R.id.tipSeekbarDisplay);
 		spinTipPercent.setOnSeekBarChangeListener(this);
 		
 		//initialise variables in main activity
@@ -83,38 +112,22 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
         }
 		//mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
 	}
-	
-/*	public void onItemSelected(AdapterView<?> parent, View view,
-							   int pos, long id) {
-        // An item was selected. You can retrieve the selected item using
-        //Spinner inputSpinner = (Spinner)parent.getItemAtPosition(pos);
-		switch (parent.getId()) {
-			case R.id.sbNumPeople:
-				Log.d(TAG, "Spinner numPeople selected: " + parent.getItemAtPosition(pos));
-				numPeople = Integer.parseInt(parent.getItemAtPosition(pos).toString());
-				break;
-			case R.id.sbTipPercent:
-				Log.d(TAG, "Spinner Tip selected: " + parent.getItemAtPosition(pos));
-				tipPercent = Integer.parseInt(parent.getItemAtPosition(pos).toString());
-				break;
-        }
-		// Send the event to the host activity
-        mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
-    }*/
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
 	
-	/*public Bundle getInput(){
-		Bundle inputBun = new Bundle();
-		inputBun.putInt("tip", tipPercent);
-		inputBun.putInt("people", numPeople);
-		inputBun.putFloat("total", billTotal);
-		Log.d(TAG, "getInput()");
-		return inputBun;
-	}*/
-
+	private void updateTotals(){
+		float total = (float) 0.0;
+		if(tvTotal.getText().length() > 0)
+			total = Float.parseFloat(tvTotal.getText().toString());
+		if((total > 0) && (numPeople > 0))
+			total /= numPeople;
+		tvBill.setText(Float.toString(total) + "pp");
+		tvTip.setText(Integer.toString(tipPercent) + "%");
+		tvBillTotal.setText(Float.toString(total + ((total * tipPercent)/100)));
+	}
+	
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		// An item was selected. You can retrieve the selected item using
@@ -122,13 +135,19 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 		switch (seekBar.getId()) {
 			case R.id.sbNumPeople:
 				Log.d(TAG, "Seekbar numPeople selected: " + seekBar.getProgress());
-				numPeople = seekBar.getProgress();
+				numPeople = seekBar.getProgress()+1;
+				if(tvNumPeopleSeekDisplay != null)
+					tvNumPeopleSeekDisplay.setText(Integer.toString(numPeople));
 				break;
 			case R.id.sbTipPercent:
 				Log.d(TAG, "Spinner Tip selected: " + seekBar.getProgress());
 				tipPercent = seekBar.getProgress();
+				if(tipSeekDisplay != null)
+					tipSeekDisplay.setText(Integer.toString(tipPercent));
 				break;
+				
 		}
+		updateTotals();
 		// Send the event to the host activity
 		mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
 	}
@@ -146,6 +165,7 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 	// Container Activity must implement this interface
     public interface OnInputUpdateListener {
         public void onInputUpdate(int numPeeps, int tip, float total);
+		
     }
 
     @Override
