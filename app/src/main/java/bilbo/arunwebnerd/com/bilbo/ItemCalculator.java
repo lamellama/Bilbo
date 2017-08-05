@@ -1,12 +1,15 @@
 package bilbo.arunwebnerd.com.bilbo;
 import java.util.*;
 import org.apache.http.conn.ssl.*;
+
+import android.os.Bundle;
 import android.util.*;
 
 public class ItemCalculator
 {
 	private final static String TAG = "ItemCalculator";
-	private PerPersonValue[] ppValues;
+	//private PerPersonValue[] ppValues;
+	private ArrayList<PerPersonValue> ppValues;
 	private Map<Integer, List<Integer>> groupIndexMap;
 	//private List<Integer> groups;
 	private float totalExtraValue =0;
@@ -15,18 +18,30 @@ public class ItemCalculator
 	private int tipPercent;
 	//private int itemsInGroup = 0;
 	private int uniqueIndex = 1;
+
+	public void saveInstance(Bundle storageBundle){
+
+		storageBundle.putParcelableArrayList("peeps", ppValues);
+	}
 	
 	public ItemCalculator(int numPeeps, float bill, int tip){
 		numPeople = numPeeps;
 		billTotal = bill;
 		tipPercent = tip;
-		ppValues = new PerPersonValue[numPeople];
-		for(int i = 0; i < numPeople; i++)
-			ppValues[i] = new PerPersonValue();
+		//ppValues = new PerPersonValue[numPeople];
+		ppValues = new ArrayList<PerPersonValue>();
+		//for(int i = 0; i < numPeople; i++)
+		//	ppValues[i] = new PerPersonValue();
+		initPPValueList();
 		calculatePerPersonValues();
 		groupIndexMap = new HashMap <Integer, List<Integer>>();
 		//groups = new ArrayList<Integer>();
 		//initialiseGroups();
+	}
+
+	private void initPPValueList(){
+		for(int i = 0; i < numPeople; i++)
+			ppValues.add(new PerPersonValue(0, 0, 0));
 	}
 	
 	private void addToGroup(List<Integer> items, int group){
@@ -41,7 +56,7 @@ public class ItemCalculator
 			
 			if(!groupList.contains(items.get(i))){
 				groupList.add(items.get(i));
-				ppValues[items.get(i)].group = group;
+				ppValues.get(items.get(i)).group = group;
 				Log.d(TAG, "addToGroup()" + group + ": " + items.get(i));
 				}
 			
@@ -56,8 +71,8 @@ public class ItemCalculator
 		for(int j = 0; j < items.size(); j++){
 			
 			int index = items.get(j) - groupIndexMap.size();
-			for(int i = 0; i<ppValues.length && i < (items.get(j) + groupIndexMap.size()); i++){
-				if(ppValues[i].group > 0)
+			for(int i = 0; i<ppValues.size() && i < (items.get(j) + groupIndexMap.size()); i++){
+				if(ppValues.get(i).group > 0)
 					index++;
 			}
 			newList.add(index);
@@ -67,8 +82,8 @@ public class ItemCalculator
 	
 	private int getRealIndex(int displayIndex){
 		int index = displayIndex + groupIndexMap.size();
-		for(int i = 0; i<ppValues.length && i < (displayIndex + groupIndexMap.size()); i++){
-			if(ppValues[i].group > 0)
+		for(int i = 0; i<ppValues.size() && i < (displayIndex + groupIndexMap.size()); i++){
+			if(ppValues.get(i).group > 0)
 				index--;
 		}
 		return index;
@@ -80,7 +95,7 @@ public class ItemCalculator
 			Log.d(TAG, "destroy group ");
 			for(int i = 0; i < groupIndexMap.get(groupIndex).size(); i ++){
 			//	if((groupIndexMap.get(groupIndex).get(i) < ppValues.length)&&(groupIndexMap.get(groupIndex).get(i) >=0))
-				ppValues[groupIndexMap.get(groupIndex).get(i)].group = 0;
+				ppValues.get(groupIndexMap.get(groupIndex).get(i)).group = 0;
 				}
 				
 			groupIndexMap.remove(groupIndex);
@@ -95,9 +110,9 @@ public class ItemCalculator
 		for(int x =0; x<itemsCopy.size(); x++)
 			Log.d(TAG, "Makegroup(): " + itemsCopy.get(x));
 		for( int i =0; i< itemsCopy.size(); i++){
-			if(ppValues[itemsCopy.get(i)].group > 0){
+			if(ppValues.get(itemsCopy.get(i)).group > 0){
 				//this item is already in a group
-				addToGroup(itemsCopy, ppValues[itemsCopy.get(i)].group);
+				addToGroup(itemsCopy, ppValues.get(itemsCopy.get(i)).group);
 				return;
 			}
 		}
@@ -111,8 +126,8 @@ public class ItemCalculator
 		//Set thier group value
 		Log.d(TAG, "make new group: " + group);
 		for(int i = 0; i < itemsCopy.size(); i ++)
-			if((items.get(i) < ppValues.length)&&(itemsCopy.get(i) >=0)){
-				ppValues[itemsCopy.get(i)].group = group;
+			if((items.get(i) < ppValues.size())&&(itemsCopy.get(i) >=0)){
+				ppValues.get(itemsCopy.get(i)).group = group;
 				Log.d(TAG, "item " + itemsCopy.get(i) + " group set to: " + group);
 				}
 			
@@ -123,17 +138,17 @@ public class ItemCalculator
 		float perPerson = 0;
 		if(billTotal > totalExtraValue)
 			totalLeft = billTotal - totalExtraValue;
-		if((totalLeft > 0)&&(ppValues.length > 0))
-			perPerson =  totalLeft / ppValues.length;
-		for(int i =0; i<ppValues.length; i++){
-			ppValues[i].bill = ppValues[i].addedExtra + perPerson;
+		if((totalLeft > 0)&&(ppValues.size() > 0))
+			perPerson =  totalLeft / ppValues.size();
+		for(int i =0; i<ppValues.size(); i++){
+			ppValues.get(i).bill = ppValues.get(i).addedExtra + perPerson;
 		}
 		
 	}
 	
 	public void addExtraValue(int index, float val){
-		if((index >= 0)&&(index < ppValues.length)){
-			ppValues[index].addedExtra+=val;
+		if((index >= 0)&&(index < ppValues.size())){
+			ppValues.get(index).addedExtra+=val;
 			totalExtraValue+=val;
 			calculatePerPersonValues();
 		}
@@ -150,11 +165,11 @@ public class ItemCalculator
 			Integer groupKey = entry.getKey();
 			List<Integer> groupList = entry.getValue();
 			
-			PerPersonValue grouped = new PerPersonValue();
+			PerPersonValue grouped = new PerPersonValue(0, 0, 0);
 			grouped.group = groupKey;
 			for(int k =0; k< groupList.size(); k++){
-				grouped.addedExtra += ppValues[groupList.get(k)].addedExtra;
-				grouped.bill += ppValues[groupList.get(k)].bill;
+				grouped.addedExtra += ppValues.get(groupList.get(k)).addedExtra;
+				grouped.bill += ppValues.get(groupList.get(k)).bill;
 				//TODO grouped. += ppValues[tempList.get(k)].addedExtra;
 
 			}
@@ -182,9 +197,9 @@ public class ItemCalculator
 			}
 		}*/
 		//Add individuals
-		for(i = 0; i < ppValues.length; i++){
-			if(ppValues[i].group == 0)
-				dataSet.add(ppValues[i]);
+		for(i = 0; i < ppValues.size(); i++){
+			if(ppValues.get(i).group == 0)
+				dataSet.add(ppValues.get(i));
 		}
 		return dataSet;
 	}
