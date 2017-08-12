@@ -8,9 +8,10 @@ import android.util.*;
 public class ItemCalculator
 {
 	private final static String TAG = "ItemCalculator";
+	List<Integer> groupKeys = new ArrayList<Integer>();
 	//private PerPersonValue[] ppValues;
 	private ArrayList<PerPersonValue> ppValues;
-	private Map<Integer, List<Integer>> groupIndexMap;
+	private HashMap<Integer, List<Integer>> groupIndexMap;
 	//private List<Integer> groups;
 	private float totalExtraValue =0;
 	private int numPeople;
@@ -22,6 +23,11 @@ public class ItemCalculator
 	public void saveInstance(Bundle storageBundle){
 
 		storageBundle.putParcelableArrayList("peeps", ppValues);
+		storageBundle.putSerializable("map", groupIndexMap);
+	}
+	
+	public void restoreState(Bundle storageBundle){
+		groupIndexMap = (HashMap<Integer, List<Integer>>)storageBundle.getSerializable("map");
 	}
 	
 	public ItemCalculator(int numPeeps, float bill, int tip){
@@ -38,6 +44,22 @@ public class ItemCalculator
 		//groups = new ArrayList<Integer>();
 		//initialiseGroups();
 	}
+	
+	public ItemCalculator(int numPeeps, float bill, int tip, ArrayList<PerPersonValue> ppList){
+		numPeople = numPeeps;
+		billTotal = bill;
+		tipPercent = tip;
+		//ppValues = new PerPersonValue[numPeople];
+		//ppValues = new ArrayList<PerPersonValue>();
+		ppValues = ppList;
+		//for(int i = 0; i < numPeople; i++)
+		//	ppValues[i] = new PerPersonValue();
+		//initPPValueList();
+		//calculatePerPersonValues();
+		groupIndexMap = new HashMap <Integer, List<Integer>>();
+		//groups = new ArrayList<Integer>();
+		//initialiseGroups();
+	}
 
 	private void initPPValueList(){
 		for(int i = 0; i < numPeople; i++)
@@ -45,12 +67,7 @@ public class ItemCalculator
 	}
 	
 	private void addToGroup(List<Integer> items, int group){
-		//Integer[] newGroup = new Integer[items.size()];
-		//Log.d(TAG, "Add to group ");
 		List<Integer> groupList = groupIndexMap.get(group);
-		for(int i = 0; i < groupList.size(); i++){
-			Log.d(TAG, "groupList before: " + groupList.get(i));
-		}
 		
 		for(Integer i = 0; i < items.size(); i++){
 			
@@ -66,16 +83,23 @@ public class ItemCalculator
 		}
 			
 	}
+	
+	//Find real dataset position from adapter position
 	private List<Integer> getRealIndex(List<Integer> items){
+		
 		List<Integer> newList = new ArrayList<Integer>();
 		for(int j = 0; j < items.size(); j++){
 			
 			int index = items.get(j) - groupIndexMap.size();
-			for(int i = 0; i<ppValues.size() && i < (items.get(j) + groupIndexMap.size()); i++){
+			for(int i = 0; i<ppValues.size() && i < (items.get(j) - groupIndexMap.size()); i++){
 				if(ppValues.get(i).group > 0)
 					index++;
 			}
 			newList.add(index);
+		}
+		
+		for(int i = 0; i < items.size(); i++){
+			Log.d(TAG, "display Index: " + items.get(i) + " realIndex: " + newList.get(i));
 		}
 		return newList;
 	}
@@ -86,7 +110,29 @@ public class ItemCalculator
 			if(ppValues.get(i).group > 0)
 				index--;
 		}
+		Log.d(TAG, "display Index: " + displayIndex + " realIndex: " + index);
 		return index;
+	}
+	
+	//Takes a list of group index
+	//Merges multiple groups into one and 
+	//returns new group index
+	public int mergeGroups(List<Integer> groups){
+		if(groups.size() > 1)
+			if(groupIndexMap.containsKey(groups.get(0)))
+			for(int i = 1; i < groups.size(); i ++){
+				//Merge two lists
+				groupIndexMap.get(groups.get(0)).addAll(groupIndexMap.get(groups.get(i)));
+				
+				//Switch their group value
+				for(int j = 0; j < groupIndexMap.get(groups.get(i)).size(); j++)
+					ppValues.get(groupIndexMap.get(groups.get(i)).get(j)).group = groups.get(0);
+				
+				//delete other group lists
+				groupIndexMap.remove(groups.get(i));
+				groups.remove(i);
+			}
+		return groups.get(0);
 	}
 	
 	public void breakGroup(int groupIndex){
@@ -101,29 +147,46 @@ public class ItemCalculator
 			groupIndexMap.remove(groupIndex);
 		
 		}
-		//if(groups.contains(groupIndex)){groups.remove(Integer.valueOf(groupIndex));}
-		
 	}
 	
+	//This is where the meat is
 	public void makeGroup(List<Integer> items){
-		List<Integer> itemsCopy = getRealIndex(items);
-		for(int x =0; x<itemsCopy.size(); x++)
-			Log.d(TAG, "Makegroup(): " + itemsCopy.get(x));
-		for( int i =0; i< itemsCopy.size(); i++){
-			if(ppValues.get(itemsCopy.get(i)).group > 0){
-				//this item is already in a group
-				addToGroup(itemsCopy, ppValues.get(itemsCopy.get(i)).group);
-				return;
-			}
+		List<Integer> groups = new ArrayList<Integer>();
+		
+		//Seperate groups and individuals lists
+		for(int z = 0; z < items.size();){
+			if(items.get(z) < groupIndexMap.size()){
+				//item is a group
+				groups.add(groupKeys.get(items.get(z)));
+				items.remove(z);
+			}else{z++;}
 		}
-		//items not already in groups, so male a new one
-		//numGroups++;
-		int group = uniqueIndex;
+		
+		if(groups.size() > 1){ //Multiple groups
+			//Merge groups
+			mergeGroups(groups);
+			
+		}
+		
+		//Get individual dataset indexes
+		List<Integer> itemsCopy = getRealIndex(items);
+		
+		//Check there is anything else to merge
+		if(itemsCopy.size() < 1)
+			return;
+
+		//One group in list, add all individuals to this group
+		if((groups.size() == 1)&&(itemsCopy.size() > 0)){
+			addToGroup(itemsCopy, groups.get(0));
+			return;
+		}
+			
+		//items not already in groups, so make a new one
+		int group = Integer.valueOf(uniqueIndex);
 		uniqueIndex++;
-		//groups.add(group);
-		//Add list to 
+		//Add list to map
 		groupIndexMap.put(group, itemsCopy);
-		//Set thier group value
+		//Set persons group value
 		Log.d(TAG, "make new group: " + group);
 		for(int i = 0; i < itemsCopy.size(); i ++)
 			if((items.get(i) < ppValues.size())&&(itemsCopy.get(i) >=0)){
@@ -155,10 +218,13 @@ public class ItemCalculator
 		
 	}
 	
+	
+	
 	public List<PerPersonValue> getPPValueList(){
 	
 		int i;
 		List<PerPersonValue> dataSet = new ArrayList<PerPersonValue>();
+		groupKeys.clear();
 		
 		//Combine groups imto single PP
 		for (Map.Entry<Integer, List <Integer>> entry : groupIndexMap.entrySet()) {
@@ -167,6 +233,7 @@ public class ItemCalculator
 			
 			PerPersonValue grouped = new PerPersonValue(0, 0, 0);
 			grouped.group = groupKey;
+			
 			for(int k =0; k< groupList.size(); k++){
 				grouped.addedExtra += ppValues.get(groupList.get(k)).addedExtra;
 				grouped.bill += ppValues.get(groupList.get(k)).bill;
@@ -174,6 +241,7 @@ public class ItemCalculator
 
 			}
 			Log.d(TAG, "Add group to dataset");
+			groupKeys.add(groupKey);
 			dataSet.add(grouped);
 
 		}

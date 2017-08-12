@@ -106,7 +106,15 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		billTotal = getArguments().getFloat("total", 0);
 		//updateArgs(getNumPeople(), getTipPercent(), getBillTotal());
         // Initialize dataset
-        initDataset();
+		if(savedInstanceState == null){
+        	initDataset();
+			}
+		else{
+			ArrayList<PerPersonValue> list = savedInstanceState.getParcelableArrayList("peeps");
+			calculator = new ItemCalculator(getNumPeople(), getBillTotal(), getTipPercent(), list);
+			calculator.restoreState(savedInstanceState);
+		}
+			
     }
 	
 	
@@ -162,7 +170,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
         mRecyclerView.setLayoutManager(mLayoutManager);
 		
 		//mRecyclerView.setChoiceMode
-
+		
         mAdapter = new CustomAdapter(calculator.getPPValueList(), this, mActionMode);
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
@@ -170,12 +178,14 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
         Log.d(TAG, "Testing Logging");
         return rootView;
     }
-
+	
+	
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save currently selected layout manager.
       //  savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, mCurrentLayoutManagerType);
+	  	calculator.saveInstance(savedInstanceState);
         super.onSaveInstanceState(savedInstanceState);
     }
 
