@@ -30,6 +30,12 @@ public class ItemCalculator
 		groupIndexMap = (HashMap<Integer, List<Integer>>)storageBundle.getSerializable("map");
 	}
 	
+	public boolean isThisAGroup(int g){
+		if(g < groupIndexMap.size())
+			return true;
+		return false;
+	}
+	
 	public ItemCalculator(int numPeeps, float bill, int tip){
 		numPeople = numPeeps;
 		billTotal = bill;

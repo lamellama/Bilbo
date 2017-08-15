@@ -49,6 +49,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 	
 	boolean multiMenuStarted = false;
 	boolean singleMenuStarted = false;
+	boolean groupSelected = false;
 	
 	Menu addValuePopup;
 	
@@ -234,14 +235,39 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 			// Inflate a menu resource providing context menu items
 			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.action_menu, menu);
+			MenuItem ungroupBtn = menu.findItem(R.id.action_ungroup);
+			MenuItem groupBtn = menu.findItem(R.id.action_group);
+			MenuItem addBtn = menu.findItem(R.id.action_add_value);
 			//if(mAdapter.getSelectedItemCount() > 1){
-				if(singleMenuStarted){
+				if((singleMenuStarted)&&(!groupSelected)){
 					//start singleMenu
-					inflater.inflate(R.menu.action_single_select, menu);
+					//inflater.inflate(R.menu.action_single_select, menu);
+					ungroupBtn.setVisible(false);
+					groupBtn.setVisible(true);
+					addBtn.setVisible(true);
 				}
-				else{
+				else if((multiMenuStarted) && (groupSelected)){
 					//start multiMenu
-					inflater.inflate(R.menu.action_multi_select, menu);
+					//inflater.inflate(R.menu.action_multi_select, menu);
+					ungroupBtn.setVisible(true);
+					groupBtn.setVisible(true);
+					addBtn.setVisible(false);
+				}
+				else if((singleMenuStarted)&&(groupSelected)){
+					//start singleMenu
+					//inflater.inflate(R.menu.action_single_select, menu);
+					ungroupBtn.setVisible(true);
+					groupBtn.setVisible(true);
+					addBtn.setVisible(false);
+					
+				}
+				else if((multiMenuStarted) && (!groupSelected)){
+					//start multiMenu
+					//inflater.inflate(R.menu.action_multi_select, menu);
+					ungroupBtn.setVisible(true);
+					groupBtn.setVisible(true);
+					addBtn.setVisible(false);
 				}
 			
 			
@@ -309,7 +335,15 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		Log.d(TAG, "OnClick");
 		mAdapter.toggleSelection(position);
 		AppCompatActivity activity=(AppCompatActivity)getActivity();
-		
+		groupSelected = false;
+		for(int i = 0; i < mAdapter.getSelectedItemCount(); i++){
+			
+			List<Integer> selectedItems = mAdapter.getSelectedItems();
+			if(calculator.isThisAGroup(selectedItems.get(i))){
+				//Item is a group
+				groupSelected = true;
+			}
+		}
 		
 		if(multiMenuStarted){
 			if(mAdapter.getSelectedItemCount() < 2){
