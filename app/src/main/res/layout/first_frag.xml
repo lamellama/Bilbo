@@ -60,6 +60,7 @@
 				android:layout_height="0dp"
 				android:layout_weight="1"
 				android:gravity="center"
+
 				android:text="10"/>
 
 			<SeekBar
@@ -132,6 +133,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:gravity="center"
+			android:textAppearance="@style/strongFont"
 			android:layout_weight="1"
 			android:text="10.00"/>
 
@@ -149,6 +151,7 @@
 			android:layout_height="wrap_content"
 			android:gravity="center"
 			android:layout_weight="1"
+			android:textAppearance="@style/strongFont"
 			android:text="10%"/>
 
 		<TextView
@@ -167,7 +170,7 @@
 			android:gravity="center"
 			android:layout_weight="1"
 			android:textStyle="bold"
-			
+			android:textAppearance="@style/extraStrongFont"
 			android:text="20"/>
 	</LinearLayout>
 

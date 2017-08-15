@@ -22,7 +22,18 @@
 	<style name="TextViewAppTheme" parent="android:Widget.TextView">
 		<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
 	</style>
-         
+    <style name="strongFont" parent="@android:style/TextAppearance.Medium">
+        <item name="android:shadowColor">@color/text_shadow</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+    </style>
+    <style name="extraStrongFont" parent="@android:style/TextAppearance.Large">
+        <item name="android:shadowColor">@color/text_shadow</item>
+        <item name="android:shadowDx">1.5</item>
+        <item name="android:shadowDy">1.5</item>
+        <item name="android:shadowRadius">3</item>
+    </style>
        
    
 

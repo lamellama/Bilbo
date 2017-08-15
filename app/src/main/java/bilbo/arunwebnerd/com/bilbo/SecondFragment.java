@@ -244,7 +244,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 					//start singleMenu
 					//inflater.inflate(R.menu.action_single_select, menu);
 					ungroupBtn.setVisible(false);
-					groupBtn.setVisible(true);
+					groupBtn.setVisible(false);
 					addBtn.setVisible(true);
 				}
 				else if((multiMenuStarted) && (groupSelected)){
@@ -258,7 +258,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 					//start singleMenu
 					//inflater.inflate(R.menu.action_single_select, menu);
 					ungroupBtn.setVisible(true);
-					groupBtn.setVisible(true);
+					groupBtn.setVisible(false);
 					addBtn.setVisible(false);
 					
 				}
