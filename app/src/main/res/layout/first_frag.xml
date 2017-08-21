@@ -10,135 +10,208 @@
 	android:orientation="vertical"
 	xmlns:tools="http://schemas.android.com/tools"
 	tools:context="bilbo.arunwebnerd.com.bilbo.MainActivity">
-	
-<TableLayout
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:layout_weight="1"
-	android:stretchColumns="*">
 
-	<TableRow
-		android:layout_weight="0.5"
-		android:gravity="center">
-
-		<TextView
-			android:id="@+id/billTitle"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Total Bill"/>
-
-		<EditText
-			android:id="@+id/tvTotal"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:inputType="numberDecimal"
-			android:digits="0123456789."
-			android:text="@string/total_prompt"
-			android:ems="10"/>
-
-	</TableRow>
-
-	<TableRow
-		android:id="@+id/tableRow1"
+	<TableLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
 		android:layout_weight="1"
-		android:gravity="center">
+		android:stretchColumns="*">
 
-		<TextView
-			android:id="@+id/numPeopleTitle"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/people_prompt"/>
-
-		<LinearLayout
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:orientation="vertical">
+		<TableRow
+			android:layout_weight="0.5"
+			android:gravity="center">
 
 			<TextView
-				android:id="@+id/numPeopleSeekbarDisplay"
-				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				android:layout_weight="1"
-				android:gravity="center"
+				android:id="@+id/billTitle"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Total Bill"/>
 
-				android:text="10"/>
-
-			<SeekBar
-				android:id="@+id/sbNumPeople"
+			<EditText
+				android:id="@+id/tvTotal"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				
-				android:max="50"
-				android:progress="25"/>
+				android:inputType="numberDecimal"
+				android:digits="0123456789-."
+				android:text="@string/total_prompt"
+				android:ems="10"/>
 
-		</LinearLayout>
+		</TableRow>
 
-	</TableRow>
-
-	<TableRow
-		android:layout_weight="1"
-		android:gravity="center">
-
-		<TextView
-			android:id="@+id/tipTitle"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/tip_prompt"/>
-
-		<LinearLayout
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:orientation="vertical">
-
-			<TextView
-				android:id="@+id/tipSeekbarDisplay"
+		<TableRow
+			android:id="@+id/tableRow1"
+			android:layout_weight="1"
+			android:gravity="center">
+			<LinearLayout
 				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				android:layout_weight="1"
-				android:gravity="center"
-				android:text="10"/>
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+				<TextView
+					android:id="@+id/numPeopleTitleSpacer"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+				/>
 
-			<SeekBar
-				android:id="@+id/sbTipPercent"
+				<TextView
+					android:id="@+id/numPeopleTitle"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/people_prompt"/>
+			</LinearLayout>
+			<LinearLayout
 				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				android:layout_weight="1"
-				android:max="50"
-				android:progress="10"/>
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
 
-		</LinearLayout>
+				<TextView
+					android:id="@+id/numPeopleSeekbarDisplay"
+					android:layout_width="match_parent"
+					android:layout_height="0dp"
+					android:layout_weight="1"
+					android:gravity="center"
+					android:text="10"/>
 
-	</TableRow>
+				<RelativeLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal">
 
-	<TableRow
-		android:layout_weight="2"
-		android:gravity="center">
+					<Button
+						android:id="@+id/btnNumPeepMinus"
+						android:layout_alignParentLeft="true"
+
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:minHeight="36dp"
+						android:minWidth="36dp"
+						android:text="-"/>
 
 
-		
-	</TableRow>
 
-</TableLayout>
+					<SeekBar
+						android:id="@+id/sbNumPeople"
+						android:layout_toLeftOf="@+id/btnNumPeepPlus"
+						android:layout_toRightOf="@+id/btnNumPeepMinus"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:max="50"
+						android:progress="25"
+						android:layout_centerVertical="true"/>
+
+					<Button
+						android:id="@+id/btnNumPeepPlus"
+						android:layout_alignParentRight="true"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:minHeight="36dp"
+						android:minWidth="36dp"
+						android:text="+"/>
+
+
+				</RelativeLayout>
+
+			</LinearLayout>
+
+		</TableRow>
+
+		<TableRow
+			android:layout_weight="1"
+			android:gravity="center">
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+				<TextView
+					android:id="@+id/tipTitleSpacer"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+				/>
+
+				<TextView
+					android:id="@+id/tipTitle"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/tip_prompt"/>
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+
+				<TextView
+					android:id="@+id/tipSeekbarDisplay"
+					android:layout_width="match_parent"
+					android:layout_height="0dp"
+					android:layout_weight="1"
+					android:gravity="center"
+					android:text="10"/>
+				<RelativeLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal">
+
+					<Button
+						android:id="@+id/btnTipMinus"
+						android:layout_alignParentLeft="true"
+
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:minHeight="36dp"
+						android:minWidth="36dp"
+						android:text="-"/>
+
+					<SeekBar
+						android:id="@+id/sbTipPercent"
+						android:layout_toLeftOf="@+id/btnTipPlus"
+						android:layout_toRightOf="@+id/btnTipMinus"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:max="50"
+						android:progress="10"
+						android:layout_centerVertical="true"/>
+
+					<Button
+						android:id="@+id/btnTipPlus"
+						android:layout_alignParentRight="true"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:minHeight="36dp"
+						android:minWidth="36dp"
+						android:text="+"/>
+
+
+				</RelativeLayout>
+
+			</LinearLayout>
+
+		</TableRow>
+
+		<TableRow
+			android:layout_weight="2"
+			android:gravity="center">
+
+		</TableRow>
+
+	</TableLayout>
+
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:gravity="center"
+		android:gravity="top"
 		android:layout_weight="1"
 		android:orientation="horizontal">
-
-
 
 		<TextView
 			android:id="@+id/tvPPBillDisplay"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:gravity="center"
+			android:gravity="top|center"
 			android:textAppearance="@style/strongFont"
 			android:layout_weight="1"
 			android:text="10.00"/>
 
 		<TextView
-
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:gravity="center"
@@ -155,13 +228,11 @@
 			android:text="10%"/>
 
 		<TextView
-
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:gravity="center"
 			android:layout_weight="1"
 			android:text="="/>
-
 
 		<TextView
 			android:id="@+id/tvPPTotalDisplay"
@@ -172,6 +243,8 @@
 			android:textStyle="bold"
 			android:textAppearance="@style/extraStrongFont"
 			android:text="20"/>
+
 	</LinearLayout>
 
 </LinearLayout>
+

@@ -111,10 +111,10 @@ public class ItemCalculator
 	}
 	
 	private int getRealIndex(int displayIndex){
-		int index = displayIndex + groupIndexMap.size();
-		for(int i = 0; i<ppValues.size() && i < (displayIndex + groupIndexMap.size()); i++){
+		int index = displayIndex - groupIndexMap.size();
+		for(int i = 0; i<ppValues.size() && i < (displayIndex - groupIndexMap.size()); i++){
 			if(ppValues.get(i).group > 0)
-				index--;
+				index++;
 		}
 		Log.d(TAG, "display Index: " + displayIndex + " realIndex: " + index);
 		return index;
@@ -221,6 +221,12 @@ public class ItemCalculator
 			totalExtraValue+=val;
 			calculatePerPersonValues();
 		}
+		
+	}
+	
+	public void setItemText(int index, String text){
+		ppValues.get(getRealIndex(index)).name = text;
+		
 		
 	}
 	

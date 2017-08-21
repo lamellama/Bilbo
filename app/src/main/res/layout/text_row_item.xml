@@ -42,12 +42,12 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:text="10.00"/>
-			<Button
-				android:id="@+id/addButton"
-				style="?android:attr/buttonStyleSmall"
+			<EditText
+				android:id="@+id/etName"
 				android:layout_height="wrap_content"
 				android:layout_width="wrap_content"
-				android:text="Add ons"
+				android:text="Group name"
+				android:background="@android:color/transparent"
 			/>
 			
 		</TableRow>

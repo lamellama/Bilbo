@@ -9,6 +9,7 @@ public class PerPersonValue implements Parcelable
 	public float bill = 0;
 	//public String label;
 	public int group = 0;
+	public String name = "group name";
 
 	public PerPersonValue(float add, float bil, int gro){
 		addedExtra = add;
@@ -24,6 +25,7 @@ public class PerPersonValue implements Parcelable
 		addedExtra = in.readFloat();
 		bill = in.readFloat();
 		group = in.readInt();
+		name = in.readString();
 	}
 
 	@Override
@@ -36,6 +38,7 @@ public class PerPersonValue implements Parcelable
 		dest.writeFloat(addedExtra);
 		dest.writeFloat(bill);
 		dest.writeInt(group);
+		dest.writeString(name);
 	}
 
 	@SuppressWarnings("unused")

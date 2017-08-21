@@ -21,23 +21,31 @@ import android.text.*;
 public class FirstFragment extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener
 {
 	private static final String TAG = "FirstFragment";
-	OnInputUpdateListener mCallback;
+	private OnInputUpdateListener mCallback;
 	private int tipPercent;
 	private float billTotal;
 	private int numPeople;
 	
 	private TextView tvNumPeopleSeekDisplay;
+	private Button btnNumPeopleMinus;
+	private Button btnNumPeoplePlus;
 	private TextView tipSeekDisplay;
+	private Button btnTipMinus;
+	private Button btnTipPlus;
 	private EditText tvTotal;
 	
 	private TextView tvTip;
 	private TextView tvBill;
 	private TextView tvBillTotal;
+	private SeekBar sbNumberPeople;
+	private SeekBar spinTipPercent;
 	
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.first_frag, container, false);
+		
+		
 		
 		tipPercent = getResources().getInteger(R.integer.tip_default);
 		billTotal = Float.parseFloat( getContext().getResources().getString(R.string.total_default));
@@ -84,15 +92,23 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 	//	tvTotal.setFocusable(true);
 		//tvTotal.setFocusableInTouchMode(true);
 
-        SeekBar sbNumberPeople = (SeekBar) v.findViewById(R.id.sbNumPeople);
+        sbNumberPeople = (SeekBar) v.findViewById(R.id.sbNumPeople);
 		sbNumberPeople.setProgress(numPeople);
 		tvNumPeopleSeekDisplay = (TextView) v.findViewById(R.id.numPeopleSeekbarDisplay);
+		btnNumPeopleMinus = (Button) v.findViewById(R.id.btnNumPeepMinus);
+		btnNumPeoplePlus = (Button) v.findViewById(R.id.btnNumPeepPlus);
+		btnNumPeoplePlus.setOnClickListener(this);
+		btnNumPeopleMinus.setOnClickListener(this);
 		sbNumberPeople.setOnSeekBarChangeListener(this);
 		
 		
 		
-        SeekBar spinTipPercent = (SeekBar) v.findViewById(R.id.sbTipPercent);
+        spinTipPercent = (SeekBar) v.findViewById(R.id.sbTipPercent);
 		tipSeekDisplay = (TextView) v.findViewById(R.id.tipSeekbarDisplay);
+		btnTipMinus = (Button) v.findViewById(R.id.btnTipMinus);
+		btnTipPlus = (Button) v.findViewById(R.id.btnTipPlus);
+		btnTipPlus.setOnClickListener(this);
+		btnTipMinus.setOnClickListener(this);
 		spinTipPercent.setOnSeekBarChangeListener(this);
 		
 		//initialise variables in main activity
@@ -106,8 +122,19 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 	public void onClick(View p1)
 	{
 		switch (p1.getId()) {
-			case R.id.sbNumPeople:
+			case R.id.btnNumPeepPlus:
+				sbNumberPeople.setProgress(sbNumberPeople.getProgress() + 1);
+				break;
 				
+			case R.id.btnNumPeepMinus:
+				sbNumberPeople.setProgress(sbNumberPeople.getProgress() - 1);
+				break;
+			case R.id.btnTipPlus:
+				spinTipPercent.setProgress(spinTipPercent.getProgress() + 1);
+				break;
+
+			case R.id.btnTipMinus:
+				spinTipPercent.setProgress(spinTipPercent.getProgress() - 1);
 				break;
         }
 		//mCallback.onInputUpdate(numPeople, tipPercent, billTotal);

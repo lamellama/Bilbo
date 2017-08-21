@@ -23,10 +23,13 @@ import android.content.*;
 import android.support.v4.app.DialogFragment;
 import android.app.Dialog;
 import android.app.Activity;
+import android.os.*;
 
 
 public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder.ClickListener
 {
+
+	
 
 	
 	
@@ -71,8 +74,10 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 	}
 	private void updateAdapterData(){
 		//pass new dataset to adapter
-		if(mAdapter!=null)
+		if(mAdapter!=null){
 			mAdapter.updateDataset(calculator.getPPValueList());
+			mAdapter.refreshAdapter();
+			}
 	}
 	public void groupItems(){
 		Log.d(TAG, "makeGroup()");
@@ -163,9 +168,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
         // BEGIN_INCLUDE(initializeRecyclerView)
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rvPeopleGroups);
 
-        // LinearLayoutManager is used here, this will layout the elements in a similar fashion
-        // to the way ListView would layout elements. The RecyclerView.LayoutManager defines how
-        // elements are laid out.
+     
         mLayoutManager = new LinearLayoutManager(getActivity());
 		
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -386,6 +389,25 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
         
         
 	}
+	
+	Handler adapterHandler = new Handler();
+	
+	
+	@Override
+	public void onTextNameChanged(int position, String text)
+	{
+		calculator.setItemText(position, text);
+		
+		//TODO innefficient
+		if(mAdapter!=null){
+			mAdapter.updateDataset(calculator.getPPValueList());
+			
+			mAdapter.postAndNotifyAdapter(adapterHandler, mRecyclerView, mAdapter);
+			}
+		
+		
+	}
+	
 	
 }	
 

@@ -27,6 +27,9 @@ import android.widget.*;
 import android.support.v7.view.ActionMode;
 import android.view.MenuInflater;
 import android.view.*;
+import android.text.*;
+import android.os.*;
+import android.view.View.*;
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
@@ -36,43 +39,86 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 
     private List<PerPersonValue> mDataSet;
 	private ViewHolder.ClickListener clickListener;
+	
 	private ActionMode mActionMode;
 
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
-	{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, TextWatcher
+	{	
 
 		
 		public interface ClickListener {
             public void onItemClicked(int position);
          //   public boolean onItemLongClicked(int position);
+		 	public void onTextNameChanged(int position, String text);
         }
 
         public final TextView totalTextView;
-		public Button addButton;
+		//public Button addButton;
 		public TextView numPartiesTextView;
+		public EditText etName;
+		
 		public boolean selected = true;
 		
 		// an array of selected items (Integer indices) 
 		private ClickListener listener;
+		//MyCustomEditTextListener textListener;
 		
-		RecyclerView mRecyclerView; 
 		View selectedOverlay;
+		String etNameInput;
+		//public boolean hasFocus = false;
 
         public ViewHolder(View v, ClickListener listener) {
             super(v);
+			
 			selectedOverlay = itemView.findViewById(R.id.selected_overlay);
 			this.listener = listener;
 			itemView.setOnClickListener(this);
 
             totalTextView = (TextView) v.findViewById(R.id.tvTotalB);
 			numPartiesTextView = (TextView) v.findViewById(R.id.tvPP);
-			addButton = (Button) v.findViewById(R.id.addButton);
+			etName = (EditText) v.findViewById(R.id.etName);
+			//this.textListener = customTextListener;
+			etName.addTextChangedListener(this);
+			etName.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+					@Override
+					public void onFocusChange(View v, boolean hasFocus) {
+						if (!hasFocus) {
+							validateInput(v);
+						}
+					}
+				});
+			//addButton = (Button) v.findViewById(R.id.addButton);
 			
         }
+		
+		public void validateInput(View v){
+			//View has lost focus, check text and send to interface
+			listener.onTextNameChanged(getPosition(),etNameInput);
+		}
+		
+		@Override
+		public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+			// no op
+		}
+
+		@Override
+		public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+			etNameInput = charSequence.toString();
+			
+			//   mDataSet.get(position).name = charSequence.toString();
+
+		}
+
+		@Override
+		public void afterTextChanged(Editable editable) {
+			
+			// no op
+		}
 		
 		@Override
         public void onClick(View v) {
@@ -86,10 +132,16 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		
 		public TextView getNumPPText(){return numPartiesTextView;}
 		public TextView getTotalText(){return totalTextView;}
-		public Button getAddButton(){return addButton;}
-
+		public EditText getEtName(){return etName;}
+	//	public Button getAddButton(){return addButton;}
+	
+	
+		
         
     }
+	
+	
+	
     // END_INCLUDE(recyclerViewSampleViewHolder)
 
     /**
@@ -105,10 +157,32 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 	
 	public void updateDataset(List<PerPersonValue> data){
 		mDataSet = data;
-		clearSelection();
-		notifyDataSetChanged();
 		
 	}
+	
+	public void refreshAdapter(){
+		clearSelection();
+		notifyDataSetChanged();
+	}
+	
+	boolean notifyIsRunning = false;
+	
+	public void postAndNotifyAdapter(final Handler handler, final RecyclerView recyclerView, final RecyclerView.Adapter adapter) {
+		if(!notifyIsRunning){
+			notifyIsRunning = true;
+        handler.post(new Runnable() {
+				@Override
+				public void run() {
+					notifyIsRunning = false;
+					if (!recyclerView.isComputingLayout()) {
+						adapter.notifyDataSetChanged();
+					} else {
+						postAndNotifyAdapter(handler, recyclerView, adapter);
+					}
+				}
+			});
+		}
+    }
 	
 	public List<Integer> getSelectedGroupId(){
 		List<Integer> groups = new ArrayList<Integer>();
@@ -159,6 +233,9 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		else{
      	   viewHolder.numPartiesTextView.setText(Integer.toString(position));
 		   viewHolder.totalTextView.setText(Float.toString(mDataSet.get(position).bill));
+		   viewHolder.etName.removeTextChangedListener(viewHolder);
+			viewHolder.etName.setText(mDataSet.get(position).name);
+			viewHolder.etName.addTextChangedListener(viewHolder);
 		   }
     }
     // END_INCLUDE(recyclerViewOnBindViewHolder)
@@ -168,6 +245,11 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
     public int getItemCount() {
         return mDataSet.size();
     }
+	
+	@Override
+	public int getItemViewType(int position) {
+		return position;
+	}    
 	
 	
 }
