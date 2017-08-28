@@ -15,4 +15,6 @@
 	<string name="dialog_add_title">Add Value</string>
 	<string name="pp_tip_equals">Tip: </string>
 	<string name="pp_bill_equals">Per Person: </string>
+	<string name="item_name_title">Name</string>
+	<string name="group_name_title">Group name</string>
 	</resources>

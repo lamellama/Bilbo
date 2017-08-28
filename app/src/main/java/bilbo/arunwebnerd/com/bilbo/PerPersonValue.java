@@ -2,6 +2,7 @@ package bilbo.arunwebnerd.com.bilbo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.content.Context;
 
 public class PerPersonValue implements Parcelable
 {
@@ -9,12 +10,14 @@ public class PerPersonValue implements Parcelable
 	public float bill = 0;
 	//public String label;
 	public int group = 0;
-	public String name = "group name";
+	public String name;
+	public int realIndex = -1; //No need to parcel
 
-	public PerPersonValue(float add, float bil, int gro){
+	public PerPersonValue( float add, float bil, int gro){
 		addedExtra = add;
 		bill = bil;
 		group = gro;
+		name = "Name";
 	}
 	
 	public float getTotal(){

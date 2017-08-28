@@ -65,16 +65,6 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mPageAdapter);
 		
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-		
 		
 		
 		tipPercent = getResources().getInteger(R.integer.tip_default);

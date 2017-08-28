@@ -26,10 +26,12 @@ import java.util.*;
 import android.widget.*;
 import android.support.v7.view.ActionMode;
 import android.view.MenuInflater;
-import android.view.*;
-import android.text.*;
-import android.os.*;
+//import android.view.*;
+import android.text.TextWatcher;
+import android.text.Editable;
+import android.os.Handler;
 import android.view.View.*;
+import android.graphics.Color;
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
@@ -98,7 +100,8 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		
 		public void validateInput(View v){
 			//View has lost focus, check text and send to interface
-			listener.onTextNameChanged(getPosition(),etNameInput);
+			if(etNameInput != null)
+				listener.onTextNameChanged(getPosition(),etNameInput);
 		}
 		
 		@Override
@@ -184,6 +187,23 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		}
     }
 	
+	public List<Integer> getSelectedRealIndex (){
+		List<Integer> selectedItems = getSelectedItems();
+		List<Integer> selectedItemIndex = new ArrayList<Integer>();
+		for(int i = 0; i < selectedItems.size(); i++){
+			selectedItemIndex.add(mDataSet.get(selectedItems.get(i)).realIndex);
+			}
+		return selectedItemIndex;
+	}
+	
+	public int getItemRealIndex (int position){
+		int itemIndex;
+		
+		itemIndex = mDataSet.get(position).realIndex;
+		
+		return itemIndex;
+	}
+	
 	public List<Integer> getSelectedGroupId(){
 		List<Integer> groups = new ArrayList<Integer>();
 		List<Integer> selectedItems = getSelectedItems();
@@ -228,7 +248,15 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		if(mDataSet.get(position).group > 0){
 			//its a group
 			Log.d(TAG, "Print group");
-			viewHolder.numPartiesTextView.setText("Group");
+			viewHolder.numPartiesTextView.setText("group");
+			
+			//viewHolder.etName.setText("Group " + mDataSet.get(mDataSet.get(position).group).name);
+			viewHolder.etName.setText(mDataSet.get(position).name);
+			viewHolder.etName.setFocusable(false);
+			viewHolder.etName.setEnabled(false);
+			viewHolder.etName.setCursorVisible(false);
+			viewHolder.etName.setKeyListener(null);
+			viewHolder.etName.setBackgroundColor(Color.TRANSPARENT);
 		}
 		else{
      	   viewHolder.numPartiesTextView.setText(Integer.toString(position));
@@ -236,6 +264,10 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		   viewHolder.etName.removeTextChangedListener(viewHolder);
 			viewHolder.etName.setText(mDataSet.get(position).name);
 			viewHolder.etName.addTextChangedListener(viewHolder);
+			viewHolder.etName.setFocusable(true);
+			viewHolder.etName.setEnabled(true);
+			viewHolder.etName.setCursorVisible(true);
+			viewHolder.etName.setKeyListener(null);//TODO
 		   }
     }
     // END_INCLUDE(recyclerViewOnBindViewHolder)

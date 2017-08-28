@@ -4,6 +4,7 @@ import org.apache.http.conn.ssl.*;
 
 import android.os.Bundle;
 import android.util.*;
+import android.content.Context;
 
 public class ItemCalculator
 {
@@ -91,7 +92,7 @@ public class ItemCalculator
 	}
 	
 	//Find real dataset position from adapter position
-	private List<Integer> getRealIndex(List<Integer> items){
+	/*private List<Integer> getRealIndex(List<Integer> items){
 		
 		List<Integer> newList = new ArrayList<Integer>();
 		for(int j = 0; j < items.size(); j++){
@@ -118,7 +119,7 @@ public class ItemCalculator
 		}
 		Log.d(TAG, "display Index: " + displayIndex + " realIndex: " + index);
 		return index;
-	}
+	}*/
 	
 	//Takes a list of group index
 	//Merges multiple groups into one and 
@@ -175,15 +176,15 @@ public class ItemCalculator
 		}
 		
 		//Get individual dataset indexes
-		List<Integer> itemsCopy = getRealIndex(items);
+		//List<Integer> itemsCopy = getRealIndex(items);
 		
 		//Check there is anything else to merge
-		if(itemsCopy.size() < 1)
+		if(items.size() < 1)
 			return;
 
 		//One group in list, add all individuals to this group
-		if((groups.size() == 1)&&(itemsCopy.size() > 0)){
-			addToGroup(itemsCopy, groups.get(0));
+		if((groups.size() == 1)&&(items.size() > 0)){
+			addToGroup(items, groups.get(0));
 			return;
 		}
 			
@@ -191,13 +192,13 @@ public class ItemCalculator
 		int group = Integer.valueOf(uniqueIndex);
 		uniqueIndex++;
 		//Add list to map
-		groupIndexMap.put(group, itemsCopy);
+		groupIndexMap.put(group, items);
 		//Set persons group value
 		Log.d(TAG, "make new group: " + group);
-		for(int i = 0; i < itemsCopy.size(); i ++)
-			if((items.get(i) < ppValues.size())&&(itemsCopy.get(i) >=0)){
-				ppValues.get(itemsCopy.get(i)).group = group;
-				Log.d(TAG, "item " + itemsCopy.get(i) + " group set to: " + group);
+		for(int i = 0; i < items.size(); i ++)
+			if((items.get(i) < ppValues.size())&&(items.get(i) >=0)){
+				ppValues.get(items.get(i)).group = group;
+				Log.d(TAG, "item " + items.get(i) + " group set to: " + group);
 				}
 			
 	}
@@ -225,7 +226,10 @@ public class ItemCalculator
 	}
 	
 	public void setItemText(int index, String text){
-		ppValues.get(getRealIndex(index)).name = text;
+		//int realIndex = getRealIndex(index);
+		if(index >= 0)//If it is < 0 it is a group
+			ppValues.get(index).name = text;
+			
 		
 		
 	}
@@ -246,9 +250,15 @@ public class ItemCalculator
 			PerPersonValue grouped = new PerPersonValue(0, 0, 0);
 			grouped.group = groupKey;
 			
+			//create name for group, this is not saved
+			grouped.name = "Group ";
+			if(groupList.size() > 0)
+				grouped.name += ppValues.get(groupList.get(0)).name;
+				
 			for(int k =0; k< groupList.size(); k++){
 				grouped.addedExtra += ppValues.get(groupList.get(k)).addedExtra;
 				grouped.bill += ppValues.get(groupList.get(k)).bill;
+				
 				//TODO grouped. += ppValues[tempList.get(k)].addedExtra;
 
 			}
@@ -257,29 +267,13 @@ public class ItemCalculator
 			dataSet.add(grouped);
 
 		}
-		//int currentGroup = 0;
-		/*for(i = 0; i<groups.size(); i++){
-			//for(Iterator j = new Set() : groupIndexMap)
-			if(groupIndexMap.containsKey(groups.get(i))){
-				List<Integer> tempList;// = new ArrayList<Integer>();
-				tempList = groupIndexMap.get(groups.get(i));
-				//Combine each group and add it to the list
-				PerPersonValue grouped = new PerPersonValue();
-				grouped.group = ppValues[tempList.get(0)].group;
-				for(int k =0; k< tempList.size(); k++){
-					grouped.addedExtra += ppValues[tempList.get(k)].addedExtra;
-					grouped.bill += ppValues[tempList.get(k)].bill;
-					//TODO grouped. += ppValues[tempList.get(k)].addedExtra;
-					
-				}
-				Log.d(TAG, "Add group to dataset");
-				dataSet.add(grouped);
-			}
-		}*/
-		//Add individuals
+		
+		//Add individuals and also record thier positions in ppValues
 		for(i = 0; i < ppValues.size(); i++){
-			if(ppValues.get(i).group == 0)
+			if(ppValues.get(i).group == 0){
+				ppValues.get(i).realIndex = i;
 				dataSet.add(ppValues.get(i));
+				}
 		}
 		return dataSet;
 	}

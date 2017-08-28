@@ -23,7 +23,8 @@ import android.content.*;
 import android.support.v4.app.DialogFragment;
 import android.app.Dialog;
 import android.app.Activity;
-import android.os.*;
+import android.os.Handler;
+
 
 
 public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder.ClickListener
@@ -82,7 +83,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 	public void groupItems(){
 		Log.d(TAG, "makeGroup()");
 		if(calculator!=null)
-			calculator.makeGroup(mAdapter.getSelectedItems());
+			calculator.makeGroup(mAdapter.getSelectedRealIndex());
 		
 		updateAdapterData();
 	}
@@ -97,8 +98,8 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 	
 	public void addValueToItems(float value){
 		if(calculator!=null)
-			for(int i = 0; i < mAdapter.getSelectedItems().size(); i++)
-				calculator.addExtraValue(mAdapter.getSelectedItems().get(i), value);
+			for(int i = 0; i < mAdapter.getSelectedRealIndex().size(); i++)
+				calculator.addExtraValue(mAdapter.getSelectedRealIndex().get(i), value);
 
 		updateAdapterData();
 	
@@ -341,7 +342,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		groupSelected = false;
 		for(int i = 0; i < mAdapter.getSelectedItemCount(); i++){
 			
-			List<Integer> selectedItems = mAdapter.getSelectedItems();
+			List<Integer> selectedItems = mAdapter.getSelectedRealIndex();
 			if(calculator.isThisAGroup(selectedItems.get(i))){
 				//Item is a group
 				groupSelected = true;
@@ -396,7 +397,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 	@Override
 	public void onTextNameChanged(int position, String text)
 	{
-		calculator.setItemText(position, text);
+		calculator.setItemText(mAdapter.getItemRealIndex(position), text);
 		
 		//TODO innefficient
 		if(mAdapter!=null){
