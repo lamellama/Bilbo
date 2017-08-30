@@ -29,12 +29,6 @@ import android.os.Handler;
 
 public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder.ClickListener
 {
-
-	
-
-	
-	
-	
     private static final String TAG = "RecyclerViewFragment";
 
     protected RadioButton mLinearLayoutRadioButton;

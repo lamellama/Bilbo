@@ -10,13 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.*;
-import android.app.*;
-import java.util.function.*;
-import android.widget.AdapterView.*;
-import android.util.*;
-import android.text.method.*;
-import android.view.*;
-import android.text.*;
+import android.app.Activity;
+import android.util.Log;
+import android.text.TextWatcher;
+import android.text.Editable;
 
 public class FirstFragment extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener
 {
@@ -32,6 +29,7 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 	private TextView tipSeekDisplay;
 	private Button btnTipMinus;
 	private Button btnTipPlus;
+	private Button btnContinue;
 	private EditText tvTotal;
 	
 	private TextView tvTip;
@@ -44,8 +42,6 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.first_frag, container, false);
-		
-		
 		
 		tipPercent = getResources().getInteger(R.integer.tip_default);
 		billTotal = Float.parseFloat( getContext().getResources().getString(R.string.total_default));
@@ -86,11 +82,6 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 					}
 				} 
 			});
-					
-					
-		
-	//	tvTotal.setFocusable(true);
-		//tvTotal.setFocusableInTouchMode(true);
 
         sbNumberPeople = (SeekBar) v.findViewById(R.id.sbNumPeople);
 		sbNumberPeople.setProgress(numPeople);
@@ -101,8 +92,6 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 		btnNumPeopleMinus.setOnClickListener(this);
 		sbNumberPeople.setOnSeekBarChangeListener(this);
 		
-		
-		
         spinTipPercent = (SeekBar) v.findViewById(R.id.sbTipPercent);
 		tipSeekDisplay = (TextView) v.findViewById(R.id.tipSeekbarDisplay);
 		btnTipMinus = (Button) v.findViewById(R.id.btnTipMinus);
@@ -111,8 +100,11 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 		btnTipMinus.setOnClickListener(this);
 		spinTipPercent.setOnSeekBarChangeListener(this);
 		
+		btnContinue = (Button) v.findViewById(R.id.btnContinue);
+		btnContinue.setOnClickListener(this);
+		
 		//initialise variables in main activity
-		mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
+		//mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
 		
         return v;
     }
@@ -135,6 +127,9 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 
 			case R.id.btnTipMinus:
 				spinTipPercent.setProgress(spinTipPercent.getProgress() - 1);
+				break;
+			case R.id.btnContinue:
+				mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
 				break;
         }
 		//mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
@@ -176,23 +171,18 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 		}
 		updateTotals();
 		// Send the event to the host activity
-		mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
+		//mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
 	}
 
 	@Override
-	public void onStartTrackingTouch(SeekBar seekBar) {
-
-	}
+	public void onStartTrackingTouch(SeekBar seekBar) {}
 
 	@Override
-	public void onStopTrackingTouch(SeekBar seekBar) {
-
-	}
+	public void onStopTrackingTouch(SeekBar seekBar) {}
 
 	// Container Activity must implement this interface
     public interface OnInputUpdateListener {
         public void onInputUpdate(int numPeeps, int tip, float total);
-		
     }
 
     @Override

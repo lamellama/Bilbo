@@ -91,36 +91,6 @@ public class ItemCalculator
 			
 	}
 	
-	//Find real dataset position from adapter position
-	/*private List<Integer> getRealIndex(List<Integer> items){
-		
-		List<Integer> newList = new ArrayList<Integer>();
-		for(int j = 0; j < items.size(); j++){
-			
-			int index = items.get(j) - groupIndexMap.size();
-			for(int i = 0; i<ppValues.size() && i < (items.get(j) - groupIndexMap.size()); i++){
-				if(ppValues.get(i).group > 0)
-					index++;
-			}
-			newList.add(index);
-		}
-		
-		for(int i = 0; i < items.size(); i++){
-			Log.d(TAG, "display Index: " + items.get(i) + " realIndex: " + newList.get(i));
-		}
-		return newList;
-	}
-	
-	private int getRealIndex(int displayIndex){
-		int index = displayIndex - groupIndexMap.size();
-		for(int i = 0; i<ppValues.size() && i < (displayIndex - groupIndexMap.size()); i++){
-			if(ppValues.get(i).group > 0)
-				index++;
-		}
-		Log.d(TAG, "display Index: " + displayIndex + " realIndex: " + index);
-		return index;
-	}*/
-	
 	//Takes a list of group index
 	//Merges multiple groups into one and 
 	//returns new group index
@@ -176,7 +146,7 @@ public class ItemCalculator
 		}
 		
 		//Get individual dataset indexes
-		//List<Integer> itemsCopy = getRealIndex(items);
+		//List<Integer> itemsCopy = getRealIndex(items); //REDUNDENT
 		
 		//Check there is anything else to merge
 		if(items.size() < 1)
@@ -222,16 +192,12 @@ public class ItemCalculator
 			totalExtraValue+=val;
 			calculatePerPersonValues();
 		}
-		
 	}
 	
 	public void setItemText(int index, String text){
 		//int realIndex = getRealIndex(index);
 		if(index >= 0)//If it is < 0 it is a group
 			ppValues.get(index).name = text;
-			
-		
-		
 	}
 	
 	

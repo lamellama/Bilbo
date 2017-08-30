@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    private CustomViewpager mViewPager;
 	
 	private static final String TAG = "MainActivity";
 	
@@ -62,16 +62,16 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
         mPageAdapter = new MyPagerAdapter(getSupportFragmentManager(), secondFragment);
 		
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (CustomViewpager) findViewById(R.id.container);
         mViewPager.setAdapter(mPageAdapter);
-		
+		mViewPager.setSwipeEnabled(false);
 		
 		
 		tipPercent = getResources().getInteger(R.integer.tip_default);
 		billTotal = Float.parseFloat( getResources().getString(R.string.total_default));
 		numPeople = getResources().getInteger(R.integer.numpeople_default);
 		// Initialise bundle before second fragment is created
-		onInputUpdate(numPeople, tipPercent, billTotal);
+		initSecondFrag(numPeople, tipPercent, billTotal);
 		
 
     }
@@ -104,24 +104,33 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
         }       
     }
 
-	@Override
-	public void onInputUpdate(int numPeeps, int tip, float total)
+	
+	public void initSecondFrag(int numPeeps, int tip, float total)
 	{
 		// TODO: Need to pass the new data to the second fragment
 		Log.d(TAG, "onInputUpdate - bill: " + total + " - tip: " + tip + " - Peeps: " + numPeeps);
 		secondFragBundle.putInt("tip", tip);
 		secondFragBundle.putInt("people", numPeeps);
 		secondFragBundle.putFloat("total", total);
-		
+
 		//secondFragment.setArguments(secondFragBundle);
-		
+
 		if(secondFragment == null){}
 		else{
 			Bundle bun = new Bundle();
 			bun.putInt("tip", tip);
 			bun.putInt("people", numPeeps);
 			bun.putFloat("total", total);
-			secondFragment.updateArgs(bun);}
+			secondFragment.updateArgs(bun);
+			}
+	}
+	
+	@Override
+	public void onInputUpdate(int numPeeps, int tip, float total)
+	{
+		initSecondFrag(numPeeps, tip, total);
+		
+		mViewPager.setCurrentItem(1, true);
 	}
 
 
