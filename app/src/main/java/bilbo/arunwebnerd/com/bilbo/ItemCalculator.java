@@ -9,7 +9,7 @@ import android.content.Context;
 public class ItemCalculator
 {
 	private final static String TAG = "ItemCalculator";
-	List<Integer> groupKeys = new ArrayList<Integer>();
+	//List<Integer> groupKeys = new ArrayList<Integer>();
 	//private PerPersonValue[] ppValues;
 	private ArrayList<PerPersonValue> ppValues;
 	private HashMap<Integer, List<Integer>> groupIndexMap;
@@ -19,7 +19,7 @@ public class ItemCalculator
 	private float billTotal;
 	private int tipPercent;
 	//private int itemsInGroup = 0;
-	private int uniqueIndex = 1;
+	private int uniqueIndex = -1;
 
 	public void saveInstance(Bundle storageBundle){
 
@@ -32,7 +32,7 @@ public class ItemCalculator
 	}
 	
 	public boolean isThisAGroup(int g){
-		if(g < groupIndexMap.size())
+		if(g < 0)
 			return true;
 		return false;
 	}
@@ -132,9 +132,10 @@ public class ItemCalculator
 		
 		//Seperate groups and individuals lists
 		for(int z = 0; z < items.size();){
-			if(items.get(z) < groupIndexMap.size()){
+			//if(items.get(z) < groupIndexMap.size()){
+			if(items.get(z) < 0){//this is a group
 				//item is a group
-				groups.add(groupKeys.get(items.get(z)));
+				groups.add(items.get(z));
 				items.remove(z);
 			}else{z++;}
 		}
@@ -160,7 +161,7 @@ public class ItemCalculator
 			
 		//items not already in groups, so make a new one
 		int group = Integer.valueOf(uniqueIndex);
-		uniqueIndex++;
+		uniqueIndex--;
 		//Add list to map
 		groupIndexMap.put(group, items);
 		//Set persons group value
@@ -206,7 +207,7 @@ public class ItemCalculator
 	
 		int i;
 		List<PerPersonValue> dataSet = new ArrayList<PerPersonValue>();
-		groupKeys.clear();
+		//groupKeys.clear();
 		
 		//Combine groups imto single PP
 		for (Map.Entry<Integer, List <Integer>> entry : groupIndexMap.entrySet()) {
@@ -215,6 +216,7 @@ public class ItemCalculator
 			
 			PerPersonValue grouped = new PerPersonValue(0, 0, 0);
 			grouped.group = groupKey;
+			grouped.realIndex = groupKey;
 			
 			//create name for group, this is not saved
 			grouped.name = "Group ";
@@ -229,7 +231,7 @@ public class ItemCalculator
 
 			}
 			Log.d(TAG, "Add group to dataset");
-			groupKeys.add(groupKey);
+		//	groupKeys.add(groupKey);
 			dataSet.add(grouped);
 
 		}

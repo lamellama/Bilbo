@@ -31,8 +31,8 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 {
     private static final String TAG = "RecyclerViewFragment";
 
-    protected RadioButton mLinearLayoutRadioButton;
-    protected RadioButton mGridLayoutRadioButton;
+  //  protected RadioButton mLinearLayoutRadioButton;
+  //  protected RadioButton mGridLayoutRadioButton;
 
     protected RecyclerView mRecyclerView;
     protected CustomAdapter mAdapter;
@@ -71,7 +71,6 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		//pass new dataset to adapter
 		if(mAdapter!=null){
 			mAdapter.updateDataset(calculator.getPPValueList());
-			mAdapter.refreshAdapter();
 			}
 	}
 	public void groupItems(){
@@ -114,6 +113,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 			ArrayList<PerPersonValue> list = savedInstanceState.getParcelableArrayList("peeps");
 			calculator = new ItemCalculator(getNumPeople(), getBillTotal(), getTipPercent(), list);
 			calculator.restoreState(savedInstanceState);
+			
 		}
 			
     }
@@ -170,7 +170,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		
 		//mRecyclerView.setChoiceMode
 		
-        mAdapter = new CustomAdapter(calculator.getPPValueList(), this, mActionMode);
+        mAdapter = new CustomAdapter(calculator.getPPValueList(), mRecyclerView, this, mActionMode);
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
         // END_INCLUDE(initializeRecyclerView)
@@ -263,7 +263,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 				else if((multiMenuStarted) && (!groupSelected)){
 					//start multiMenu
 					//inflater.inflate(R.menu.action_multi_select, menu);
-					ungroupBtn.setVisible(true);
+					ungroupBtn.setVisible(false);
 					groupBtn.setVisible(true);
 					addBtn.setVisible(false);
 				}
@@ -295,21 +295,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 					//AddValueDialogFragment.AddClickListener listener = null;
 					//AddValueDialogFragment addValueDialog = AddValueDialogFragment.newInstance("Add Value", listener);
 					messageDialog(getActivity(), "Add Value", "bl");
-				/*	addValueDialog.builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								// Add value
-								EditText t = ((EditText) ((AlertDialog) dialog).findViewById(R.id.popAddInput));
-								addValueToItems(Float.parseFloat(t.getText().toString()));
-
-							}
-						})
-						.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								// User cancelled the dialog
-							}
-						});*/
-					//addValueDialog.show(getFragmentManager(), "yesNoAlert");
-					//TODO
+				
 			
 					return true;
 				default:
@@ -385,7 +371,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
         
 	}
 	
-	Handler adapterHandler = new Handler();
+	
 	
 	
 	@Override
@@ -393,11 +379,11 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 	{
 		calculator.setItemText(mAdapter.getItemRealIndex(position), text);
 		
-		//TODO innefficient
+		
 		if(mAdapter!=null){
-			mAdapter.updateDataset(calculator.getPPValueList());
+			mAdapter.queueDatasetUpdate(calculator.getPPValueList());
 			
-			mAdapter.postAndNotifyAdapter(adapterHandler, mRecyclerView, mAdapter);
+			//mAdapter.postAndNotifyAdapter(adapterHandler, mRecyclerView, mAdapter);
 			}
 		
 		

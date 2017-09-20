@@ -124,6 +124,20 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 			secondFragment.updateArgs(bun);
 			}
 	}
+
+	@Override
+	public void onBackPressed()
+	{
+		// TODO: Implement this method
+		if(mViewPager.getCurrentItem() == 1){
+			mViewPager.setCurrentItem(0);
+		}else
+		super.onBackPressed();
+	}
+	
+
+	
+	
 	
 	@Override
 	public void onInputUpdate(int numPeeps, int tip, float total)

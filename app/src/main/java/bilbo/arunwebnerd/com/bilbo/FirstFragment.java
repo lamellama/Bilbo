@@ -14,9 +14,14 @@ import android.app.Activity;
 import android.util.Log;
 import android.text.TextWatcher;
 import android.text.Editable;
+import android.view.*;
+import android.view.View.OnClickListener;
 
-public class FirstFragment extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener
+public class FirstFragment extends Fragment implements  View.OnTouchListener, SeekBar.OnSeekBarChangeListener
 {
+
+	
+	
 	private static final String TAG = "FirstFragment";
 	private OnInputUpdateListener mCallback;
 	private int tipPercent;
@@ -60,7 +65,7 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 						
 						billTotal = Float.valueOf(tvTotal.getText().toString());
 						Log.d(TAG, "EditText lost focus, tvTotal = " + billTotal);
-						mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
+						//mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
 						updateTotals();
 					}
 				}
@@ -77,7 +82,7 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 					if(tvTotal.getText().length() > 0){
 						billTotal = Float.valueOf(tvTotal.getText().toString());
 					
-						mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
+						//mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
 						updateTotals();
 					}
 				} 
@@ -88,20 +93,48 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 		tvNumPeopleSeekDisplay = (TextView) v.findViewById(R.id.numPeopleSeekbarDisplay);
 		btnNumPeopleMinus = (Button) v.findViewById(R.id.btnNumPeepMinus);
 		btnNumPeoplePlus = (Button) v.findViewById(R.id.btnNumPeepPlus);
-		btnNumPeoplePlus.setOnClickListener(this);
-		btnNumPeopleMinus.setOnClickListener(this);
+		//btnNumPeoplePlus.setOnClickListener(this);
+		//btnNumPeopleMinus.setOnClickListener(this);
+		btnNumPeoplePlus.setOnTouchListener(new RepeatListener(400, 100, new OnClickListener() {
+													@Override
+													public void onClick(View view) {
+														// the code to execute repeatedly
+														sbNumberPeople.setProgress(sbNumberPeople.getProgress() + 1);
+													}
+												}));
+		btnNumPeopleMinus.setOnTouchListener(new RepeatListener(400, 100, new OnClickListener() {
+																		@Override
+																		public void onClick(View view) {
+																			// the code to execute repeatedly
+																			sbNumberPeople.setProgress(sbNumberPeople.getProgress() - 1);
+																		}
+																	}));
 		sbNumberPeople.setOnSeekBarChangeListener(this);
 		
         spinTipPercent = (SeekBar) v.findViewById(R.id.sbTipPercent);
 		tipSeekDisplay = (TextView) v.findViewById(R.id.tipSeekbarDisplay);
 		btnTipMinus = (Button) v.findViewById(R.id.btnTipMinus);
 		btnTipPlus = (Button) v.findViewById(R.id.btnTipPlus);
-		btnTipPlus.setOnClickListener(this);
-		btnTipMinus.setOnClickListener(this);
+		//btnTipPlus.setOnClickListener(this);
+		//btnTipMinus.setOnClickListener(this);
+		btnTipPlus.setOnTouchListener(new RepeatListener(400, 100, new OnClickListener() {
+											  @Override
+											  public void onClick(View view) {
+												  // the code to execute repeatedly
+												  spinTipPercent.setProgress(sbNumberPeople.getProgress() + 1);
+											  }
+										  }));
+		btnTipMinus.setOnTouchListener(new RepeatListener(400, 100, new OnClickListener() {
+											   @Override
+											   public void onClick(View view) {
+												   // the code to execute repeatedly
+												   spinTipPercent.setProgress(sbNumberPeople.getProgress() - 1);
+											   }
+										   }));
 		spinTipPercent.setOnSeekBarChangeListener(this);
 		
 		btnContinue = (Button) v.findViewById(R.id.btnContinue);
-		btnContinue.setOnClickListener(this);
+		btnContinue.setOnTouchListener(this);
 		
 		//initialise variables in main activity
 		//mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
@@ -109,6 +142,38 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
         return v;
     }
 	
+	@Override
+	public boolean onTouch(View p1, MotionEvent p2)
+	{
+		switch (p1.getId()) {
+				case R.id.btnContinue:
+					mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
+				break;
+			}
+		return false;
+	}
+	
+	/*@Override
+	public boolean onLongClick(View p1)
+	{
+		switch (p1.getId()) {
+			case R.id.btnNumPeepPlus:
+				sbNumberPeople.setProgress(sbNumberPeople.getProgress() + 1);
+				break;
+
+			case R.id.btnNumPeepMinus:
+				sbNumberPeople.setProgress(sbNumberPeople.getProgress() - 1);
+				break;
+			case R.id.btnTipPlus:
+				spinTipPercent.setProgress(spinTipPercent.getProgress() + 1);
+				break;
+
+			case R.id.btnTipMinus:
+				spinTipPercent.setProgress(spinTipPercent.getProgress() - 1);
+				break;
+				}
+				return true;
+				}
 	
 	@Override
 	public void onClick(View p1)
@@ -133,7 +198,7 @@ public class FirstFragment extends Fragment implements View.OnClickListener, See
 				break;
         }
 		//mCallback.onInputUpdate(numPeople, tipPercent, billTotal);
-	}
+	}*/
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback

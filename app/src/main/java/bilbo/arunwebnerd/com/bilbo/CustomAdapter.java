@@ -40,9 +40,10 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
     private List<PerPersonValue> mDataSet;
-	private ViewHolder.ClickListener clickListener;
-	
+	private ViewHolder.ClickListener mClickListener;
+	RecyclerView mRecyclerView;
 	private ActionMode mActionMode;
+	Handler mAdapterHandler;
 
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
     /**
@@ -70,6 +71,7 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		//MyCustomEditTextListener textListener;
 		
 		View selectedOverlay;
+		boolean etNameChanged = false;
 		String etNameInput;
 		//public boolean hasFocus = false;
 
@@ -83,6 +85,7 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
             totalTextView = (TextView) v.findViewById(R.id.tvTotalB);
 			numPartiesTextView = (TextView) v.findViewById(R.id.tvPP);
 			etName = (EditText) v.findViewById(R.id.etName);
+			
 			//this.textListener = customTextListener;
 			etName.addTextChangedListener(this);
 			etName.setOnFocusChangeListener(new OnFocusChangeListener() {
@@ -100,8 +103,10 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		
 		public void validateInput(View v){
 			//View has lost focus, check text and send to interface
-			if(etNameInput != null)
+			if((etNameInput != null)&&(etNameChanged)){
 				listener.onTextNameChanged(getPosition(),etNameInput);
+				etNameChanged = false;
+				}
 		}
 		
 		@Override
@@ -112,6 +117,7 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		@Override
 		public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
 			etNameInput = charSequence.toString();
+			etNameChanged = true;
 			
 			//   mDataSet.get(position).name = charSequence.toString();
 
@@ -122,6 +128,8 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 			
 			// no op
 		}
+		
+		
 		
 		@Override
         public void onClick(View v) {
@@ -152,24 +160,32 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
      *
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
      */
-    public CustomAdapter(List<PerPersonValue> dataSet, ViewHolder.ClickListener clickListener, ActionMode actionMode) {
+    public CustomAdapter(List<PerPersonValue> dataSet, RecyclerView recyclerView, ViewHolder.ClickListener clickListener, ActionMode actionMode) {
         mDataSet = dataSet;
-		this.clickListener = clickListener;
+		this.mClickListener = clickListener;
 		mActionMode = actionMode;
+		mRecyclerView = recyclerView;
+		mAdapterHandler = new Handler();
+		
     }
+	
+	public void queueDatasetUpdate(List<PerPersonValue> data){
+		mDataSet = data;
+		clearSelection(); //TODO would be better to update selection
+		postAndNotifyAdapter(mAdapterHandler, mRecyclerView, this);
+	}
 	
 	public void updateDataset(List<PerPersonValue> data){
 		mDataSet = data;
-		
-	}
-	
-	public void refreshAdapter(){
 		clearSelection();
 		notifyDataSetChanged();
 	}
 	
 	boolean notifyIsRunning = false;
 	
+	
+	//Recycler view does not like being updated while it is doing something so this is a work around
+	//BUT RecyclerView also does not like being called from another thread in some instances "BUG" so use sparringly
 	public void postAndNotifyAdapter(final Handler handler, final RecyclerView recyclerView, final RecyclerView.Adapter adapter) {
 		if(!notifyIsRunning){
 			notifyIsRunning = true;
@@ -191,7 +207,7 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		List<Integer> selectedItems = getSelectedItems();
 		List<Integer> selectedItemIndex = new ArrayList<Integer>();
 		for(int i = 0; i < selectedItems.size(); i++){
-			selectedItemIndex.add(mDataSet.get(selectedItems.get(i)).realIndex);
+			selectedItemIndex.add(getItemRealIndex(selectedItems.get(i)));
 			}
 		return selectedItemIndex;
 	}
@@ -200,6 +216,8 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		int itemIndex;
 		
 		itemIndex = mDataSet.get(position).realIndex;
+		//if(itemIndex == -1)
+		//	itemIndex = position;
 		
 		return itemIndex;
 	}
@@ -225,10 +243,10 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.text_row_item, viewGroup, false);
 		
-        return new ViewHolder(v, clickListener);
+        return new ViewHolder(v, mClickListener);
     }
-    // END_INCLUDE(recyclerViewOnCreateViewHolder)
-
+    	// END_INCLUDE(recyclerViewOnCreateViewHolder)
+	boolean etNameEnabled = true;
     // BEGIN_INCLUDE(recyclerViewOnBindViewHolder)
     // Replace the contents of a view (invoked by the layout manager)
     @Override
@@ -245,20 +263,23 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
         // Get element from your dataset at this position and replace the contents of the view
         // with that element,
 		Log.d(TAG, "Dataset group: " + mDataSet.get(position).group );
-		if(mDataSet.get(position).group > 0){
+		if(mDataSet.get(position).group < 0){
+			
 			//its a group
 			Log.d(TAG, "Print group");
 			viewHolder.numPartiesTextView.setText("group");
 			
-			//viewHolder.etName.setText("Group " + mDataSet.get(mDataSet.get(position).group).name);
-			viewHolder.etName.setText(mDataSet.get(position).name);
+			viewHolder.etName.setText("Group " + mDataSet.get(position).name);
+			//viewHolder.etName.setText(mDataSet.get(position).name);
 			viewHolder.etName.setFocusable(false);
 			viewHolder.etName.setEnabled(false);
 			viewHolder.etName.setCursorVisible(false);
 			viewHolder.etName.setKeyListener(null);
+			etNameEnabled = false;
 			viewHolder.etName.setBackgroundColor(Color.TRANSPARENT);
 		}
-		else{
+		else {
+			etNameEnabled = true;
      	   viewHolder.numPartiesTextView.setText(Integer.toString(position));
 		   viewHolder.totalTextView.setText(Float.toString(mDataSet.get(position).bill));
 		   viewHolder.etName.removeTextChangedListener(viewHolder);
@@ -267,7 +288,7 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 			viewHolder.etName.setFocusable(true);
 			viewHolder.etName.setEnabled(true);
 			viewHolder.etName.setCursorVisible(true);
-			viewHolder.etName.setKeyListener(null);//TODO
+			//viewHolder.etName.setKeyListener(null);//TODO
 		   }
     }
     // END_INCLUDE(recyclerViewOnBindViewHolder)
