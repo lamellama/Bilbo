@@ -34,20 +34,34 @@
 			android:background="@android:color/transparent"
 			android:layout_toRightOf="@id/tvItemNumber"/>
 		<TextView
-			android:id="@+id/tvPP"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:padding="@dimen/list_item_view_margin"
-			android:layout_alignParentRight="true"
-			android:text="1"/>
-		<TextView
 			android:id="@+id/tvTotalB"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="10.00"
 			android:padding="@dimen/list_item_view_margin"
-			android:layout_toRightOf="@id/tvPP"
+			android:layout_alignParentRight="true"
 			/>
+		<TextView
+			android:id="@+id/tvPP"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="@dimen/list_item_view_margin"
+			android:layout_toLeftOf="@id/tvTotalB"
+			android:text="1"/>
+		<TextView
+			android:id="@+id/tvTip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="@dimen/list_item_view_margin"
+			android:layout_toLeftOf="@id/tvPP"
+			android:text="%"/>
+		<TextView
+			android:id="@+id/tvAV"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="@dimen/list_item_view_margin"
+			android:layout_toLeftOf="@id/tvTip"
+			android:text="+/-1"/>
 	</RelativeLayout>
 
 
