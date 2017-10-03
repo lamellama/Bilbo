@@ -8,6 +8,7 @@ public class PerPersonValue implements Parcelable
 {
 	public float addedExtra = 0;
 	public float bill = 0;
+	public int tipPercent = 0;
 	//public String label;
 	public int group = 0;
 	public String name;
@@ -21,7 +22,13 @@ public class PerPersonValue implements Parcelable
 	}
 	
 	public float getTotal(){
-		return bill+addedExtra;
+	/*	float basic = bill + addedExtra;
+		if(basic!=0)
+			basic += (basic/100) * tipPercent;
+		return basic;*/
+		if(bill == 0)
+			return bill;
+		return bill + (bill/100)*tipPercent;
 	}
 
 	protected PerPersonValue(Parcel in) {

@@ -18,6 +18,9 @@ import android.view.ViewGroup;
 import android.util.Log;
 
 import android.widget.TextView;
+import android.app.Activity;
+import android.support.v7.app.AlertDialog;
+import android.content.DialogInterface;
 
 public class MainActivity extends AppCompatActivity implements FirstFragment.OnInputUpdateListener{
 	
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 
 				case 0: return FirstFragment.newInstance("FirstFragment, Instance 1");
 				case 1://SecondFragment newFragment = SecondFragment.newInstance("SecondFragment, Instance 1");
-					Log.d(TAG, "secondFragBundled");
+				//	Log.d(TAG, "secondFragBundled");
 					
 					//secondFragBundle = getSupportFragmentManager().findFragmentById(R.id.pageview)
 					secondFragment.setArguments(secondFragBundle); 
@@ -107,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 	
 	public void initSecondFrag(int numPeeps, int tip, float total)
 	{
-		// TODO: Need to pass the new data to the second fragment
 		Log.d(TAG, "onInputUpdate - bill: " + total + " - tip: " + tip + " - Peeps: " + numPeeps);
 		secondFragBundle.putInt("tip", tip);
 		secondFragBundle.putInt("people", numPeeps);
@@ -124,15 +126,41 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 			secondFragment.updateArgs(bun);
 			}
 	}
+	
+
+	//boolean backPressHandled = false;
+	//Are you sure? dialog box
+	public  void areyousureDialog(Activity a, String title, String message){
+		AlertDialog.Builder dialog = new AlertDialog.Builder(a);
+		dialog.setTitle(title);
+		dialog.setMessage(message);
+		LayoutInflater inflater = getLayoutInflater();
+
+		// Inflate and set the layout for the dialog
+		// Pass null as the parent view because its going in the dialog layout
+		dialog.setView(inflater.inflate(R.layout.warning_dialog, null));
+		dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					mViewPager.setCurrentItem(mViewPager.getCurrentItem()-1 );
+				}
+			})
+			.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					// User cancelled the dialog
+				
+				}
+			});
+		dialog.create().show();     
+
+	}
 
 	@Override
 	public void onBackPressed()
 	{
-		// TODO: Implement this method
 		if(mViewPager.getCurrentItem() == 1){
-			mViewPager.setCurrentItem(0);
+			areyousureDialog(this, "Are you sure you want to return?", "Your input on this page will be lost");
 		}else
-		super.onBackPressed();
+			super.onBackPressed();
 	}
 	
 

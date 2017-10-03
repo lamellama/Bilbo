@@ -59,9 +59,13 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		 	public void onTextNameChanged(int position, String text);
         }
 
-        public final TextView totalTextView;
+        public final TextView tvTotal;
+		
 		//public Button addButton;
-		public TextView numPartiesTextView;
+		public TextView tvTip;
+		public TextView tvAddedValue;
+		public TextView tvPPTotal;
+		public TextView tvItemNumber;
 		public EditText etName;
 		
 		public boolean selected = true;
@@ -82,8 +86,11 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 			this.listener = listener;
 			itemView.setOnClickListener(this);
 
-            totalTextView = (TextView) v.findViewById(R.id.tvTotalB);
-			numPartiesTextView = (TextView) v.findViewById(R.id.tvPP);
+            tvTotal = (TextView) v.findViewById(R.id.tvTotalB);
+			tvPPTotal = (TextView) v.findViewById(R.id.tvPP);
+			tvTip = (TextView) v.findViewById(R.id.tvTip);
+			tvAddedValue = (TextView) v.findViewById(R.id.tvAV);
+			tvItemNumber = (TextView) v.findViewById(R.id.tvItemNumber);
 			etName = (EditText) v.findViewById(R.id.etName);
 			
 			//this.textListener = customTextListener;
@@ -141,8 +148,8 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
             }
         }
 		
-		public TextView getNumPPText(){return numPartiesTextView;}
-		public TextView getTotalText(){return totalTextView;}
+		public TextView getPPTotaltv(){return tvPPTotal;}
+		public TextView getTotaltv(){return tvTotal;}
 		public EditText getEtName(){return etName;}
 	//	public Button getAddButton(){return addButton;}
 	
@@ -260,6 +267,7 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		
 		// Highlight the item if it's selected
         viewHolder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
+		viewHolder.tvItemNumber.setText(Integer.toString(position));
         // Get element from your dataset at this position and replace the contents of the view
         // with that element,
 		Log.d(TAG, "Dataset group: " + mDataSet.get(position).group );
@@ -267,22 +275,25 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 			
 			//its a group
 			Log.d(TAG, "Print group");
-			viewHolder.numPartiesTextView.setText("group");
 			
 			viewHolder.etName.setText("Group " + mDataSet.get(position).name);
+			viewHolder.tvTip.setText(Float.toString(mDataSet.get(position).tipPercent) + "%");
 			//viewHolder.etName.setText(mDataSet.get(position).name);
 			viewHolder.etName.setFocusable(false);
 			viewHolder.etName.setEnabled(false);
 			viewHolder.etName.setCursorVisible(false);
-			viewHolder.etName.setKeyListener(null);
+			//viewHolder.etName.setKeyListener(null);
 			etNameEnabled = false;
 			viewHolder.etName.setBackgroundColor(Color.TRANSPARENT);
 		}
 		else {
+			// its an individual
+			viewHolder.tvTip.setText( Float.toString(mDataSet.get(position).tipPercent) + "%");
+			viewHolder.tvAddedValue.setText(Float.toString(mDataSet.get(position).addedExtra));
 			etNameEnabled = true;
-     	   viewHolder.numPartiesTextView.setText(Integer.toString(position));
-		   viewHolder.totalTextView.setText(Float.toString(mDataSet.get(position).bill));
-		   viewHolder.etName.removeTextChangedListener(viewHolder);
+			viewHolder.tvPPTotal.setText(Float.toString(mDataSet.get(position).bill));
+			viewHolder.tvTotal.setText(Float.toString(mDataSet.get(position).getTotal() ));
+		   	viewHolder.etName.removeTextChangedListener(viewHolder);
 			viewHolder.etName.setText(mDataSet.get(position).name);
 			viewHolder.etName.addTextChangedListener(viewHolder);
 			viewHolder.etName.setFocusable(true);

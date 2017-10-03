@@ -183,6 +183,7 @@ public class ItemCalculator
 			perPerson =  totalLeft / ppValues.size();
 		for(int i =0; i<ppValues.size(); i++){
 			ppValues.get(i).bill = ppValues.get(i).addedExtra + perPerson;
+			ppValues.get(i).tipPercent = tipPercent;
 		}
 		
 	}
@@ -222,14 +223,18 @@ public class ItemCalculator
 			grouped.name = "Group ";
 			if(groupList.size() > 0)
 				grouped.name += ppValues.get(groupList.get(0)).name;
-				
-			for(int k =0; k< groupList.size(); k++){
+			
+			float tip = 0;
+			int k = 0;
+			for(; k< groupList.size(); k++){
 				grouped.addedExtra += ppValues.get(groupList.get(k)).addedExtra;
 				grouped.bill += ppValues.get(groupList.get(k)).bill;
-				
+				tip += ppValues.get(groupList.get(k)).tipPercent;
 				//TODO grouped. += ppValues[tempList.get(k)].addedExtra;
 
 			}
+			if((k > 0)&&(tip > 0))
+				grouped.tipPercent =(int) tip / k;
 			Log.d(TAG, "Add group to dataset");
 		//	groupKeys.add(groupKey);
 			dataSet.add(grouped);

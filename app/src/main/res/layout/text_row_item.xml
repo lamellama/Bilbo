@@ -39,28 +39,53 @@
 			android:layout_height="wrap_content"
 			android:text="10.00"
 			android:padding="@dimen/list_item_view_margin"
+			android:textAppearance="@style/strongFont"
 			android:layout_alignParentRight="true"
 			/>
 		<TextView
-			android:id="@+id/tvPP"
+			android:id="@+id/tvEquals"
 			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:padding="@dimen/list_item_view_margin"
+			android:layout_height="match_parent"
+			android:gravity="center"
+			android:layout_gravity="center_vertical"
 			android:layout_toLeftOf="@id/tvTotalB"
-			android:text="1"/>
+			android:text="="/>
 		<TextView
 			android:id="@+id/tvTip"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:padding="@dimen/list_item_view_margin"
-			android:layout_toLeftOf="@id/tvPP"
+			android:layout_toLeftOf="@id/tvEquals"
 			android:text="%"/>
+		<TextView
+			android:id="@+id/tvPlus"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:gravity="center"
+			android:layout_gravity="center_vertical"
+			android:layout_toLeftOf="@id/tvTip"
+			android:text="+"/>
+		<TextView
+			android:id="@+id/tvPP"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="@dimen/list_item_view_margin"
+			android:layout_toLeftOf="@id/tvPlus"
+			android:text="1"/>
+		<TextView
+			android:id="@+id/tvPlus2"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:gravity="center"
+			android:layout_gravity="center_vertical"
+			android:layout_toLeftOf="@id/tvPP"
+			android:text="+"/>
 		<TextView
 			android:id="@+id/tvAV"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:padding="@dimen/list_item_view_margin"
-			android:layout_toLeftOf="@id/tvTip"
+			android:layout_toLeftOf="@id/tvPlus2"
 			android:text="+/-1"/>
 	</RelativeLayout>
 
