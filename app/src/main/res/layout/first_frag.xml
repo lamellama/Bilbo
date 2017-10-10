@@ -32,8 +32,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:inputType="numberDecimal"
-				android:digits="0123456789-."
-				android:text="@string/total_prompt"
+				android:hint="@string/total_prompt"
 				android:ems="10"/>
 
 		</TableRow>
@@ -69,7 +68,7 @@
 					android:layout_height="0dp"
 					android:layout_weight="1"
 					android:gravity="center"
-					android:text="10"/>
+					android:text="@integer/numpeople_default"/>
 
 				<RelativeLayout
 					android:layout_width="match_parent"
@@ -95,7 +94,7 @@
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:max="50"
-						android:progress="25"
+						android:progress="@integer/numpeople_default"
 						android:layout_centerVertical="true"/>
 
 					<Button
@@ -145,7 +144,7 @@
 					android:layout_height="0dp"
 					android:layout_weight="1"
 					android:gravity="center"
-					android:text="10"/>
+					android:text="@integer/tip_default"/>
 				<RelativeLayout
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -168,7 +167,7 @@
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:max="50"
-						android:progress="10"
+						android:progress="@integer/tip_default"
 						android:layout_centerVertical="true"/>
 
 					<Button

@@ -24,20 +24,8 @@ import android.content.DialogInterface;
 
 public class MainActivity extends AppCompatActivity implements FirstFragment.OnInputUpdateListener{
 	
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-  //  private SectionsPagerAdapter mSectionsPagerAdapter;
 	private MyPagerAdapter mPageAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private CustomViewpager mViewPager;
 	
 	private static final String TAG = "MainActivity";
@@ -91,11 +79,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
             switch(pos) {
 
 				case 0: return FirstFragment.newInstance("FirstFragment, Instance 1");
-				case 1://SecondFragment newFragment = SecondFragment.newInstance("SecondFragment, Instance 1");
-				//	Log.d(TAG, "secondFragBundled");
-					
-					//secondFragBundle = getSupportFragmentManager().findFragmentById(R.id.pageview)
-					secondFragment.setArguments(secondFragBundle); 
+				case 1:secondFragment.setArguments(secondFragBundle); 
 					return secondFragment;
 				default: return FirstFragment.newInstance("ThirdFragment, Default");
             }
@@ -115,8 +99,6 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 		secondFragBundle.putInt("people", numPeeps);
 		secondFragBundle.putFloat("total", total);
 
-		//secondFragment.setArguments(secondFragBundle);
-
 		if(secondFragment == null){}
 		else{
 			Bundle bun = new Bundle();
@@ -135,9 +117,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 		dialog.setTitle(title);
 		dialog.setMessage(message);
 		LayoutInflater inflater = getLayoutInflater();
-
-		// Inflate and set the layout for the dialog
-		// Pass null as the parent view because its going in the dialog layout
+		
 		dialog.setView(inflater.inflate(R.layout.warning_dialog, null));
 		dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
@@ -186,22 +166,15 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // Handle action bar item clicks here
        
 		switch (item.getItemId()) {
-			case R.id.action_settings:
-				// User chose the "Settings" item, show the app settings UI...
-				return true;
 
 			case R.id.action_group:
-				//((SecondFragment)getSupportFragmentManager().findFragmentById(R.id.second_frag)).groupItems();
 				secondFragment.groupItems();
 				return true;
 			case R.id.action_ungroup:
 				secondFragment.unGroupItems();
-				//((SecondFragment)getSupportFragmentManager().findFragmentById(R.id.second_frag)).unGroupItems();
 				return true;
 			default:
 			//No action

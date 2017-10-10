@@ -13,26 +13,23 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.util.Log;
-import android.support.v7.app.*;
-import java.util.*;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
-import android.view.*;
-import android.support.v7.widget.*;
-import android.widget.*;
-import android.content.*;
+import android.view.MenuInflater;
+import android.widget.EditText;
+import android.content.DialogInterface;
 import android.support.v4.app.DialogFragment;
 import android.app.Dialog;
 import android.app.Activity;
 import android.os.Handler;
 
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder.ClickListener
 {
     private static final String TAG = "RecyclerViewFragment";
-
-  //  protected RadioButton mLinearLayoutRadioButton;
-  //  protected RadioButton mGridLayoutRadioButton;
 
     protected RecyclerView mRecyclerView;
     protected CustomAdapter mAdapter;
@@ -104,7 +101,6 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		numPeople = getArguments().getInt("people", 0);
 		tipPercent = getArguments().getInt("tip", 0);
 		billTotal = getArguments().getFloat("total", 0);
-		//updateArgs(getNumPeople(), getTipPercent(), getBillTotal());
         // Initialize dataset
 		if(savedInstanceState == null){
         	initDataset();
@@ -113,13 +109,8 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 			ArrayList<PerPersonValue> list = savedInstanceState.getParcelableArrayList("peeps");
 			calculator = new ItemCalculator(getNumPeople(), getBillTotal(), getTipPercent(), list);
 			calculator.restoreState(savedInstanceState);
-			
 		}
-			
     }
-	
-	
-	
 	
 	private int getNumPeople() {
         if (numPeople > 0)
@@ -160,21 +151,17 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
         rootView = inflater.inflate(R.layout.second_frag, container, false);
         rootView.setTag(TAG);
 
-        // BEGIN_INCLUDE(initializeRecyclerView)
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rvPeopleGroups);
 
-     
         mLayoutManager = new LinearLayoutManager(getActivity());
 		
         mRecyclerView.setLayoutManager(mLayoutManager);
 		
-		//mRecyclerView.setChoiceMode
-		
         mAdapter = new CustomAdapter(calculator.getPPValueList(), mRecyclerView, this, mActionMode);
+		
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
-        // END_INCLUDE(initializeRecyclerView)
-        Log.d(TAG, "Testing Logging");
+        
         return rootView;
     }
 	
@@ -182,8 +169,6 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save currently selected layout manager.
-      //  savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, mCurrentLayoutManagerType);
 	  	calculator.saveInstance(savedInstanceState);
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -223,8 +208,6 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 
 	}
 	
-	
-	
 	//actionbar
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
@@ -237,24 +220,21 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 			MenuItem ungroupBtn = menu.findItem(R.id.action_ungroup);
 			MenuItem groupBtn = menu.findItem(R.id.action_group);
 			MenuItem addBtn = menu.findItem(R.id.action_add_value);
-			//if(mAdapter.getSelectedItemCount() > 1){
+			
 				if((singleMenuStarted)&&(!groupSelected)){
 					//start singleMenu
-					//inflater.inflate(R.menu.action_single_select, menu);
 					ungroupBtn.setVisible(false);
 					groupBtn.setVisible(false);
 					addBtn.setVisible(true);
 				}
 				else if((multiMenuStarted) && (groupSelected)){
-					//start multiMenu
-					//inflater.inflate(R.menu.action_multi_select, menu);
+					//start multiMenu with a grouped item
 					ungroupBtn.setVisible(true);
 					groupBtn.setVisible(true);
 					addBtn.setVisible(false);
 				}
 				else if((singleMenuStarted)&&(groupSelected)){
-					//start singleMenu
-					//inflater.inflate(R.menu.action_single_select, menu);
+					//start single menu with a grouped item
 					ungroupBtn.setVisible(true);
 					groupBtn.setVisible(false);
 					addBtn.setVisible(false);
@@ -262,7 +242,6 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 				}
 				else if((multiMenuStarted) && (!groupSelected)){
 					//start multiMenu
-					//inflater.inflate(R.menu.action_multi_select, menu);
 					ungroupBtn.setVisible(false);
 					groupBtn.setVisible(true);
 					addBtn.setVisible(false);
@@ -292,11 +271,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 					mode.finish(); // Action picked, so close the CAB
 					return true;
 				case R.id.action_add_value:
-					//AddValueDialogFragment.AddClickListener listener = null;
-					//AddValueDialogFragment addValueDialog = AddValueDialogFragment.newInstance("Add Value", listener);
 					messageDialog(getActivity(), "Add Value", "bl");
-				
-			
 					return true;
 				default:
 					return false;
@@ -366,30 +341,17 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 			
 			mActionMode = activity.startSupportActionMode(mActionModeCallback);
 		}
-		
-        
-        
 	}
-	
-	
-	
 	
 	@Override
 	public void onTextNameChanged(int position, String text)
 	{
 		calculator.setItemText(mAdapter.getItemRealIndex(position), text);
 		
-		
 		if(mAdapter!=null){
 			mAdapter.queueDatasetUpdate(calculator.getPPValueList());
-			
-			//mAdapter.postAndNotifyAdapter(adapterHandler, mRecyclerView, mAdapter);
-			}
-		
-		
+		}
 	}
-	
-	
 }	
 
 

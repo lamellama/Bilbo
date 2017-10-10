@@ -9,16 +9,12 @@ import android.content.Context;
 public class ItemCalculator
 {
 	private final static String TAG = "ItemCalculator";
-	//List<Integer> groupKeys = new ArrayList<Integer>();
-	//private PerPersonValue[] ppValues;
 	private ArrayList<PerPersonValue> ppValues;
 	private HashMap<Integer, List<Integer>> groupIndexMap;
-	//private List<Integer> groups;
 	private float totalExtraValue =0;
 	private int numPeople;
 	private float billTotal;
 	private int tipPercent;
-	//private int itemsInGroup = 0;
 	private int uniqueIndex = -1;
 
 	public void saveInstance(Bundle storageBundle){
@@ -41,31 +37,18 @@ public class ItemCalculator
 		numPeople = numPeeps;
 		billTotal = bill;
 		tipPercent = tip;
-		//ppValues = new PerPersonValue[numPeople];
 		ppValues = new ArrayList<PerPersonValue>();
-		//for(int i = 0; i < numPeople; i++)
-		//	ppValues[i] = new PerPersonValue();
 		initPPValueList();
 		calculatePerPersonValues();
 		groupIndexMap = new HashMap <Integer, List<Integer>>();
-		//groups = new ArrayList<Integer>();
-		//initialiseGroups();
 	}
 	
 	public ItemCalculator(int numPeeps, float bill, int tip, ArrayList<PerPersonValue> ppList){
 		numPeople = numPeeps;
 		billTotal = bill;
 		tipPercent = tip;
-		//ppValues = new PerPersonValue[numPeople];
-		//ppValues = new ArrayList<PerPersonValue>();
 		ppValues = ppList;
-		//for(int i = 0; i < numPeople; i++)
-		//	ppValues[i] = new PerPersonValue();
-		//initPPValueList();
-		//calculatePerPersonValues();
 		groupIndexMap = new HashMap <Integer, List<Integer>>();
-		//groups = new ArrayList<Integer>();
-		//initialiseGroups();
 	}
 
 	private void initPPValueList(){
@@ -117,7 +100,6 @@ public class ItemCalculator
 		if(groupIndexMap.containsKey(groupIndex)){
 			Log.d(TAG, "destroy group ");
 			for(int i = 0; i < groupIndexMap.get(groupIndex).size(); i ++){
-			//	if((groupIndexMap.get(groupIndex).get(i) < ppValues.length)&&(groupIndexMap.get(groupIndex).get(i) >=0))
 				ppValues.get(groupIndexMap.get(groupIndex).get(i)).group = 0;
 				}
 				
@@ -132,7 +114,6 @@ public class ItemCalculator
 		
 		//Seperate groups and individuals lists
 		for(int z = 0; z < items.size();){
-			//if(items.get(z) < groupIndexMap.size()){
 			if(items.get(z) < 0){//this is a group
 				//item is a group
 				groups.add(items.get(z));
@@ -145,9 +126,6 @@ public class ItemCalculator
 			mergeGroups(groups);
 			
 		}
-		
-		//Get individual dataset indexes
-		//List<Integer> itemsCopy = getRealIndex(items); //REDUNDENT
 		
 		//Check there is anything else to merge
 		if(items.size() < 1)
@@ -197,7 +175,6 @@ public class ItemCalculator
 	}
 	
 	public void setItemText(int index, String text){
-		//int realIndex = getRealIndex(index);
 		if(index >= 0)//If it is < 0 it is a group
 			ppValues.get(index).name = text;
 	}
@@ -208,7 +185,6 @@ public class ItemCalculator
 	
 		int i;
 		List<PerPersonValue> dataSet = new ArrayList<PerPersonValue>();
-		//groupKeys.clear();
 		
 		//Combine groups imto single PP
 		for (Map.Entry<Integer, List <Integer>> entry : groupIndexMap.entrySet()) {
@@ -236,7 +212,6 @@ public class ItemCalculator
 			if((k > 0)&&(tip > 0))
 				grouped.tipPercent =(int) tip / k;
 			Log.d(TAG, "Add group to dataset");
-		//	groupKeys.add(groupKey);
 			dataSet.add(grouped);
 
 		}

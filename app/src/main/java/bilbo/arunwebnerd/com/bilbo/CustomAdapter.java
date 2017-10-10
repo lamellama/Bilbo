@@ -1,19 +1,3 @@
-/*
-* Copyright (C) 2014 The Android Open Source Project
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*      http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
-
 package bilbo.arunwebnerd.com.bilbo;
 
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +10,6 @@ import java.util.*;
 import android.widget.*;
 import android.support.v7.view.ActionMode;
 import android.view.MenuInflater;
-//import android.view.*;
 import android.text.TextWatcher;
 import android.text.Editable;
 import android.os.Handler;
@@ -45,7 +28,6 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 	private ActionMode mActionMode;
 	Handler mAdapterHandler;
 
-    // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
@@ -55,13 +37,11 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		
 		public interface ClickListener {
             public void onItemClicked(int position);
-         //   public boolean onItemLongClicked(int position);
 		 	public void onTextNameChanged(int position, String text);
         }
 
         public final TextView tvTotal;
 		
-		//public Button addButton;
 		public TextView tvTip;
 		public TextView tvAddedValue;
 		public TextView tvPPTotal;
@@ -72,12 +52,10 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		
 		// an array of selected items (Integer indices) 
 		private ClickListener listener;
-		//MyCustomEditTextListener textListener;
 		
 		View selectedOverlay;
 		boolean etNameChanged = false;
 		String etNameInput;
-		//public boolean hasFocus = false;
 
         public ViewHolder(View v, ClickListener listener) {
             super(v);
@@ -92,8 +70,6 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 			tvAddedValue = (TextView) v.findViewById(R.id.tvAV);
 			tvItemNumber = (TextView) v.findViewById(R.id.tvItemNumber);
 			etName = (EditText) v.findViewById(R.id.etName);
-			
-			//this.textListener = customTextListener;
 			etName.addTextChangedListener(this);
 			etName.setOnFocusChangeListener(new OnFocusChangeListener() {
 
@@ -104,8 +80,6 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 						}
 					}
 				});
-			//addButton = (Button) v.findViewById(R.id.addButton);
-			
         }
 		
 		public void validateInput(View v){
@@ -117,24 +91,16 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		}
 		
 		@Override
-		public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-			// no op
-		}
+		public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {}
 
 		@Override
 		public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
 			etNameInput = charSequence.toString();
 			etNameChanged = true;
-			
-			//   mDataSet.get(position).name = charSequence.toString();
-
 		}
 
 		@Override
-		public void afterTextChanged(Editable editable) {
-			
-			// no op
-		}
+		public void afterTextChanged(Editable editable) {}
 		
 		
 		
@@ -142,31 +108,14 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
         public void onClick(View v) {
             if (listener != null) {
                 listener.onItemClicked(getPosition());
-			//	mActionMode = MainActivity.getInstance().startActionMode(mActionModeCallback);
-			//	view.setSelected(true);
-			//	return true;
             }
         }
 		
 		public TextView getPPTotaltv(){return tvPPTotal;}
 		public TextView getTotaltv(){return tvTotal;}
 		public EditText getEtName(){return etName;}
-	//	public Button getAddButton(){return addButton;}
-	
-	
-		
-        
     }
-	
-	
-	
-    // END_INCLUDE(recyclerViewSampleViewHolder)
 
-    /**
-     * Initialize the dataset of the Adapter.
-     *
-     * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
-     */
     public CustomAdapter(List<PerPersonValue> dataSet, RecyclerView recyclerView, ViewHolder.ClickListener clickListener, ActionMode actionMode) {
         mDataSet = dataSet;
 		this.mClickListener = clickListener;
@@ -223,8 +172,6 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		int itemIndex;
 		
 		itemIndex = mDataSet.get(position).realIndex;
-		//if(itemIndex == -1)
-		//	itemIndex = position;
 		
 		return itemIndex;
 	}
@@ -234,37 +181,26 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		List<Integer> selectedItems = getSelectedItems();
 		
 		for(int i = 0; i < selectedItems.size(); i++){
-			//for(int j = 0; j < groups.size(); j++){
 			groups.add(mDataSet.get(selectedItems.get(i)).group);
-			//}
 		}
 		return groups;
 	}
 
-    // BEGIN_INCLUDE(recyclerViewOnCreateViewHolder)
     // Create new views (invoked by the layout manager)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-    //    Log.d(TAG, "Testing recyclerView item");
         // Create a new view.
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.text_row_item, viewGroup, false);
 		
         return new ViewHolder(v, mClickListener);
     }
-    	// END_INCLUDE(recyclerViewOnCreateViewHolder)
+	
 	boolean etNameEnabled = true;
-    // BEGIN_INCLUDE(recyclerViewOnBindViewHolder)
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        Log.d(TAG, "Element selected " + viewHolder.selected);
-	//	viewHolder.itemView.setSelected(viewHolder.selected);
-	//	viewHolder.itemView.setTag(position);
-		// each time an item comes into view, its position is checked
-		// against "selected" indices
-		
-		
+        
 		// Highlight the item if it's selected
         viewHolder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
 		viewHolder.tvItemNumber.setText(Integer.toString(position));
@@ -302,7 +238,6 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 			//viewHolder.etName.setKeyListener(null);//TODO
 		   }
     }
-    // END_INCLUDE(recyclerViewOnBindViewHolder)
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
