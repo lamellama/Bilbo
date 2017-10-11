@@ -28,101 +28,12 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 	private ActionMode mActionMode;
 	Handler mAdapterHandler;
 
-    /**
-     * Provide a reference to the type of views that you are using (custom ViewHolder)
-     */
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, TextWatcher
-	{	
-
-		
-		public interface ClickListener {
-            public void onItemClicked(int position);
-		 	public void onTextNameChanged(int position, String text);
-        }
-
-        public final TextView tvTotal;
-		
-		public TextView tvTip;
-		public TextView tvAddedValue;
-		public TextView tvPPTotal;
-		public TextView tvItemNumber;
-		public EditText etName;
-		
-		public boolean selected = true;
-		
-		// an array of selected items (Integer indices) 
-		private ClickListener listener;
-		
-		View selectedOverlay;
-		boolean etNameChanged = false;
-		String etNameInput;
-
-        public ViewHolder(View v, ClickListener listener) {
-            super(v);
-			
-			selectedOverlay = itemView.findViewById(R.id.selected_overlay);
-			this.listener = listener;
-			itemView.setOnClickListener(this);
-
-            tvTotal = (TextView) v.findViewById(R.id.tvTotalB);
-			tvPPTotal = (TextView) v.findViewById(R.id.tvPP);
-			tvTip = (TextView) v.findViewById(R.id.tvTip);
-			tvAddedValue = (TextView) v.findViewById(R.id.tvAV);
-			tvItemNumber = (TextView) v.findViewById(R.id.tvItemNumber);
-			etName = (EditText) v.findViewById(R.id.etName);
-			etName.addTextChangedListener(this);
-			etName.setOnFocusChangeListener(new OnFocusChangeListener() {
-
-					@Override
-					public void onFocusChange(View v, boolean hasFocus) {
-						if (!hasFocus) {
-							validateInput(v);
-						}
-					}
-				});
-        }
-		
-		public void validateInput(View v){
-			//View has lost focus, check text and send to interface
-			if((etNameInput != null)&&(etNameChanged)){
-				listener.onTextNameChanged(getPosition(),etNameInput);
-				etNameChanged = false;
-				}
-		}
-		
-		@Override
-		public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {}
-
-		@Override
-		public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-			etNameInput = charSequence.toString();
-			etNameChanged = true;
-		}
-
-		@Override
-		public void afterTextChanged(Editable editable) {}
-		
-		
-		
-		@Override
-        public void onClick(View v) {
-            if (listener != null) {
-                listener.onItemClicked(getPosition());
-            }
-        }
-		
-		public TextView getPPTotaltv(){return tvPPTotal;}
-		public TextView getTotaltv(){return tvTotal;}
-		public EditText getEtName(){return etName;}
-    }
-
     public CustomAdapter(List<PerPersonValue> dataSet, RecyclerView recyclerView, ViewHolder.ClickListener clickListener, ActionMode actionMode) {
         mDataSet = dataSet;
 		this.mClickListener = clickListener;
 		mActionMode = actionMode;
 		mRecyclerView = recyclerView;
-		mAdapterHandler = new Handler();
-		
+		mAdapterHandler = new Handler();	
     }
 	
 	public void queueDatasetUpdate(List<PerPersonValue> data){
@@ -138,8 +49,6 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 	}
 	
 	boolean notifyIsRunning = false;
-	
-	
 	//Recycler view does not like being updated while it is doing something so this is a work around
 	//BUT RecyclerView also does not like being called from another thread in some instances "BUG" so use sparringly
 	public void postAndNotifyAdapter(final Handler handler, final RecyclerView recyclerView, final RecyclerView.Adapter adapter) {
@@ -162,27 +71,24 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 	public List<Integer> getSelectedRealIndex (){
 		List<Integer> selectedItems = getSelectedItems();
 		List<Integer> selectedItemIndex = new ArrayList<Integer>();
-		for(int i = 0; i < selectedItems.size(); i++){
+		
+		for(int i = 0; i < selectedItems.size(); i++)
 			selectedItemIndex.add(getItemRealIndex(selectedItems.get(i)));
-			}
+			
 		return selectedItemIndex;
 	}
 	
 	public int getItemRealIndex (int position){
-		int itemIndex;
-		
-		itemIndex = mDataSet.get(position).realIndex;
-		
-		return itemIndex;
+		return Integer.valueOf(mDataSet.get(position).realIndex);
 	}
 	
 	public List<Integer> getSelectedGroupId(){
 		List<Integer> groups = new ArrayList<Integer>();
 		List<Integer> selectedItems = getSelectedItems();
 		
-		for(int i = 0; i < selectedItems.size(); i++){
+		for(int i = 0; i < selectedItems.size(); i++)
 			groups.add(mDataSet.get(selectedItems.get(i)).group);
-		}
+		
 		return groups;
 	}
 
@@ -203,16 +109,16 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
         
 		// Highlight the item if it's selected
         viewHolder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
-		viewHolder.tvItemNumber.setText(Integer.toString(position));
+		//viewHolder.tvItemNumber.setText(Integer.toString(position));
         // Get element from your dataset at this position and replace the contents of the view
         // with that element,
 		Log.d(TAG, "Dataset group: " + mDataSet.get(position).group );
 		if(mDataSet.get(position).group < 0){
 			
 			//its a group
-			Log.d(TAG, "Print group");
+			//Log.d(TAG, "Print group");
 			
-			viewHolder.etName.setText("Group " + mDataSet.get(position).name);
+			viewHolder.etName.setText(mDataSet.get(position).name);
 			viewHolder.tvTip.setText(Float.toString(mDataSet.get(position).tipPercent) + "%");
 			//viewHolder.etName.setText(mDataSet.get(position).name);
 			viewHolder.etName.setFocusable(false);
@@ -250,5 +156,86 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		return position;
 	}    
 	
-	
+
+    /**
+     * Provide a reference to the type of views that you are using (custom ViewHolder)
+     */
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, TextWatcher
+	{	
+        public final TextView tvTotal;
+		public TextView tvTip;
+		public TextView tvAddedValue;
+		public TextView tvPPTotal;
+		public EditText etName;
+
+		public boolean selected = true;
+
+		private ClickListener listener;
+
+		View selectedOverlay;
+		boolean etNameChanged = false;
+		String etNameInput;
+
+        public ViewHolder(View v, ClickListener listener) {
+            super(v);
+
+			selectedOverlay = itemView.findViewById(R.id.selected_overlay);
+			this.listener = listener;
+			itemView.setOnClickListener(this);
+
+            tvTotal = (TextView) v.findViewById(R.id.tvTotalB);
+			tvPPTotal = (TextView) v.findViewById(R.id.tvPP);
+			tvTip = (TextView) v.findViewById(R.id.tvTip);
+			tvAddedValue = (TextView) v.findViewById(R.id.tvAV);
+			etName = (EditText) v.findViewById(R.id.etName);
+			etName.addTextChangedListener(this);
+			etName.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+					@Override
+					public void onFocusChange(View v, boolean hasFocus) {
+						if (!hasFocus) {
+							validateInput(v);
+						}
+					}
+				});
+        }
+
+		public void validateInput(View v){
+			//View has lost focus, check text and send to interface
+			if((etNameInput != null)&&(etNameChanged)){
+				listener.onTextNameChanged(getPosition(),etNameInput);
+				etNameChanged = false;
+			}
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {}
+
+		@Override
+		public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+			etNameInput = charSequence.toString();
+			etNameChanged = true;
+		}
+
+		@Override
+		public void afterTextChanged(Editable editable) {}
+
+		@Override
+        public void onClick(View v) {
+            if (listener != null) {
+                listener.onItemClicked(getPosition());
+            }
+        }
+
+		public TextView getPPTotaltv(){return tvPPTotal;}
+		public TextView getTotaltv(){return tvTotal;}
+		public EditText getEtName(){return etName;}
+
+		//Interface methods
+		public interface ClickListener {
+            public void onItemClicked(int position);
+		 	public void onTextNameChanged(int position, String text);
+        }
+
+    }// end viewholder
 }
