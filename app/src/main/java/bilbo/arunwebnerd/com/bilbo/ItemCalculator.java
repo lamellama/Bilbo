@@ -157,10 +157,12 @@ public class ItemCalculator
 		float perPerson = 0;
 		if(billTotal > totalExtraValue)
 			totalLeft = billTotal - totalExtraValue;
-		if((totalLeft > 0)&&(ppValues.size() > 0))
+		if((totalLeft != 0)&&(ppValues.size() > 0))
 			perPerson =  totalLeft / ppValues.size();
+		else
+			perPerson = 0;
 		for(int i =0; i<ppValues.size(); i++){
-			ppValues.get(i).bill = ppValues.get(i).addedExtra + perPerson;
+			ppValues.get(i).setBill( perPerson);
 			ppValues.get(i).tipPercent = tipPercent;
 		}
 		
@@ -168,8 +170,7 @@ public class ItemCalculator
 	
 	public void addExtraValue(int index, float val){
 		if((index >= 0)&&(index < ppValues.size())){
-			ppValues.get(index).addedExtra+=val;
-			totalExtraValue+=val;
+			totalExtraValue += ppValues.get(index).addExtra(val);
 			calculatePerPersonValues();
 		}
 	}
@@ -203,8 +204,8 @@ public class ItemCalculator
 			float tip = 0;
 			int k = 0;
 			for(; k< groupList.size(); k++){
-				grouped.addedExtra += ppValues.get(groupList.get(k)).addedExtra;
-				grouped.bill += ppValues.get(groupList.get(k)).bill;
+				grouped.addExtra( ppValues.get(groupList.get(k)).getAddedExtra());
+				grouped.setBill(grouped.getBill() + ppValues.get(groupList.get(k)).getBill());
 				tip += ppValues.get(groupList.get(k)).tipPercent;
 				//TODO grouped. += ppValues[tempList.get(k)].addedExtra;
 

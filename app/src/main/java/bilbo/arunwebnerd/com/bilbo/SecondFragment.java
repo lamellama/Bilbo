@@ -347,10 +347,10 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 	public void onTextNameChanged(int position, String text)
 	{
 		calculator.setItemText(mAdapter.getItemRealIndex(position), text);
-		
-		if(mAdapter!=null){
-			mAdapter.queueDatasetUpdate(calculator.getPPValueList());
-		}
+		mAdapter.updateDatasetNoNotify(calculator.getPPValueList());
+	//	if(mAdapter!=null){
+	//		mAdapter.queueDatasetUpdate(calculator.getPPValueList());
+	//	}
 	}
 }	
 

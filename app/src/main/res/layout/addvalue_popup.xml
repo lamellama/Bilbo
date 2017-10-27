@@ -17,7 +17,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:inputType="numberDecimal"
-			android:digits="0123456789."
-			android:text="10.00"/>
+			android:digits="0123456789-."
+			android:hint="-10.00"/>
 	</TableRow>
 </TableLayout>

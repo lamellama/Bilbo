@@ -22,9 +22,10 @@
 			android:id="@+id/etName"
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
-			android:text="@string/item_name_title"
+			android:hint="@string/item_name_title"
 			android:padding="@dimen/list_item_view_margin"
 			android:background="@android:color/transparent"
+			android:inputType="textFilter|textPersonName"
 			android:layout_alignParentLeft="true"/>
 		<TextView
 			android:id="@+id/tvTotalB"

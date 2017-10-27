@@ -15,6 +15,8 @@ import android.text.Editable;
 import android.os.Handler;
 import android.view.View.*;
 import android.graphics.Color;
+import java.text.NumberFormat;
+import android.support.transition.*;
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
@@ -30,11 +32,16 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 
     public CustomAdapter(List<PerPersonValue> dataSet, RecyclerView recyclerView, ViewHolder.ClickListener clickListener, ActionMode actionMode) {
         mDataSet = dataSet;
-		this.mClickListener = clickListener;
+		mClickListener = clickListener;
 		mActionMode = actionMode;
 		mRecyclerView = recyclerView;
 		mAdapterHandler = new Handler();	
     }
+	
+	public void updateDatasetNoNotify(List<PerPersonValue> data){
+		mDataSet = data;
+		
+	}
 	
 	public void queueDatasetUpdate(List<PerPersonValue> data){
 		mDataSet = data;
@@ -103,6 +110,22 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
     }
 	
 	boolean etNameEnabled = true;
+	NumberFormat fmt = NumberFormat.getCurrencyInstance(Locale.getDefault());
+	
+	private String setFormat(float total){
+		return fmt.format(total);
+	}
+	
+	private void setTextViewVisability(ViewHolder v, int vis){
+		v.tvTip.setVisibility(vis);
+		v.tvAddedValue.setVisibility(vis);
+		v.tvPPTotal.setVisibility(vis);
+		v.tvAddedValue.setVisibility(vis);
+		v.tvPlus.setVisibility(vis);
+		v.tvPlus2.setVisibility(vis);
+		v.tvEquals.setVisibility(vis);
+	}
+	
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
@@ -113,14 +136,16 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
         // Get element from your dataset at this position and replace the contents of the view
         // with that element,
 		Log.d(TAG, "Dataset group: " + mDataSet.get(position).group );
+		viewHolder.etName.removeTextChangedListener(viewHolder);
+		viewHolder.etName.setText(mDataSet.get(position).name);
+		viewHolder.etName.addTextChangedListener(viewHolder);
+		viewHolder.tvTotal.setText(setFormat(mDataSet.get(position).getTotal() ));
+		
+		
 		if(mDataSet.get(position).group < 0){
 			
 			//its a group
-			//Log.d(TAG, "Print group");
-			
-			viewHolder.etName.setText(mDataSet.get(position).name);
-			viewHolder.tvTip.setText(Float.toString(mDataSet.get(position).tipPercent) + "%");
-			//viewHolder.etName.setText(mDataSet.get(position).name);
+			setTextViewVisability(viewHolder, View.INVISIBLE);
 			viewHolder.etName.setFocusable(false);
 			viewHolder.etName.setEnabled(false);
 			viewHolder.etName.setCursorVisible(false);
@@ -130,14 +155,13 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		}
 		else {
 			// its an individual
+			setTextViewVisability(viewHolder, View.VISIBLE);
 			viewHolder.tvTip.setText( Float.toString(mDataSet.get(position).tipPercent) + "%");
-			viewHolder.tvAddedValue.setText(Float.toString(mDataSet.get(position).addedExtra));
+			viewHolder.tvAddedValue.setText(Float.toString(mDataSet.get(position).getAddedExtra()));
 			etNameEnabled = true;
-			viewHolder.tvPPTotal.setText(Float.toString(mDataSet.get(position).bill));
-			viewHolder.tvTotal.setText(Float.toString(mDataSet.get(position).getTotal() ));
-		   	viewHolder.etName.removeTextChangedListener(viewHolder);
-			viewHolder.etName.setText(mDataSet.get(position).name);
-			viewHolder.etName.addTextChangedListener(viewHolder);
+			viewHolder.tvPPTotal.setText(setFormat(mDataSet.get(position).getBillPlusExtras()));
+			
+		   	
 			viewHolder.etName.setFocusable(true);
 			viewHolder.etName.setEnabled(true);
 			viewHolder.etName.setCursorVisible(true);
@@ -168,6 +192,11 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		public TextView tvPPTotal;
 		public EditText etName;
 
+		public TextView tvPlus;
+		public TextView tvPlus2;
+		public TextView tvEquals;
+		
+		
 		public boolean selected = true;
 
 		private ClickListener listener;
@@ -182,7 +211,11 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 			selectedOverlay = itemView.findViewById(R.id.selected_overlay);
 			this.listener = listener;
 			itemView.setOnClickListener(this);
-
+			
+			tvPlus = (TextView) v.findViewById(R.id.tvPlus);
+			tvPlus2 = (TextView) v.findViewById(R.id.tvPlus2);
+			tvEquals = (TextView) v.findViewById(R.id.tvEquals);
+			
             tvTotal = (TextView) v.findViewById(R.id.tvTotalB);
 			tvPPTotal = (TextView) v.findViewById(R.id.tvPP);
 			tvTip = (TextView) v.findViewById(R.id.tvTip);

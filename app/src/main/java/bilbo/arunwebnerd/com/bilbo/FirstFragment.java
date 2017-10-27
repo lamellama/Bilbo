@@ -49,6 +49,7 @@ public class FirstFragment extends Fragment implements  View.OnTouchListener, Se
 		tipPercent = getResources().getInteger(R.integer.tip_default);
 		billTotal = Float.parseFloat(getContext().getResources().getString(R.string.total_default));
 		numPeople = getContext().getResources().getInteger(R.integer.numpeople_default);
+		//numPeople++;
 
 		tvTip = (TextView) v.findViewById(R.id.tvPPTipDisplay);
 		tvBill = (TextView) v.findViewById(R.id.tvPPBillDisplay);
@@ -140,6 +141,8 @@ public class FirstFragment extends Fragment implements  View.OnTouchListener, Se
 
 		btnContinue = (Button) v.findViewById(R.id.btnContinue);
 		btnContinue.setOnTouchListener(this);
+		
+		updateTotals();
 		
         return v;
     }
