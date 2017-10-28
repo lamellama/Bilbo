@@ -97,7 +97,7 @@ public class FirstFragment extends Fragment implements  View.OnTouchListener, Se
 		tvNumPeopleSeekDisplay = (TextView) v.findViewById(R.id.numPeopleSeekbarDisplay);
 		btnNumPeopleMinus = (Button) v.findViewById(R.id.btnNumPeepMinus);
 		btnNumPeoplePlus = (Button) v.findViewById(R.id.btnNumPeepPlus);
-		tvNumPeopleSeekDisplay.setText(Integer.toString(numPeople + 1));
+		tvNumPeopleSeekDisplay.setText(Integer.toString(numPeople));
 		btnNumPeoplePlus.setOnTouchListener(new RepeatListener(400, 100, new OnClickListener() {
 													@Override
 													public void onClick(View view)
@@ -199,7 +199,9 @@ public class FirstFragment extends Fragment implements  View.OnTouchListener, Se
 		{
 			case R.id.sbNumPeople:
 				Log.d(TAG, "Seekbar numPeople selected: " + seekBar.getProgress());
-				numPeople = seekBar.getProgress() + 1;
+				if(seekBar.getProgress() < 1)
+					seekBar.setProgress(1);
+				numPeople = seekBar.getProgress();
 				if (tvNumPeopleSeekDisplay != null)
 					tvNumPeopleSeekDisplay.setText(Integer.toString(numPeople));
 				break;
