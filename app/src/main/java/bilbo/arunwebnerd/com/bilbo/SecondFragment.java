@@ -261,21 +261,28 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		// Called when the user selects a contextual menu item
 		@Override
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			multiMenuStarted = false; //because the menu is always closed after a button is pressed
+			singleMenuStarted = false;//because the menu is always closed after a button is pressed
 			switch (item.getItemId()) {
 				case R.id.action_group:
 					groupItems();
 					mode.finish();
+					mAdapter.clearSelection();
 					return true;
 				case R.id.action_ungroup:
 					unGroupItems();
 					mode.finish(); // Action picked, so close the CAB
+					mAdapter.clearSelection();
 					return true;
 				case R.id.action_add_value:
 					messageDialog(getActivity(), "Add Value", "bl");
+					
+					mode.finish();
 					return true;
 				default:
 					return false;
 			}
+			
 		}
 
 		// Called when the user exits the action mode
@@ -285,7 +292,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		}
 	};
 	
-	private int itemSelected =-1;
+//	private int itemSelected =-1;
 	
 	//onClick passed from the adapter viewholder
 	@Override
@@ -323,7 +330,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 				//Start multiMenu
 				multiMenuStarted = true;
 				singleMenuStarted =false;
-				itemSelected = mAdapter.getSelectedGroupId().get(0);
+			//	itemSelected = mAdapter.getSelectedGroupId().get(0);
 				if(mActionMode != null)
 					mActionMode.finish();
 				mActionMode = activity.startSupportActionMode(mActionModeCallback);
