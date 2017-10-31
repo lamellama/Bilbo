@@ -8,6 +8,8 @@ import android.content.Context;
 
 public class ItemCalculator
 {
+	
+	private int MAX_NAME_LENGTH = 18;
 	private final static String TAG = "ItemCalculator";
 	private ArrayList<PerPersonValue> ppValues;
 	private HashMap<Integer, List<Integer>> groupIndexMap;
@@ -175,9 +177,10 @@ public class ItemCalculator
 		}
 	}
 	
+	//Sets the name variable and limits the name to 18 chars
 	public void setItemText(int index, String text){
 		if(index >= 0)//If it is < 0 it is a group
-			ppValues.get(index).name = text;
+			ppValues.get(index).name = text.substring(0, Math.min(text.length(), MAX_NAME_LENGTH));
 	}
 	
 	
@@ -200,7 +203,7 @@ public class ItemCalculator
 			grouped.name = "Group ";
 			for(int j = 0; j < groupList.size(); j++){
 				if(ppValues.get(groupList.get(j)).name != null)
-				for(int k = 0; k < ppValues.get(groupList.get(j)).name.length() && k < 3; k++)
+				for(int k = 0; k < ppValues.get(groupList.get(j)).name.length() && k < 3 && grouped.name.length() < MAX_NAME_LENGTH; k++)
 					grouped.name += ppValues.get(groupList.get(j)).name.charAt(k);
 			}
 			
