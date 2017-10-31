@@ -33,6 +33,7 @@
 				android:layout_height="wrap_content"
 				android:inputType="numberDecimal"
 				android:hint="@string/total_prompt"
+				android:singleLine="true"
 				android:ems="10"/>
 
 		</TableRow>
