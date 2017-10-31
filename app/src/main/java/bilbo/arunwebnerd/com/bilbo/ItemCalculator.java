@@ -198,8 +198,11 @@ public class ItemCalculator
 			
 			//create name for group, this is not saved
 			grouped.name = "Group ";
-			if(groupList.size() > 0)
-				grouped.name += ppValues.get(groupList.get(0)).name;
+			for(int j = 0; j < groupList.size(); j++){
+				if(ppValues.get(groupList.get(j)).name != null)
+				for(int k = 0; k < ppValues.get(groupList.get(j)).name.length() && k < 3; k++)
+					grouped.name += ppValues.get(groupList.get(j)).name.charAt(k);
+			}
 			
 			float tip = 0;
 			int k = 0;
