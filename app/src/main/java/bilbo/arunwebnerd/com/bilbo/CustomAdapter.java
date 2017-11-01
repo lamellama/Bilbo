@@ -141,30 +141,29 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		viewHolder.etName.addTextChangedListener(viewHolder);
 		viewHolder.tvTotal.setText(setFormat(mDataSet.get(position).getTotal() ));
 		
-		
 		if(mDataSet.get(position).group < 0){
 			
 			//its a group
 			setTextViewVisability(viewHolder, View.INVISIBLE);
-			viewHolder.etName.setFocusable(false);
+		//	viewHolder.etName.setFocusable(false);
 			viewHolder.etName.setEnabled(false);
-			viewHolder.etName.setCursorVisible(false);
+		//	viewHolder.etName.setCursorVisible(false);
 			//viewHolder.etName.setKeyListener(null);
-			etNameEnabled = false;
-			viewHolder.etName.setBackgroundColor(Color.TRANSPARENT);
+		//	etNameEnabled = false;
+			//viewHolder.etName.setBackgroundColor(Color.TRANSPARENT);
 		}
 		else {
 			// its an individual
 			setTextViewVisability(viewHolder, View.VISIBLE);
 			viewHolder.tvTip.setText( Float.toString(mDataSet.get(position).tipPercent) + "%");
 			viewHolder.tvAddedValue.setText(Float.toString(mDataSet.get(position).getAddedExtra()));
-			etNameEnabled = true;
+		//	etNameEnabled = true;
 			viewHolder.tvPPTotal.setText(setFormat(mDataSet.get(position).getBillPlusExtras()));
 			
 		   	
-			viewHolder.etName.setFocusable(true);
+			//viewHolder.etName.setFocusable(true);
 			viewHolder.etName.setEnabled(true);
-			viewHolder.etName.setCursorVisible(true);
+			//viewHolder.etName.setCursorVisible(true);
 			//viewHolder.etName.setKeyListener(null);//TODO
 		   }
     }

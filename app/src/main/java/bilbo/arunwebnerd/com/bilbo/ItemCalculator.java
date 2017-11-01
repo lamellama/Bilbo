@@ -199,8 +199,8 @@ public class ItemCalculator
 			grouped.group = groupKey;
 			grouped.realIndex = groupKey;
 			
-			//create name for group, this is not saved
-			grouped.name = "Group ";
+			//generate name & number for group, this is not saved
+			grouped.name = "Group " + Math.abs(grouped.group) + " ";
 			for(int j = 0; j < groupList.size(); j++){
 				if(ppValues.get(groupList.get(j)).name != null)
 				for(int k = 0; k < ppValues.get(groupList.get(j)).name.length() && k < 3 && grouped.name.length() < MAX_NAME_LENGTH; k++)
