@@ -11,13 +11,17 @@
 	android:layout_height="wrap_content"
 	app:contentPadding="0dp"
 	app:cardUseCompatPadding="true">
-
-	<RelativeLayout
+	<LinearLayout
+		android:orientation="vertical"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		>
+	<RelativeLayout
+		android:id="@+id/rlLeft"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
 		android:layout_marginLeft="@dimen/margin_medium"
 		android:layout_marginRight="@dimen/margin_medium">
-
 		<EditText
 			android:id="@+id/etName"
 			android:layout_height="wrap_content"
@@ -26,7 +30,19 @@
 			android:padding="@dimen/list_item_view_margin"
 			android:background="@android:color/transparent"
 			android:inputType="textFilter|textPersonName"
+			android:maxLength="36"
+			android:singleLine="true"
 			android:layout_alignParentLeft="true"/>
+		
+	</RelativeLayout>/
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="@dimen/margin_medium"
+		android:layout_marginRight="@dimen/margin_medium">
+
+		
 		<TextView
 			android:id="@+id/tvTotalB"
 			android:layout_width="wrap_content"
@@ -34,8 +50,10 @@
 			android:text="10.00"
 			android:padding="@dimen/list_item_view_margin"
 			android:textAppearance="@style/strongFont"
+			
 			android:layout_alignParentRight="true"
 			/>
+	
 		<TextView
 			android:id="@+id/tvEquals"
 			android:layout_width="wrap_content"
@@ -83,7 +101,7 @@
 			android:text="+/-1"/>
 	</RelativeLayout>
 
-
+	</LinearLayout>
 	<View
 		android:id="@+id/selected_overlay"
 		android:layout_width="match_parent"

@@ -9,7 +9,7 @@ import android.content.Context;
 public class ItemCalculator
 {
 	
-	private int MAX_NAME_LENGTH = 18;
+	private int MAX_NAME_LENGTH = 36;
 	private final static String TAG = "ItemCalculator";
 	private ArrayList<PerPersonValue> ppValues;
 	private HashMap<Integer, List<Integer>> groupIndexMap;
