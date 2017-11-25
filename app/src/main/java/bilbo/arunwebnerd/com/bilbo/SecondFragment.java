@@ -26,6 +26,7 @@ import android.os.Handler;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.codec.binary.*;
 
 public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder.ClickListener
 {
@@ -195,6 +196,8 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 				public void onClick(DialogInterface dialog, int id) {
 					// Add value
 					EditText t = ((EditText) ((AlertDialog) dialog).findViewById(R.id.popAddInput));
+					//String input = t.getText().toString();
+					//if(StringUtils.isNumber(input))
 					addValueToItems(Float.parseFloat(t.getText().toString()));
 
 				}

@@ -76,13 +76,16 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 
         @Override
         public Fragment getItem(int pos) {
-            switch(pos) {
-
-				case 0: return FirstFragment.newInstance("FirstFragment, Instance 1");
-				case 1:secondFragment.setArguments(secondFragBundle); 
-					return secondFragment;
-				default: return FirstFragment.newInstance("ThirdFragment, Default");
-            }
+			
+			
+            if(pos == 1){
+				secondFragment.setArguments(secondFragBundle); 
+				return secondFragment;
+			}
+			else{
+				return FirstFragment.newInstance("FirstFragment, Instance 1");
+			}
+	
         }
 
         @Override
