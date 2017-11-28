@@ -17,7 +17,7 @@ import android.text.Editable;
 import android.view.MotionEvent;
 import android.view.View.OnClickListener;
 import java.util.Locale;
-import android.icu.text.NumberFormat;
+import java.text.NumberFormat;
 
 public class FirstFragment extends Fragment implements  View.OnTouchListener, SeekBar.OnSeekBarChangeListener
 {
