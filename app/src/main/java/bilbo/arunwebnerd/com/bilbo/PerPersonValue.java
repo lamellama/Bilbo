@@ -20,6 +20,12 @@ public class PerPersonValue implements Parcelable
 		group = gro;
 		//name = "Name";
 	}
+	
+	public float getTipTotal(){
+		if(getBillPlusExtras() != 0)
+			return (getBillPlusExtras() / 100) * tipPercent;
+		return 0;
+	}
 
 	public void setBill(float bill)
 	{
@@ -45,9 +51,10 @@ public class PerPersonValue implements Parcelable
 	*/
 	//Returns amount addedExtra changed by because it may not be the same as the amount input
 	public float addExtra(float extra){
-		if((addedExtra + extra) < (-bill)){
-			addedExtra = -bill;
-			return -bill;
+		float min = -bill;
+		if((addedExtra + extra) < (min)){
+			addedExtra = min;
+			return min;
 		}
 		addedExtra += extra;
 		return extra;

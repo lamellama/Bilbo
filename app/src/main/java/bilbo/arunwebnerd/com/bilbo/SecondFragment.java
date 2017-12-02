@@ -183,10 +183,10 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
     }
 	
 	//Add value popup box input
-	public  void messageDialog(Activity a, String title, String message){
+	public  void messageDialog(Activity a, String title){
 		AlertDialog.Builder dialog = new AlertDialog.Builder(a);
 		dialog.setTitle(title);
-		dialog.setMessage(message);
+		//dialog.setMessage(message);
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 
 		// Inflate and set the layout for the dialog
@@ -278,7 +278,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 					mAdapter.clearSelection();
 					return true;
 				case R.id.action_add_value:
-					messageDialog(getActivity(), "Add Value", "bl");
+					messageDialog(getActivity(), "Add Value");
 					
 					mode.finish();
 					return true;
