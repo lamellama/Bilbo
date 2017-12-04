@@ -27,6 +27,7 @@ import android.os.Handler;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.codec.binary.*;
+import java.math.*;
 
 public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder.ClickListener
 {
@@ -41,7 +42,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 	
 	private int numPeople;
 	private int tipPercent;
-	private float billTotal;
+	private BigDecimal billTotal;
 	
 	boolean multiMenuStarted = false;
 	boolean singleMenuStarted = false;
@@ -53,7 +54,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		Log.d(TAG, "updateArgs");
 		numPeople = args.getInt("people", 0);
 		tipPercent = args.getInt("tip", 0);
-		billTotal = args.getFloat("total", 0);
+		billTotal = new BigDecimal(args.getFloat("total", 0));
 		
 		init();
 	}
@@ -87,7 +88,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		updateAdapterData();
 	}
 	
-	public void addValueToItems(float value){
+	public void addValueToItems(BigDecimal value){
 		if(calculator!=null)
 			for(int i = 0; i < mAdapter.getSelectedRealIndex().size(); i++)
 				calculator.addExtraValue(mAdapter.getSelectedRealIndex().get(i), value);
@@ -101,7 +102,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
         super.onCreate(savedInstanceState);
 		numPeople = getArguments().getInt("people", 0);
 		tipPercent = getArguments().getInt("tip", 0);
-		billTotal = getArguments().getFloat("total", 0);
+		billTotal = new BigDecimal(getArguments().getFloat("total", 0));
         // Initialize dataset
 		if(savedInstanceState == null){
         	initDataset();
@@ -120,11 +121,11 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 			return 0;
     }
 	
-	private float getBillTotal() {
-        if (billTotal > 0)
+	private BigDecimal getBillTotal() {
+        if (billTotal.compareTo(new BigDecimal(0)) > 0)
 			return billTotal;
 		else
-			return 0;
+			return new BigDecimal(0);
     }
 	
 	private int getTipPercent() {
@@ -198,7 +199,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 					EditText t = ((EditText) ((AlertDialog) dialog).findViewById(R.id.popAddInput));
 					//String input = t.getText().toString();
 					//if(StringUtils.isNumber(input))
-					addValueToItems(Float.parseFloat(t.getText().toString()));
+					addValueToItems(new BigDecimal(t.getText().toString()));
 
 				}
 			})

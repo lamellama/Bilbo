@@ -17,6 +17,8 @@ import android.view.View.*;
 import android.graphics.Color;
 import java.text.NumberFormat;
 import android.support.transition.*;
+import java.math.BigDecimal;
+
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
@@ -112,7 +114,7 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 	boolean etNameEnabled = true;
 	NumberFormat fmt = NumberFormat.getCurrencyInstance(Locale.getDefault());
 	
-	private String setFormat(float total){
+	private String setFormat(BigDecimal total){
 		return fmt.format(total);
 	}
 	
@@ -156,7 +158,7 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 			// its an individual
 			setTextViewVisability(viewHolder, View.VISIBLE);
 			viewHolder.tvTip.setText( Float.toString(mDataSet.get(position).tipPercent) + "%");
-			viewHolder.tvAddedValue.setText(Float.toString(mDataSet.get(position).getAddedExtra()));
+			viewHolder.tvAddedValue.setText(mDataSet.get(position).getAddedExtra().toString());
 		//	etNameEnabled = true;
 			viewHolder.tvPPTotal.setText(setFormat(mDataSet.get(position).getBillPlusExtras()));
 			
