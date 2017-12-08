@@ -4,13 +4,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.content.Context;
 import java.math.BigDecimal;
+//import android.util.Log;
+import java.math.RoundingMode;
 
 public class PerPersonValue implements Parcelable
 {
+	private static int decimalPlaces = 20;
 	private BigDecimal addedExtra = new BigDecimal(0);
 	private BigDecimal bill = new BigDecimal(0);
 	public int tipPercent = 0;
-	//public String label;
 	public int group = 0;
 	public String name;
 	public int realIndex = -1; //No need to parcel
@@ -19,26 +21,16 @@ public class PerPersonValue implements Parcelable
 		addedExtra = add;
 		bill = bil;
 		group = gro;
-		//name = "Name";
 	}
 	
-	public PerPersonValue( ){
-		//name = "Name";
-	}
+	public PerPersonValue( ){}
 
-
-	
 	public BigDecimal getTipTotal(){
 		if(!getBillPlusExtras().equals(0))
-			return (getBillPlusExtras().divide(new BigDecimal(100)).multiply(new BigDecimal(tipPercent)));
+			return getBillPlusExtras().divide(new BigDecimal(100), decimalPlaces, RoundingMode.HALF_UP).multiply(new BigDecimal(tipPercent));
 		return new BigDecimal(0.0);
 	}
 
-/*	public void setBill(float bill)
-	{
-		this.bill = bill;
-	}
-	*/
 	public void setBill(BigDecimal bill)
 	{
 		this.bill = bill;
@@ -53,14 +45,6 @@ public class PerPersonValue implements Parcelable
 		return bill;
 	}
 	
-	/*public void setAddedExtra(float extra){
-		if(extra < (-bill)){
-			addedExtra = -bill;
-			return;
-		}
-		addedExtra = extra;
-	}
-	*/
 	//Returns amount addedExtra changed by because it may not be the same as the amount input
 	public BigDecimal addExtra(BigDecimal extra){
 		
@@ -75,14 +59,11 @@ public class PerPersonValue implements Parcelable
 	public BigDecimal getAddedExtra(){return addedExtra;}
 	
 	public BigDecimal getTotal(){
-	/*	float basic = bill + addedExtra;
-		if(basic!=0)
-			basic += (basic/100) * tipPercent;
-		return basic;*/
 		BigDecimal total = getBillPlusExtras();
 		if(total.equals( 0))
 			return total;
-		return total.add (total.divide(new BigDecimal(100))).multiply(new BigDecimal(tipPercent));
+		//Log.d("PerPersonValue", "totes " + total.add (total.divide(new BigDecimal(100))).multiply(new BigDecimal(tipPercent)));
+		return total.add (total.divide(new BigDecimal(100), decimalPlaces, RoundingMode.HALF_UP).multiply(new BigDecimal(tipPercent)));
 	}
 
 	protected PerPersonValue(Parcel in) {

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.*;
 import android.content.Context;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 
 public class ItemCalculator
@@ -159,13 +160,13 @@ public class ItemCalculator
 	private void calculatePerPersonValues(){
 		BigDecimal totalLeft = new BigDecimal(0);
 		BigDecimal perPerson = new BigDecimal(0);
-		BigDecimal remainder = new BigDecimal(0);
+		//BigDecimal remainder = new BigDecimal(0);
 		BigDecimal numOfPeople = new BigDecimal (ppValues.size());
 		if(billTotal.compareTo(totalExtraValue) > 0)
 			totalLeft = billTotal.subtract(totalExtraValue);
 		if((!totalLeft.equals(0))&&(ppValues.size() > 0)){
-			perPerson = totalLeft.divide(numOfPeople);
-			remainder = totalLeft.divideAndRemainder(numOfPeople)[1];
+			perPerson = totalLeft.divide(numOfPeople, 20, RoundingMode.HALF_UP);
+			//remainder = totalLeft.divideAndRemainder(numOfPeople)[1];
 			
 			}
 		for(int i =0; i<ppValues.size(); i++){

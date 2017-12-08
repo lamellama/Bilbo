@@ -141,6 +141,7 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 		viewHolder.etName.removeTextChangedListener(viewHolder);
 		viewHolder.etName.setText(mDataSet.get(position).name);
 		viewHolder.etName.addTextChangedListener(viewHolder);
+		//Log.d(TAG, "getTotal: " + mDataSet.get(position).getTotal() );
 		viewHolder.tvTotal.setText(setFormat(mDataSet.get(position).getTotal() ));
 		
 		if(mDataSet.get(position).group < 0){
@@ -160,7 +161,7 @@ public class CustomAdapter extends SelectableAdapter<CustomAdapter.ViewHolder> {
 			viewHolder.tvTip.setText( Float.toString(mDataSet.get(position).tipPercent) + "%");
 			viewHolder.tvAddedValue.setText(mDataSet.get(position).getAddedExtra().toString());
 		//	etNameEnabled = true;
-			viewHolder.tvPPTotal.setText(setFormat(mDataSet.get(position).getBillPlusExtras()));
+			viewHolder.tvPPTotal.setText(setFormat(mDataSet.get(position).getBill()));
 			
 		   	
 			//viewHolder.etName.setFocusable(true);
