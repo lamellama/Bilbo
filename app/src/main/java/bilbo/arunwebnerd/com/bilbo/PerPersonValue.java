@@ -10,6 +10,7 @@ import java.math.RoundingMode;
 public class PerPersonValue implements Parcelable
 {
 	private static int decimalPlaces = 20;
+	public static int formattedDecimalPlaces = 2;
 	private BigDecimal addedExtra = new BigDecimal(0);
 	private BigDecimal bill = new BigDecimal(0);
 	public int tipPercent = 0;

@@ -165,7 +165,7 @@ public class ItemCalculator
 		if(billTotal.compareTo(totalExtraValue) > 0)
 			totalLeft = billTotal.subtract(totalExtraValue);
 		if((!totalLeft.equals(0))&&(ppValues.size() > 0)){
-			perPerson = totalLeft.divide(numOfPeople, 20, RoundingMode.HALF_UP);
+			perPerson = totalLeft.divide(numOfPeople, PerPersonValue.formattedDecimalPlaces, RoundingMode.DOWN);
 			//remainder = totalLeft.divideAndRemainder(numOfPeople)[1];
 			
 			}

@@ -54,7 +54,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
 		Log.d(TAG, "updateArgs");
 		numPeople = args.getInt("people", 0);
 		tipPercent = args.getInt("tip", 0);
-		billTotal = new BigDecimal(args.getFloat("total", 0));
+		billTotal = new BigDecimal(args.getString("total"));
 		
 		init();
 	}
@@ -102,7 +102,7 @@ public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder
         super.onCreate(savedInstanceState);
 		numPeople = getArguments().getInt("people", 0);
 		tipPercent = getArguments().getInt("tip", 0);
-		billTotal = new BigDecimal(getArguments().getFloat("total", 0));
+		billTotal = new BigDecimal(getArguments().getString("total"));
         // Initialize dataset
 		if(savedInstanceState == null){
         	initDataset();
