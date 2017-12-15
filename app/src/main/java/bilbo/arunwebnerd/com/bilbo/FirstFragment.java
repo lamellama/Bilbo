@@ -20,12 +20,16 @@ import android.widget.TextView;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import android.icu.text.NumberFormat;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class FirstFragment extends Fragment implements  View.OnTouchListener, SeekBar.OnSeekBarChangeListener
 {
 	private static final String TAG = "FirstFragment";
 	private OnInputUpdateListener mCallback;
 	private int tipPercent;
-	private float billTotal;
+	private BigDecimal billTotal;
 	private int numPeople;
 
 	private TextView tvNumPeopleSeekDisplay;
@@ -41,14 +45,23 @@ public class FirstFragment extends Fragment implements  View.OnTouchListener, Se
 	private TextView tvBillTotal;
 	private SeekBar sbNumberPeople;
 	private SeekBar spinTipPercent;
+	
+	private LinearLayout remainderLayout;
+	private LinearLayout remainderWarningLayout;
+	private TextView remainderTotal;
+	
+	//private static int decimalPlaces = 20;
+	//private static int formattedDecimalPlaces = 2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
         View v = inflater.inflate(R.layout.first_frag, container, false);
+		
+		
 
 		tipPercent = getResources().getInteger(R.integer.tip_default);
-		billTotal = Float.parseFloat(getContext().getResources().getString(R.string.total_default));
+		billTotal = new BigDecimal(getContext().getResources().getString(R.string.total_default));
 		numPeople = getContext().getResources().getInteger(R.integer.numpeople_default);
 		//numPeople++;
 
@@ -56,7 +69,10 @@ public class FirstFragment extends Fragment implements  View.OnTouchListener, Se
 		tvBill = (TextView) v.findViewById(R.id.tvPPBillDisplay);
 		tvBillTotal = (TextView) v.findViewById(R.id.tvPPTotalDisplay);
         tvTotal = (EditText) v.findViewById(R.id.tvTotal);
-
+		
+		remainderLayout = (LinearLayout) v.findViewById(R.id.remainder_layout);
+		remainderWarningLayout = (LinearLayout) v.findViewById(R.id.remainder_warning_layout);
+		remainderTotal = (TextView) v.findViewById(R.id.remainderTotal);
 		tvTotal.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 				@Override
 				public void onFocusChange(View v, boolean hasFocus)
@@ -66,9 +82,9 @@ public class FirstFragment extends Fragment implements  View.OnTouchListener, Se
 
 						String tote = tvTotal.getText().toString();
 						if (tote.length() > 0)
-							setBillTotal(Float.valueOf(tote));
+							setBillTotal(new BigDecimal(tote));
 						else
-							setBillTotal(0);	
+							setBillTotal(new BigDecimal(0));	
 
 						updateTotals();
 					}
@@ -85,9 +101,9 @@ public class FirstFragment extends Fragment implements  View.OnTouchListener, Se
 
 					String tote = tvTotal.getText().toString();
 					if (tote.length() > 0)
-						setBillTotal(Float.valueOf(tote));
+						setBillTotal(new BigDecimal(tote));
 					else
-						setBillTotal(0);	
+						setBillTotal(new BigDecimal(0));	
 					updateTotals();
 				}
 
@@ -151,16 +167,16 @@ public class FirstFragment extends Fragment implements  View.OnTouchListener, Se
 	NumberFormat fmt = NumberFormat.getCurrencyInstance(Locale.getDefault());
 
 	//Set and format total variable to local currency
-	private float setBillTotal(float total)
+	private BigDecimal setBillTotal(BigDecimal total)
 	{
 		fmt.format(total);
 		billTotal = total;
 		return billTotal;
 	} 
 
-	private float getBillTotal()
+	private BigDecimal getBillTotal()
 	{
-		return Float.valueOf(billTotal);
+		return billTotal;
 	} 
 
 	@Override
@@ -182,13 +198,25 @@ public class FirstFragment extends Fragment implements  View.OnTouchListener, Se
 	//Update textViews values
 	private void updateTotals()
 	{
-		float total = (float) 0.0;
+		BigDecimal total = new BigDecimal(0.0);
 		total = getBillTotal();
-		if ((total > 0) && (numPeople > 0))
-			total /= numPeople;
-		tvBill.setText(Float.toString(total) + "pp");
+		BigDecimal remainder = new BigDecimal(0);
+		if ((total.compareTo(new BigDecimal(0)) > 0) && (numPeople > 0)){
+			total = total.divide(new BigDecimal(numPeople), PerPersonValue.formattedDecimalPlaces, RoundingMode.DOWN);
+			remainder = getBillTotal().subtract(total.multiply(new BigDecimal(numPeople)));
+			}
+		if(remainder.compareTo(new BigDecimal(0.0)) > 0.0){
+			remainderTotal.setText(remainder.toPlainString());
+			remainderWarningLayout.setVisibility(View.VISIBLE);
+			remainderLayout.setVisibility(View.VISIBLE);
+		}
+		else{
+			remainderWarningLayout.setVisibility(View.INVISIBLE);
+			remainderLayout.setVisibility(View.INVISIBLE);
+		}
+		tvBill.setText(fmt.format(total) + "pp");
 		tvTip.setText(Integer.toString(tipPercent) + "%");
-		tvBillTotal.setText(fmt.format(total + ((total * tipPercent) / 100)));
+		tvBillTotal.setText(fmt.format(total.add( (total.multiply(new BigDecimal(tipPercent))).divide(new BigDecimal(100)))));
 	}
 
 	@Override
@@ -229,7 +257,7 @@ public class FirstFragment extends Fragment implements  View.OnTouchListener, Se
 	// Container Activity must implement this interface
     public interface OnInputUpdateListener
 	{
-        public void onInputUpdate(int numPeeps, int tip, float total);
+        public void onInputUpdate(int numPeeps, int tip, BigDecimal total);
     }
 
     @Override

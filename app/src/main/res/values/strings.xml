@@ -17,4 +17,7 @@
 	<string name="pp_bill_equals">Per Person: </string>
 	<string name="item_name_title">Name</string>
 	<string name="group_name_title">Group name</string>
+	<string name="division_error_prompt">Warning, bill can not be divided equally</string>
+	<string name="remainder_prompt">Amount remaining: </string>
+	
 	</resources>

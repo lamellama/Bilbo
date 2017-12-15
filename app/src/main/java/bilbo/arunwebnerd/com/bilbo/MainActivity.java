@@ -14,6 +14,17 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.view.View;
+import android.view.ViewGroup;
+import android.util.Log;
+
+import android.widget.TextView;
+import android.app.Activity;
+import android.support.v7.app.AlertDialog;
+import android.content.DialogInterface;
+import java.math.BigDecimal;
+
+
 public class MainActivity extends AppCompatActivity implements FirstFragment.OnInputUpdateListener{
 	
 	private MyPagerAdapter mPageAdapter;
@@ -26,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 	
 	private int numPeople;
 	private int tipPercent;
-	private float billTotal;
+	private BigDecimal billTotal;
 	
 	SecondFragment secondFragment;
 
@@ -51,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 		
 		
 		tipPercent = getResources().getInteger(R.integer.tip_default);
-		billTotal = Float.parseFloat( getResources().getString(R.string.total_default));
+		billTotal = new BigDecimal(getResources().getString(R.string.total_default));
 		numPeople = getResources().getInteger(R.integer.numpeople_default);
 		// Initialise bundle before second fragment is created
 		initSecondFrag(numPeople, tipPercent, billTotal);
@@ -87,19 +98,19 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
     }
 
 	
-	public void initSecondFrag(int numPeeps, int tip, float total)
+	public void initSecondFrag(int numPeeps, int tip, BigDecimal total)
 	{
 		Log.d(TAG, "onInputUpdate - bill: " + total + " - tip: " + tip + " - Peeps: " + numPeeps);
 		secondFragBundle.putInt("tip", tip);
 		secondFragBundle.putInt("people", numPeeps);
-		secondFragBundle.putFloat("total", total);
+		secondFragBundle.putString("total", total.toString());
 
 		if(secondFragment == null){}
 		else{
 			Bundle bun = new Bundle();
 			bun.putInt("tip", tip);
 			bun.putInt("people", numPeeps);
-			bun.putFloat("total", total);
+			bun.putString("total", total.toString());
 			secondFragment.updateArgs(bun);
 			}
 	}
@@ -143,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.OnI
 	
 	
 	@Override
-	public void onInputUpdate(int numPeeps, int tip, float total)
+	public void onInputUpdate(int numPeeps, int tip, BigDecimal total)
 	{
 		initSecondFrag(numPeeps, tip, total);
 		

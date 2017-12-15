@@ -1,11 +1,19 @@
 package bilbo.arunwebnerd.com.bilbo;
 import android.os.Bundle;
+
+
+import android.content.Context;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 class ItemCalculator
 {
@@ -14,9 +22,9 @@ class ItemCalculator
 	private final static String TAG = "ItemCalculator";
 	private ArrayList<PerPersonValue> ppValues;
 	private HashMap<Integer, List<Integer>> groupIndexMap;
-	private float totalExtraValue =0;
+	private BigDecimal totalExtraValue = new BigDecimal(0);
 	private int numPeople;
-	private float billTotal;
+	private BigDecimal billTotal;
 	private int tipPercent;
 	private int uniqueIndex = -1;
 
@@ -36,7 +44,10 @@ class ItemCalculator
 		return false;
 	}
 	
+
+
 	ItemCalculator(int numPeeps, float bill, int tip){
+
 		numPeople = numPeeps;
 		billTotal = bill;
 		tipPercent = tip;
@@ -46,7 +57,9 @@ class ItemCalculator
 		groupIndexMap = new HashMap <Integer, List<Integer>>();
 	}
 	
+
 	ItemCalculator(int numPeeps, float bill, int tip, ArrayList<PerPersonValue> ppList){
+
 		numPeople = numPeeps;
 		billTotal = bill;
 		tipPercent = tip;
@@ -56,7 +69,7 @@ class ItemCalculator
 
 	private void initPPValueList(){
 		for(int i = 0; i < numPeople; i++)
-			ppValues.add(new PerPersonValue(0, 0, 0));
+			ppValues.add(new PerPersonValue());
 	}
 	
 	private void addToGroup(List<Integer> items, int group){
@@ -156,14 +169,17 @@ class ItemCalculator
 	}
 	
 	private void calculatePerPersonValues(){
-		float totalLeft = 0;
-		float perPerson = 0;
-		if(billTotal > totalExtraValue)
-			totalLeft = billTotal - totalExtraValue;
-		if((totalLeft != 0)&&(ppValues.size() > 0))
-			perPerson =  totalLeft / ppValues.size();
-		else
-			perPerson = 0;
+		BigDecimal totalLeft = new BigDecimal(0);
+		BigDecimal perPerson = new BigDecimal(0);
+		//BigDecimal remainder = new BigDecimal(0);
+		BigDecimal numOfPeople = new BigDecimal (ppValues.size());
+		if(billTotal.compareTo(totalExtraValue) > 0)
+			totalLeft = billTotal.subtract(totalExtraValue);
+		if((!totalLeft.equals(0))&&(ppValues.size() > 0)){
+			perPerson = totalLeft.divide(numOfPeople, PerPersonValue.formattedDecimalPlaces, RoundingMode.DOWN);
+			//remainder = totalLeft.divideAndRemainder(numOfPeople)[1];
+			
+			}
 		for(int i =0; i<ppValues.size(); i++){
 			ppValues.get(i).setBill( perPerson);
 			ppValues.get(i).tipPercent = tipPercent;
@@ -171,9 +187,11 @@ class ItemCalculator
 		
 	}
 	
+
 	void addExtraValue(int index, float val){
+
 		if((index >= 0)&&(index < ppValues.size())){
-			totalExtraValue += ppValues.get(index).addExtra(val);
+			totalExtraValue = totalExtraValue.add(ppValues.get(index).addExtra(val));
 			calculatePerPersonValues();
 		}
 	}
@@ -196,7 +214,7 @@ class ItemCalculator
 			Integer groupKey = entry.getKey();
 			List<Integer> groupList = entry.getValue();
 			
-			PerPersonValue grouped = new PerPersonValue(0, 0, 0);
+			PerPersonValue grouped = new PerPersonValue();
 			grouped.group = groupKey;
 			grouped.realIndex = groupKey;
 			
@@ -212,7 +230,7 @@ class ItemCalculator
 			int k = 0;
 			for(; k< groupList.size(); k++){
 				grouped.addExtra( ppValues.get(groupList.get(k)).getAddedExtra());
-				grouped.setBill(grouped.getBill() + ppValues.get(groupList.get(k)).getBill());
+				grouped.setBill(grouped.getBill().add(ppValues.get(groupList.get(k)).getBill()));
 				tip += ppValues.get(groupList.get(k)).tipPercent;
 				//TODO grouped. += ppValues[tempList.get(k)].addedExtra;
 

@@ -3,71 +3,75 @@ package bilbo.arunwebnerd.com.bilbo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import android.content.Context;
+import java.math.BigDecimal;
+//import android.util.Log;
+import java.math.RoundingMode;
+
+
 public class PerPersonValue implements Parcelable
 {
-	private float addedExtra = 0;
-	private float bill = 0;
+	private static int decimalPlaces = 20;
+	public static int formattedDecimalPlaces = 2;
+	private BigDecimal addedExtra = new BigDecimal(0);
+	private BigDecimal bill = new BigDecimal(0);
 	public int tipPercent = 0;
-	//public String label;
 	public int group = 0;
 	public String name;
 	public int realIndex = -1; //No need to parcel
 
-	public PerPersonValue( float add, float bil, int gro){
+	public PerPersonValue( BigDecimal add, BigDecimal bil, int gro){
 		addedExtra = add;
 		bill = bil;
 		group = gro;
-		//name = "Name";
+	}
+	
+	public PerPersonValue( ){}
+
+	public BigDecimal getTipTotal(){
+		if(!getBillPlusExtras().equals(0))
+			return getBillPlusExtras().divide(new BigDecimal(100), decimalPlaces, RoundingMode.HALF_UP).multiply(new BigDecimal(tipPercent));
+		return new BigDecimal(0.0);
 	}
 
-	public void setBill(float bill)
+	public void setBill(BigDecimal bill)
 	{
 		this.bill = bill;
 	}
 	
-	public float getBillPlusExtras(){
-		return bill + addedExtra;
+	public BigDecimal getBillPlusExtras(){
+		return bill.add( addedExtra);
 	}
 
-	public float getBill()
+	public BigDecimal getBill()
 	{
 		return bill;
 	}
 	
-	/*public void setAddedExtra(float extra){
-		if(extra < (-bill)){
-			addedExtra = -bill;
-			return;
-		}
-		addedExtra = extra;
-	}
-	*/
 	//Returns amount addedExtra changed by because it may not be the same as the amount input
-	public float addExtra(float extra){
-		if((addedExtra + extra) < (-bill)){
-			addedExtra = -bill;
-			return -bill;
+	public BigDecimal addExtra(BigDecimal extra){
+		
+		if((extra.add(addedExtra)).compareTo(bill.negate()) == -1){
+			addedExtra = bill.negate();
+			return bill.negate();
 		}
-		addedExtra += extra;
+		addedExtra = extra.add(addedExtra);
 		return extra;
 	}
 	
-	public float getAddedExtra(){return addedExtra;}
+	public BigDecimal getAddedExtra(){return addedExtra;}
 	
-	public float getTotal(){
-	/*	float basic = bill + addedExtra;
-		if(basic!=0)
-			basic += (basic/100) * tipPercent;
-		return basic;*/
-		float total = getBillPlusExtras();
-		if(total == 0)
+	public BigDecimal getTotal(){
+		BigDecimal total = getBillPlusExtras();
+		if(total.equals( 0))
 			return total;
-		return total + (total/100)*tipPercent;
+		//Log.d("PerPersonValue", "totes " + total.add (total.divide(new BigDecimal(100))).multiply(new BigDecimal(tipPercent)));
+		return total.add (total.divide(new BigDecimal(100), decimalPlaces, RoundingMode.HALF_UP).multiply(new BigDecimal(tipPercent)));
 	}
 
 	protected PerPersonValue(Parcel in) {
-		addedExtra = in.readFloat();
-		bill = in.readFloat();
+		addedExtra = new BigDecimal(in.readString());
+		bill = new BigDecimal(in.readString());
 		group = in.readInt();
 		name = in.readString();
 	}
@@ -79,8 +83,8 @@ public class PerPersonValue implements Parcelable
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeFloat(addedExtra);
-		dest.writeFloat(bill);
+		dest.writeString(addedExtra.toString());
+		dest.writeString(bill.toString());
 		dest.writeInt(group);
 		dest.writeString(name);
 	}
