@@ -1,7 +1,8 @@
 package bilbo.arunwebnerd.com.bilbo;
-import android.support.v7.widget.*;
-import android.util.*;
-import java.util.*;
+import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
     @SuppressWarnings("unused")

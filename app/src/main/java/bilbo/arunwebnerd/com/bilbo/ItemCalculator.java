@@ -1,15 +1,21 @@
 package bilbo.arunwebnerd.com.bilbo;
-import java.util.*;
-import org.apache.http.conn.ssl.*;
-
 import android.os.Bundle;
-import android.util.*;
+
+
 import android.content.Context;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 
-public class ItemCalculator
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+class ItemCalculator
 {
 	
 	private int MAX_NAME_LENGTH = 36;
@@ -22,23 +28,26 @@ public class ItemCalculator
 	private int tipPercent;
 	private int uniqueIndex = -1;
 
-	public void saveInstance(Bundle storageBundle){
+	void saveInstance(Bundle storageBundle){
 
 		storageBundle.putParcelableArrayList("peeps", ppValues);
 		storageBundle.putSerializable("map", groupIndexMap);
 	}
 	
-	public void restoreState(Bundle storageBundle){
+	void restoreState(Bundle storageBundle){
 		groupIndexMap = (HashMap<Integer, List<Integer>>)storageBundle.getSerializable("map");
 	}
 	
-	public boolean isThisAGroup(int g){
+    boolean isThisAGroup(int g){
 		if(g < 0)
 			return true;
 		return false;
 	}
 	
-	public ItemCalculator(int numPeeps, BigDecimal bill, int tip){
+
+
+	ItemCalculator(int numPeeps, float bill, int tip){
+
 		numPeople = numPeeps;
 		billTotal = bill;
 		tipPercent = tip;
@@ -48,7 +57,9 @@ public class ItemCalculator
 		groupIndexMap = new HashMap <Integer, List<Integer>>();
 	}
 	
-	public ItemCalculator(int numPeeps, BigDecimal bill, int tip, ArrayList<PerPersonValue> ppList){
+
+	ItemCalculator(int numPeeps, float bill, int tip, ArrayList<PerPersonValue> ppList){
+
 		numPeople = numPeeps;
 		billTotal = bill;
 		tipPercent = tip;
@@ -82,7 +93,7 @@ public class ItemCalculator
 	//Takes a list of group index
 	//Merges multiple groups into one and 
 	//returns new group index
-	public int mergeGroups(List<Integer> groups){
+	int mergeGroups(List<Integer> groups){
 		if(groups.size() > 1)
 			if(groupIndexMap.containsKey(groups.get(0)))
 			for(int i = 1; i < groups.size(); i ++){
@@ -100,7 +111,7 @@ public class ItemCalculator
 		return groups.get(0);
 	}
 	
-	public void breakGroup(int groupIndex){
+	void breakGroup(int groupIndex){
 		Log.d(TAG, "remove group: " + groupIndex);
 		if(groupIndexMap.containsKey(groupIndex)){
 			Log.d(TAG, "destroy group ");
@@ -114,7 +125,7 @@ public class ItemCalculator
 	}
 	
 	//This is where the meat is
-	public void makeGroup(List<Integer> items){
+	void makeGroup(List<Integer> items){
 		List<Integer> groups = new ArrayList<Integer>();
 		
 		//Seperate groups and individuals lists
@@ -176,7 +187,9 @@ public class ItemCalculator
 		
 	}
 	
-	public void addExtraValue(int index, BigDecimal val){
+
+	void addExtraValue(int index, float val){
+
 		if((index >= 0)&&(index < ppValues.size())){
 			totalExtraValue = totalExtraValue.add(ppValues.get(index).addExtra(val));
 			calculatePerPersonValues();
@@ -184,14 +197,14 @@ public class ItemCalculator
 	}
 	
 	//Sets the name variable and limits the name to 18 chars
-	public void setItemText(int index, String text){
+	void setItemText(int index, String text){
 		if(index >= 0)//If it is < 0 it is a group
 			ppValues.get(index).name = text.substring(0, Math.min(text.length(), MAX_NAME_LENGTH));
 	}
 	
 	
 	
-	public List<PerPersonValue> getPPValueList(){
+	List<PerPersonValue> getPPValueList(){
 	
 		int i;
 		List<PerPersonValue> dataSet = new ArrayList<PerPersonValue>();
