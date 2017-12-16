@@ -46,7 +46,7 @@ class ItemCalculator
 	
 
 
-	ItemCalculator(int numPeeps, float bill, int tip){
+	ItemCalculator(int numPeeps, BigDecimal bill, int tip){
 
 		numPeople = numPeeps;
 		billTotal = bill;
@@ -58,7 +58,7 @@ class ItemCalculator
 	}
 	
 
-	ItemCalculator(int numPeeps, float bill, int tip, ArrayList<PerPersonValue> ppList){
+	ItemCalculator(int numPeeps, BigDecimal bill, int tip, ArrayList<PerPersonValue> ppList){
 
 		numPeople = numPeeps;
 		billTotal = bill;
@@ -188,7 +188,7 @@ class ItemCalculator
 	}
 	
 
-	void addExtraValue(int index, float val){
+	void addExtraValue(int index, BigDecimal val){
 
 		if((index >= 0)&&(index < ppValues.size())){
 			totalExtraValue = totalExtraValue.add(ppValues.get(index).addExtra(val));

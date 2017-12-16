@@ -20,9 +20,9 @@ import android.widget.TextView;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import android.icu.text.NumberFormat;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import android.widget.LinearLayout;
 
 public class FirstFragment extends Fragment implements  View.OnTouchListener, SeekBar.OnSeekBarChangeListener
 {
