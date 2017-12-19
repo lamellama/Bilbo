@@ -1,299 +1,322 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 <LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:paddingBottom="@dimen/activity_vertical_margin"
-	android:paddingLeft="@dimen/activity_horizontal_margin"
-	android:paddingRight="@dimen/activity_horizontal_margin"
-	android:paddingTop="@dimen/activity_vertical_margin"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical"
-	xmlns:tools="http://schemas.android.com/tools"
-	tools:context="bilbo.arunwebnerd.com.bilbo.MainActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="bilbo.arunwebnerd.com.bilbo.MainActivity">
 
-	<TableLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_weight="1"
-		android:stretchColumns="*">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-		<TableRow
-			android:layout_weight="0.5"
-			android:gravity="center">
+        <TextView
+            android:id="@+id/billTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:maxLines="2"
+            android:text="Total Bill" />
 
-			<TextView
-				android:id="@+id/billTitle"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="Total Bill"/>
+        <EditText
+            android:id="@+id/tvTotal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:ems="10"
+            android:hint="@string/total_prompt"
+            android:inputType="numberDecimal"
+            android:singleLine="true" />
 
-			<EditText
-				android:id="@+id/tvTotal"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:inputType="numberDecimal"
-				android:hint="@string/total_prompt"
-				android:singleLine="true"
-				android:ems="10"/>
+    </LinearLayout>
 
-		</TableRow>
+    <Space
+        android:layout_width="1dp"
+        android:layout_height="10dp" />
 
-		<TableRow
-			android:id="@+id/tableRow1"
-			android:layout_weight="1"
-			android:gravity="center">
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="vertical">
-				<TextView
-					android:id="@+id/numPeopleTitleSpacer"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-				/>
+    <LinearLayout
+        android:id="@+id/tableRow1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-				<TextView
-					android:id="@+id/numPeopleTitle"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="@string/people_prompt"/>
-			</LinearLayout>
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:orientation="vertical">
 
-				<TextView
-					android:id="@+id/numPeopleSeekbarDisplay"
-					android:layout_width="match_parent"
-					android:layout_height="0dp"
-					android:layout_weight="1"
-					android:gravity="center"
-					android:text="@integer/numpeople_default"/>
+            <TextView
+                android:id="@+id/numPeopleTitleSpacer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-				<RelativeLayout
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:orientation="horizontal">
+            <TextView
+                android:id="@+id/numPeopleTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:text="@string/people_prompt" />
+        </LinearLayout>
 
-					<Button
-						android:id="@+id/btnNumPeepMinus"
-						android:layout_alignParentLeft="true"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:orientation="vertical">
 
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:minHeight="36dp"
-						android:minWidth="36dp"
-						android:text="-"/>
+            <TextView
+                android:id="@+id/numPeopleSeekbarDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@integer/numpeople_default" />
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
+                <Button
+                    android:id="@+id/btnNumPeepMinus"
+                    android:layout_width="wrap_content"
 
-					<SeekBar
-						android:id="@+id/sbNumPeople"
-						android:layout_toLeftOf="@+id/btnNumPeepPlus"
-						android:layout_toRightOf="@+id/btnNumPeepMinus"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:max="50"
-						android:progress="@integer/numpeople_default"
-						android:layout_centerVertical="true"/>
-
-					<Button
-						android:id="@+id/btnNumPeepPlus"
-						android:layout_alignParentRight="true"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:minHeight="36dp"
-						android:minWidth="36dp"
-						android:text="+"/>
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:minHeight="36dp"
+                    android:minWidth="36dp"
+                    android:text="-" />
 
 
-				</RelativeLayout>
+                <SeekBar
+                    android:id="@+id/sbNumPeople"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/btnNumPeepPlus"
+                    android:layout_toRightOf="@+id/btnNumPeepMinus"
+                    android:max="50"
+                    android:progress="@integer/numpeople_default" />
 
-			</LinearLayout>
-
-		</TableRow>
-
-		<TableRow
-			android:layout_weight="1"
-			android:gravity="center">
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="vertical">
-				<TextView
-					android:id="@+id/tipTitleSpacer"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-				/>
-
-				<TextView
-					android:id="@+id/tipTitle"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="@string/tip_prompt"/>
-			</LinearLayout>
-
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="vertical">
-
-				<TextView
-					android:id="@+id/tipSeekbarDisplay"
-					android:layout_width="match_parent"
-					android:layout_height="0dp"
-					android:layout_weight="1"
-					android:gravity="center"
-					android:text="@integer/tip_default"/>
-				<RelativeLayout
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:orientation="horizontal">
-
-					<Button
-						android:id="@+id/btnTipMinus"
-						android:layout_alignParentLeft="true"
-
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:minHeight="36dp"
-						android:minWidth="36dp"
-						android:text="-"/>
-
-					<SeekBar
-						android:id="@+id/sbTipPercent"
-						android:layout_toLeftOf="@+id/btnTipPlus"
-						android:layout_toRightOf="@+id/btnTipMinus"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:max="50"
-						android:progress="@integer/tip_default"
-						android:layout_centerVertical="true"/>
-
-					<Button
-						android:id="@+id/btnTipPlus"
-						android:layout_alignParentRight="true"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:minHeight="36dp"
-						android:minWidth="36dp"
-						android:text="+"/>
+                <Button
+                    android:id="@+id/btnNumPeepPlus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:minHeight="36dp"
+                    android:minWidth="36dp"
+                    android:text="+" />
 
 
-				</RelativeLayout>
+            </RelativeLayout>
 
-			</LinearLayout>
+        </LinearLayout>
 
-		</TableRow>
+    </LinearLayout>
 
-		<TableRow
-			android:layout_weight="2"
-			android:gravity="center">
-			
+    <Space
+        android:layout_width="1dp"
+        android:layout_height="10dp" />
 
-		</TableRow>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-	</TableLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:orientation="vertical">
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="top"
-		android:layout_weight="1"
-		android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tipTitleSpacer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-		<TextView
-			android:id="@+id/tvPPBillDisplay"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:gravity="top|center"
-			android:textAppearance="@style/strongFont"
-			android:layout_weight="1"
-			android:text="10.00"/>
+            <TextView
+                android:id="@+id/tipTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:text="@string/tip_prompt" />
+        </LinearLayout>
 
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:gravity="center"
-			android:layout_weight="1"
-			android:text="+"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:orientation="vertical">
 
-		<TextView
-			android:id="@+id/tvPPTipDisplay"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:gravity="center"
-			android:layout_weight="1"
-			android:textAppearance="@style/strongFont"
-			android:text="10%"/>
+            <TextView
+                android:id="@+id/tipSeekbarDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@integer/tip_default" />
 
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:gravity="center"
-			android:layout_weight="1"
-			android:text="="/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-		<TextView
-			android:id="@+id/tvPPTotalDisplay"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:gravity="center"
-			android:layout_weight="1"
-			android:textStyle="bold"
-			android:textAppearance="@style/extraStrongFont"
-			android:text="20"/>
+                android:orientation="horizontal">
 
-	</LinearLayout>
-	<LinearLayout
-		android:id="@+id/remainder_warning_layout"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-		android:orientation="horizontal">
-		<TextView
-			android:id="@+id/remainderWarning"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/division_error_prompt"
-		/>
+                <Button
+                    android:id="@+id/btnTipMinus"
+                    android:layout_width="wrap_content"
 
-	</LinearLayout>
-	<LinearLayout
-		android:id="@+id/remainder_layout"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-		android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:minHeight="36dp"
+                    android:minWidth="36dp"
+                    android:text="-" />
 
-		<TextView
-			android:id="@+id/remainderPrompt"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/remainder_prompt"/>
-		<TextView
-			android:id="@+id/remainderTotal"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="0"/>
-	</LinearLayout>
-	
-	
-	
-	
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="top"
-		android:layout_weight="1"
-		android:orientation="horizontal">
-	<Button
-		android:id="@+id/btnContinue"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="Continue"/>
-	</LinearLayout>
+                <SeekBar
+                    android:id="@+id/sbTipPercent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/btnTipPlus"
+                    android:layout_toRightOf="@+id/btnTipMinus"
+                    android:max="50"
+                    android:progress="@integer/tip_default" />
+
+                <Button
+                    android:id="@+id/btnTipPlus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:minHeight="36dp"
+                    android:minWidth="36dp"
+                    android:text="+" />
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="1dp"
+        android:layout_height="30dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvPPBillDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="top|center"
+            android:text="10.00"
+            android:textAppearance="@style/strongFont" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="+" />
+
+        <TextView
+            android:id="@+id/tvPPTipDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="10%"
+            android:textAppearance="@style/strongFont" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="=" />
+
+        <TextView
+            android:id="@+id/tvPPTotalDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="20"
+            android:textAppearance="@style/extraStrongFont"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <Space
+
+        android:layout_width="1dp"
+        android:layout_height="15dp" />
+
+    <LinearLayout
+        android:id="@+id/remainder_warning_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/remainderWarning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/division_error_prompt" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/remainder_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/remainderPrompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/remainder_prompt" />
+
+        <TextView
+            android:id="@+id/remainderTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnContinue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue" />
+    </LinearLayout>
 
 </LinearLayout>
 
+</ScrollView>

@@ -8,8 +8,8 @@ android {
         applicationId "bilbo.arunwebnerd.com.bilbo"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName '1.02'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         // Enabling multidex support.
@@ -29,6 +29,14 @@ android {
         debugConfig {
             signingConfig signingConfigs.debug
             versionName 'deeeeee'
+        }
+        releaseConfig {
+            minSdkVersion 15
+            applicationId 'bilbo.arunwebnerd.com.bilbo'
+            targetSdkVersion 26
+            testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+            versionName 'three'
+            versionCode 3
         }
     }
 }
