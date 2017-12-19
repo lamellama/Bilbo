@@ -17,13 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.codec.binary.*;
-import java.math.*;
- 
 
 public class SecondFragment extends Fragment implements CustomAdapter.ViewHolder.ClickListener
 {
